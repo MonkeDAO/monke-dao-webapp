@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 auto",
     display: "flex",
     alignItems: "center",
+    padding: 0,
   },
   toolbarTitle: {
     padding: `10px`,

@@ -35,6 +35,12 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Open Sans",
     marginTop: theme.spacing(2.5),
   },
+  cardsContainer: {
+    maxWidth: 1040,
+    width: "100%",
+    margin: "0 auto",
+    marginTop: 100,
+  },
 }));
 
 const theme = createTheme({
@@ -85,11 +91,10 @@ const App = () => {
             We welcome you to the MonkeDAO family!
           </Typography>
         </Container>
-        <br />
-        <br />
-        <br />
-        <br />
-        <Cards />
+
+        <div className={classes.cardsContainer}>
+          <Cards />
+        </div>
       </ThemeProvider>
     </React.Fragment>
   );
