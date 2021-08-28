@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   link: {
     textTransform: "none",
   },
+  twitterLogo: {
+    marginRight: 8,
+  },
 }));
 
 export function Header() {
@@ -82,12 +85,17 @@ export function Header() {
           </Box>
           <Box>
             <Button
-              href="#"
+              href="https://twitter.com/MonkeDAO"
               color="primary"
               variant="contained"
               className={classes.link}
             >
-              @monkeDAO
+              <img
+                alt="Twitter logo"
+                src="/twitter.svg"
+                className={classes.twitterLogo}
+              />
+              @MonkeDAO
             </Button>
           </Box>
         </Toolbar>
