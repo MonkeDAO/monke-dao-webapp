@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     padding: `10px`,
     flexGrow: 1,
     fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
-    fontWeight: "bold",
+    fontWeight: "600",
     fontSize: 18,
   },
   emoji: {
@@ -47,9 +47,20 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     textTransform: "none",
+    fontFamily: "Open Sans",
+    fontWeight: "600",
+    fontSize: 16,
+    boxShadow: "none",
+    borderRadius: 8,
   },
   twitterLogo: {
     marginRight: 8,
+  },
+  twitterLink: {
+    width: 164,
+  },
+  discordLink: {
+    width: 116,
   },
 }));
 
@@ -76,22 +87,22 @@ export function Header() {
           >
             MonkeDAO
           </Typography>
-          <Box mr={2}>
+          <Box mr={2} height={38}>
             <Button
-              href="#"
+              href="https://discord.gg/TscZwJ7jbX"
               color="secondary"
               variant="contained"
-              className={classes.link}
+              className={[classes.link, classes.discordLink]}
             >
               Join us
             </Button>
           </Box>
-          <Box>
+          <Box height={38}>
             <Button
               href="https://twitter.com/MonkeDAO"
               color="primary"
               variant="contained"
-              className={classes.link}
+              className={[classes.link, classes.twitterLink]}
             >
               <img
                 alt="Twitter logo"
