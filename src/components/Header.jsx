@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   emoji: {
     fontSize: "20px",
   },
+  link: {
+    textTransform: "none",
+  },
 }));
 
 export function Header() {
