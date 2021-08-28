@@ -38,9 +38,12 @@ const useStyles = makeStyles((theme) => ({
   toolbarTitle: {
     padding: `10px`,
     flexGrow: 1,
+    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontWeight: "bold",
+    fontSize: 18,
   },
   emoji: {
-    fontSize: "20px",
+    fontSize: "32px",
   },
   link: {
     textTransform: "none",
