@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 16,
     boxShadow: "none",
     borderRadius: 8,
+    height: 38,
   },
   twitterLogo: {
     marginRight: 8,
@@ -92,7 +93,7 @@ export function Header() {
               href="https://discord.gg/TscZwJ7jbX"
               color="secondary"
               variant="contained"
-              className={[classes.link, classes.discordLink]}
+              className={[classes.link, classes.discordLink].join(" ")}
             >
               Join us
             </Button>
@@ -102,7 +103,7 @@ export function Header() {
               href="https://twitter.com/MonkeDAO"
               color="primary"
               variant="contained"
-              className={[classes.link, classes.twitterLink]}
+              className={[classes.link, classes.twitterLink].join(" ")}
             >
               <img
                 alt="Twitter logo"
