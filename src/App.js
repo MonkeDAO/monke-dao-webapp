@@ -11,6 +11,7 @@ import {
   makeStyles,
   ThemeProvider,
 } from "@material-ui/core/styles";
+import { TEXT_BROWN } from "./constants/colors";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -25,12 +26,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   heroTitle: {
-    color: "#875811",
+    color: TEXT_BROWN,
     flexGrow: 1,
-    fontWeight: "400",
+    fontWeight: "600",
   },
   heroContent: {
-    color: "#875811",
+    color: TEXT_BROWN,
+    fontFamily: "Open Sans",
+    marginTop: theme.spacing(2.5),
   },
 }));
 
@@ -55,7 +58,7 @@ const App = () => {
         >
           <Typography
             component="h1"
-            variant="h2"
+            variant="h4"
             align="center"
             className={classes.heroTitle}
             gutterBottom
@@ -63,7 +66,7 @@ const App = () => {
             MonkeDAO is a curated community of monkes
           </Typography>
           <Typography
-            variant="h5"
+            variant="h6"
             align="center"
             className={classes.heroContent}
             component="p"
@@ -71,10 +74,10 @@ const App = () => {
           >
             Within the community, everyone is family. We share alpha, jokes,
             bullshit like there's no tomorrow but have zero tolerance for
-            hatred. We welcome you to the MonkeDAO family!
+            hatred.
           </Typography>
           <Typography
-            variant="h5"
+            variant="h6"
             align="center"
             className={classes.heroContent}
             component="p"
