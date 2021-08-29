@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   "@global": {
     body: {
       backgroundColor: "#FEF6D8",
+      minHeight: "100vh",
+      position: "relative",
+      paddingBottom: 300,
       // background: '#FEF6D8 url(\'/banana-tp-rs.png\') right repeat'
     },
   },
