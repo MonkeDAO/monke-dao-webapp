@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core/styles";
 import { TEXT_BROWN } from "./constants/colors";
 import clsx from "clsx";
+import Footer from "./components/Footer";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -71,59 +72,58 @@ const App = () => {
   const classes = useStyles();
   const isMediumScreenAndSmaller = useMediaQuery(theme.breakpoints.down("sm"));
   return (
-    <React.Fragment>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Header />
-        <div
-          className={
-            isMediumScreenAndSmaller
-              ? clsx(classes.bananasBackground, "small-bananas-background")
-              : classes.bananasBackground
-          }
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header />
+      <div
+        className={
+          isMediumScreenAndSmaller
+            ? clsx(classes.bananasBackground, "small-bananas-background")
+            : classes.bananasBackground
+        }
+      >
+        <Container
+          p={2}
+          maxWidth="sm"
+          component="main"
+          className={clsx(classes.heroContent, "container")}
         >
-          <Container
-            p={2}
-            maxWidth="sm"
-            component="main"
-            className={clsx(classes.heroContent, "container")}
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            className={classes.heroTitle}
+            gutterBottom
           >
-            <Typography
-              component="h1"
-              variant="h4"
-              align="center"
-              className={classes.heroTitle}
-              gutterBottom
-            >
-              MonkeDAO is a curated community of monkes
-            </Typography>
-            <Typography
-              variant="h6"
-              align="center"
-              className={classes.heroContent}
-              component="p"
-              gutterBottom
-            >
-              Within the community, everyone is family. We share alpha, jokes,
-              bullshit like there's no tomorrow but have zero tolerance for
-              hatred.
-            </Typography>
-            <Typography
-              variant="h6"
-              align="center"
-              className={classes.heroContent}
-              component="p"
-            >
-              We welcome you to the MonkeDAO family!
-            </Typography>
-          </Container>
+            MonkeDAO is a curated community of monkes
+          </Typography>
+          <Typography
+            variant="h6"
+            align="center"
+            className={classes.heroContent}
+            component="p"
+            gutterBottom
+          >
+            Within the community, everyone is family. We share alpha, jokes,
+            bullshit like there's no tomorrow but have zero tolerance for
+            hatred.
+          </Typography>
+          <Typography
+            variant="h6"
+            align="center"
+            className={classes.heroContent}
+            component="p"
+          >
+            We welcome you to the MonkeDAO family!
+          </Typography>
+        </Container>
 
-          <div className={classes.cardsContainer}>
-            <Cards />
-          </div>
+        <div className={classes.cardsContainer}>
+          <Cards />
         </div>
-      </ThemeProvider>
-    </React.Fragment>
+      </div>
+      <Footer />
+    </ThemeProvider>
   );
 };
 
