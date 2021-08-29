@@ -4,7 +4,7 @@ import { Cards } from "./components/Cards";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
 
-import { Container, Typography } from "@material-ui/core";
+import { Container, Typography, useMediaQuery } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {
   createTheme,
@@ -12,6 +12,7 @@ import {
   ThemeProvider,
 } from "@material-ui/core/styles";
 import { TEXT_BROWN } from "./constants/colors";
+import clsx from "clsx";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -25,16 +26,32 @@ const useStyles = makeStyles((theme) => ({
       // background: '#FEF6D8 url(\'/banana-tp-rs.png\') right repeat'
     },
   },
+  bananasBackground: {
+    backgroundImage: "url('bananas.svg')",
+    backgroundAttachment: "fixed",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPositionY: "25%",
+    "&.small-bananas-background": {
+      backgroundSize: "cover",
+      backgroundImage: "url('bananas-muted.svg')",
+    },
+  },
   heroTitle: {
     color: TEXT_BROWN,
     flexGrow: 1,
     fontWeight: "600",
-    marginTop: 100,
+    // marginTop: 100,
+    marginTop: 0,
   },
   heroContent: {
     color: TEXT_BROWN,
     fontFamily: "Open Sans",
     marginTop: theme.spacing(2.5),
+    "&.container": {
+      marginTop: 0,
+      paddingTop: theme.spacing(11),
+    },
   },
   cardsContainer: {
     maxWidth: 1040,
@@ -52,49 +69,58 @@ const theme = createTheme({
 
 const App = () => {
   const classes = useStyles();
+  const isMediumScreenAndSmaller = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header />
-        <Container
-          p={2}
-          maxWidth="sm"
-          component="main"
-          className={classes.heroContent}
+        <div
+          className={
+            isMediumScreenAndSmaller
+              ? clsx(classes.bananasBackground, "small-bananas-background")
+              : classes.bananasBackground
+          }
         >
-          <Typography
-            component="h1"
-            variant="h4"
-            align="center"
-            className={classes.heroTitle}
-            gutterBottom
+          <Container
+            p={2}
+            maxWidth="sm"
+            component="main"
+            className={clsx(classes.heroContent, "container")}
           >
-            MonkeDAO is a curated community of monkes
-          </Typography>
-          <Typography
-            variant="h6"
-            align="center"
-            className={classes.heroContent}
-            component="p"
-            gutterBottom
-          >
-            Within the community, everyone is family. We share alpha, jokes,
-            bullshit like there's no tomorrow but have zero tolerance for
-            hatred.
-          </Typography>
-          <Typography
-            variant="h6"
-            align="center"
-            className={classes.heroContent}
-            component="p"
-          >
-            We welcome you to the MonkeDAO family!
-          </Typography>
-        </Container>
+            <Typography
+              component="h1"
+              variant="h4"
+              align="center"
+              className={classes.heroTitle}
+              gutterBottom
+            >
+              MonkeDAO is a curated community of monkes
+            </Typography>
+            <Typography
+              variant="h6"
+              align="center"
+              className={classes.heroContent}
+              component="p"
+              gutterBottom
+            >
+              Within the community, everyone is family. We share alpha, jokes,
+              bullshit like there's no tomorrow but have zero tolerance for
+              hatred.
+            </Typography>
+            <Typography
+              variant="h6"
+              align="center"
+              className={classes.heroContent}
+              component="p"
+            >
+              We welcome you to the MonkeDAO family!
+            </Typography>
+          </Container>
 
-        <div className={classes.cardsContainer}>
-          <Cards />
+          <div className={classes.cardsContainer}>
+            <Cards />
+          </div>
         </div>
       </ThemeProvider>
     </React.Fragment>
