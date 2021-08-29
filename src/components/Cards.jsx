@@ -71,6 +71,8 @@ const cards = [
     description:
       "MonkeDAO is currently exclusive to Solana Monkey Business owners.",
     buttonText: "Join us",
+    textTransform: "none",
+    fontFamily: "Open Sans",
     bg: "#000000",
     buttonColor: "#FAC300",
   },
@@ -79,6 +81,8 @@ const cards = [
     description:
       "Buy your first monke from the Solana Monkey Business Marketplace.",
     buttonText: "Visit SMB Monkey Market",
+    textTransform: "none",
+    fontFamily: "Open Sans",
     bg: "#7E3EB0",
     buttonColor: "white",
     buttonTextColor: "black",
@@ -106,6 +110,8 @@ function GridItem({ classes, data, bg }) {
               style={{
                 backgroundColor: data.buttonColor,
                 color: data.buttonTextColor,
+                textTransform: data.textTransform,
+                fontFamily: data.fontFamily
               }}
             >
               {data.buttonText}
