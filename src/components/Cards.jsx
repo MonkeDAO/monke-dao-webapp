@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   cardText: {
     color: "white",
     fontFamily: "Open Sans",
-    fontWeight: "600",
+    fontWeight: "500",
     fontSize: 18,
     marginBottom: 24,
   },
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [
   {
-    title: "Join MonkeDao",
+    title: "Join MonkeDAO",
     description:
       "MonkeDAO is currently exclusive to Solana Monkey Business owners.",
     buttonText: "Join us",
