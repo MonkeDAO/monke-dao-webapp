@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     color: TEXT_BROWN,
     flexGrow: 1,
     fontWeight: "600",
+    marginTop: 100,
   },
   heroContent: {
     color: TEXT_BROWN,

@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
     },
     fontColor: "white",
     height: 268,
+    width: "100%",
   },
 }));
 
@@ -89,7 +90,7 @@ function GridItem({ classes, data, bg }) {
     // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
     // From 600-690px wide (tablets), I take up 6 out of 12 columns, so 2 columns fit the screen.
     // From 960px wide and above, I take up 25% of the device (3/12), so 4 columns fit the screen.
-    <Grid item xs={12} sm={6} md={6}>
+    <Grid item xs={12} sm={6} md={6} style={{ maxWidth: 496 }}>
       <Paper className={classes.paper} style={{ backgroundColor: data.bg }}>
         <Grid item xs container direction="column">
           <Grid item>
@@ -121,7 +122,7 @@ export function Cards() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container spacing={1} justifyContent="space-around">
+      <Grid container justifyContent="space-between">
         <GridItem classes={classes} data={cards[0]} />
         <GridItem classes={classes} data={cards[1]} />
       </Grid>
