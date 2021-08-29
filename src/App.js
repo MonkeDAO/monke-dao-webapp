@@ -1,5 +1,6 @@
 import React from "react";
 import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 import { Cards } from "./components/Cards";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -96,6 +97,7 @@ const App = () => {
         <div className={classes.cardsContainer}>
           <Cards />
         </div>
+        <Footer />
       </ThemeProvider>
     </React.Fragment>
   );
