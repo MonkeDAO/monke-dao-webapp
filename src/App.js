@@ -37,8 +37,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "25%",
     "&.small-bananas-background": {
-      backgroundSize: "cover",
       backgroundImage: "url('bananas-muted.svg')",
+      backgroundSize: "cover",
+    },
+    "&.xs-bananas-background": {
+      backgroundImage: "url('bananas-muted.svg')",
+      backgroundSize: "contain",
     },
   },
   heroTitle: {
@@ -73,14 +77,17 @@ const theme = createTheme({
 
 const App = () => {
   const classes = useStyles();
-  const isMediumScreenAndSmaller = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down("xs"));
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
       <div
         className={
-          isMediumScreenAndSmaller
+          isXsScreenAndSmaller
+            ? clsx(classes.bananasBackground, "xs-bananas-background")
+            : isSmScreenAndSmaller
             ? clsx(classes.bananasBackground, "small-bananas-background")
             : classes.bananasBackground
         }
