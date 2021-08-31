@@ -63,6 +63,16 @@ const useStyles = makeStyles((theme) => ({
     height: 268,
     width: "100%",
   },
+  buttonImageContent: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonImageSpan: {
+    marginRight: 8,
+    color: "#7E3EB0",
+    textTransform: "none",
+  },
 }));
 
 const cards = [
@@ -73,15 +83,19 @@ const cards = [
     buttonText: "Join us",
     bg: "#000000",
     buttonColor: "#FAC300",
+    buttonUrl: "https://discord.gg/TscZwJ7jbX",
   },
   {
     title: "Don't have a monke?",
     description:
       "Buy your first monke from the Solana Monkey Business Marketplace.",
-    buttonText: "Visit SMB Monkey Market",
+    buttonText: "Visit",
+    buttonImage: "/smb-monkey-market-logo.svg",
+    buttonAlt: "SMB Monkey Market Logo",
     bg: "#7E3EB0",
     buttonColor: "white",
     buttonTextColor: "black",
+    buttonUrl: "https://market.solanamonkey.business/",
   },
 ];
 
@@ -101,14 +115,14 @@ function GridItem({ classes, data, bg }) {
           </Grid>
           <Grid item>
             <Button
-              href="#"
+              href={data.buttonUrl}
               variant="contained"
               style={{
                 backgroundColor: data.buttonColor,
                 color: data.buttonTextColor,
               }}
             >
-              {data.buttonText}
+              {buttonContent(data, classes)}
             </Button>
           </Grid>
         </Grid>
@@ -128,4 +142,17 @@ export function Cards() {
       </Grid>
     </ThemeProvider>
   );
+}
+
+function buttonContent({ buttonText, buttonImage, buttonAlt }, classes) {
+  if (buttonImage) {
+    return (
+      <div className={classes.buttonImageContent}>
+        <span className={classes.buttonImageSpan}>{buttonText}</span>
+        <img alt={buttonAlt ?? buttonAlt} src={buttonImage} />
+      </div>
+    );
+  }
+
+  return buttonText;
 }
