@@ -48,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 24,
     marginBottom: 24,
   },
+  cardButtons: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
   paper: {
     borderRadius: 10,
     padding: 40,
@@ -84,6 +88,8 @@ const cards = [
     bg: "#000000",
     buttonColor: "#FAC300",
     buttonUrl: "https://discord.gg/TscZwJ7jbX",
+    cardAccent: "/dao-shake-smb.svg",
+    cardAccentAlt: "Image of MonkeDAO handshaking Solana Monkey Business",
   },
   {
     title: "Don't have a monke?",
@@ -113,7 +119,7 @@ function GridItem({ classes, data, bg }) {
               {data.description}
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid item className={classes.cardButtons}>
             <Button
               href={data.buttonUrl}
               variant="contained"
@@ -124,6 +130,12 @@ function GridItem({ classes, data, bg }) {
             >
               {buttonContent(data, classes)}
             </Button>
+            {data.cardAccent && (
+              <img
+                alt={data.cardAccentAlt && data.cardAccentAlt}
+                src={data.cardAccent}
+              />
+            )}
           </Grid>
         </Grid>
       </Paper>
@@ -149,7 +161,7 @@ function buttonContent({ buttonText, buttonImage, buttonAlt }, classes) {
     return (
       <div className={classes.buttonImageContent}>
         <span className={classes.buttonImageSpan}>{buttonText}</span>
-        <img alt={buttonAlt ?? buttonAlt} src={buttonImage} />
+        <img alt={buttonAlt && buttonAlt} src={buttonImage} />
       </div>
     );
   }
