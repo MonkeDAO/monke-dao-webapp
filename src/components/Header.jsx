@@ -45,9 +45,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
     fontWeight: "600",
     fontSize: 18,
-    "&.small": {
-      fontSize: 20,
-    },
   },
   emoji: {
     fontSize: "32px",
@@ -106,11 +103,7 @@ export function Header() {
             variant="h5"
             color="inherit"
             noWrap
-            className={
-              isXsScreenAndSmaller
-                ? [classes.toolbarTitle, "small"].join(" ")
-                : classes.toolbarTitle
-            }
+            className={classes.toolbarTitle}
           >
             MonkeDAO
           </Typography>
