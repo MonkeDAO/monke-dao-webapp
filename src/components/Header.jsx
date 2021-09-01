@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { createTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
+import { useMediaQuery } from "@material-ui/core";
 
 const theme = createTheme({
   palette: {
@@ -27,14 +28,16 @@ const useStyles = makeStyles((theme) => ({
     height: 86,
   },
   toolbar: {
-    flexWrap: "wrap",
-    maxWidth: 1040,
+    // flexWrap: "wrap",
+    maxWidth: 1072,
+    // maxWidth: 1040,
     height: "100%",
     width: "100%",
     margin: "0 auto",
     display: "flex",
     alignItems: "center",
-    padding: 0,
+    // padding: 0,
+    padding: `0 ${theme.spacing(2)}`,
   },
   toolbarTitle: {
     padding: `10px`,
@@ -42,9 +45,15 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
     fontWeight: "600",
     fontSize: 18,
+    "&.small": {
+      fontSize: 20,
+    },
   },
   emoji: {
     fontSize: "32px",
+    "&.small": {
+      fontSize: 38,
+    },
   },
   link: {
     textTransform: "none",
@@ -61,6 +70,10 @@ const useStyles = makeStyles((theme) => ({
   twitterLink: {
     width: 164,
   },
+  twitterLinkSmall: {
+    width: 40,
+    minWidth: 40,
+  },
   discordLink: {
     width: 116,
   },
@@ -68,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Header() {
   const classes = useStyles();
-
+  const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down("xs"));
   return (
     <ThemeProvider theme={theme}>
       <AppBar
@@ -78,14 +91,26 @@ export function Header() {
         className={classes.appBar}
       >
         <Toolbar className={classes.toolbar}>
-          <span role="img" aria-label="monkey" className={classes.emoji}>
+          <span
+            role="img"
+            aria-label="monkey"
+            className={
+              isXsScreenAndSmaller
+                ? [classes.emoji, "small"].join(" ")
+                : classes.emoji
+            }
+          >
             🐵
           </span>{" "}
           <Typography
             variant="h5"
             color="inherit"
             noWrap
-            className={classes.toolbarTitle}
+            className={
+              isXsScreenAndSmaller
+                ? [classes.toolbarTitle, "small"].join(" ")
+                : classes.toolbarTitle
+            }
           >
             MonkeDAO
           </Typography>
@@ -94,9 +119,13 @@ export function Header() {
               href="https://discord.gg/TscZwJ7jbX"
               color="secondary"
               variant="contained"
-              className={[classes.link, classes.discordLink].join(" ")}
+              className={
+                isXsScreenAndSmaller
+                  ? classes.link
+                  : [classes.link, classes.discordLink].join(" ")
+              }
             >
-              Join us
+              {isXsScreenAndSmaller ? "Join" : "Join us"}
             </Button>
           </Box>
           <Box height={38}>
@@ -104,14 +133,19 @@ export function Header() {
               href="https://twitter.com/MonkeDAO"
               color="primary"
               variant="contained"
-              className={[classes.link, classes.twitterLink].join(" ")}
+              className={[
+                classes.link,
+                isXsScreenAndSmaller
+                  ? classes.twitterLinkSmall
+                  : classes.twitterLink,
+              ].join(" ")}
             >
               <img
                 alt="Twitter logo"
                 src="/twitter.svg"
-                className={classes.twitterLogo}
+                className={!isXsScreenAndSmaller && classes.twitterLogo}
               />
-              @MonkeDAO
+              {!isXsScreenAndSmaller && "@MonkeDAO"}
             </Button>
           </Box>
         </Toolbar>
