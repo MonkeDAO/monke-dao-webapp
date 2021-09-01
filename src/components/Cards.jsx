@@ -81,6 +81,9 @@ const useStyles = makeStyles((theme) => ({
     color: "#7E3EB0",
     textTransform: "none",
   },
+  buttonImageSmall: {
+    maxWidth: 180,
+  },
 }));
 
 const cards = [
@@ -139,7 +142,7 @@ function GridItem({ classes, data, bg }) {
                 color: data.buttonTextColor,
               }}
             >
-              {buttonContent(data, classes)}
+              {buttonContent(data, classes, isXsScreenAndSmaller)}
             </Button>
             {data.cardAccent && (
               <img
@@ -167,12 +170,20 @@ export function Cards() {
   );
 }
 
-function buttonContent({ buttonText, buttonImage, buttonAlt }, classes) {
+function buttonContent(
+  { buttonText, buttonImage, buttonAlt },
+  classes,
+  isXsScreenAndSmaller
+) {
   if (buttonImage) {
     return (
       <div className={classes.buttonImageContent}>
         <span className={classes.buttonImageSpan}>{buttonText}</span>
-        <img alt={buttonAlt && buttonAlt} src={buttonImage} />
+        <img
+          alt={buttonAlt && buttonAlt}
+          src={buttonImage}
+          className={isXsScreenAndSmaller && classes.buttonImageSmall}
+        />
       </div>
     );
   }
