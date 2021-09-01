@@ -14,6 +14,7 @@ import {
 import { TEXT_BROWN } from "./constants/colors";
 import clsx from "clsx";
 import Footer from "./components/Footer";
+import Roadmap from "./components/Roadmap";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -66,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: "0 auto",
     marginTop: 100,
+    marginBottom: 50,
   },
 }));
 
@@ -132,6 +134,7 @@ const App = () => {
           <Cards />
         </div>
       </div>
+      <Roadmap />
       <Footer />
     </ThemeProvider>
   );
