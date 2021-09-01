@@ -7,6 +7,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import { useMediaQuery } from "@material-ui/core";
 
 const theme = createTheme({
   palette: {
@@ -64,8 +65,11 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
     fontColor: "white",
-    height: 268,
     width: "100%",
+    maxWidth: 496,
+    "&.small": {
+      padding: 20,
+    },
   },
   buttonImageContent: {
     display: "flex",
@@ -106,12 +110,19 @@ const cards = [
 ];
 
 function GridItem({ classes, data, bg }) {
+  const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down("xs"));
+
   return (
     // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
     // From 600-690px wide (tablets), I take up 6 out of 12 columns, so 2 columns fit the screen.
     // From 960px wide and above, I take up 25% of the device (3/12), so 4 columns fit the screen.
-    <Grid item xs={12} sm={6} md={6} style={{ maxWidth: 496 }}>
-      <Paper className={classes.paper} style={{ backgroundColor: data.bg }}>
+    <Grid item sm={12} md={6}>
+      <Paper
+        className={
+          isXsScreenAndSmaller ? [classes.paper, "small"] : classes.paper
+        }
+        style={{ backgroundColor: data.bg }}
+      >
         <Grid item xs container direction="column">
           <Grid item>
             <Typography className={classes.cardTitle}>{data.title}</Typography>
@@ -148,7 +159,7 @@ export function Cards() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container justifyContent="space-between">
+      <Grid container justifyContent="space-between" spacing={6}>
         <GridItem classes={classes} data={cards[0]} />
         <GridItem classes={classes} data={cards[1]} />
       </Grid>

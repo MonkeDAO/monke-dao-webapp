@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
       minHeight: "100vh",
       position: "relative",
       paddingBottom: 300,
-      // background: '#FEF6D8 url(\'/banana-tp-rs.png\') right repeat'
     },
   },
   bananasBackground: {
@@ -63,11 +62,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardsContainer: {
-    maxWidth: 1040,
+    maxWidth: 1072,
+    // maxWidth: 1040,
     width: "100%",
     margin: "0 auto",
-    marginTop: 100,
-    marginBottom: 50,
+    marginTop: 120,
+    paddingBottom: 50,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
 }));
 
