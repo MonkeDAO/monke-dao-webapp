@@ -119,7 +119,7 @@ const App = () => {
             gutterBottom
           >
             Within the community, everyone is family. We share alpha, jokes,
-            bullshit like there's no tomorrow but have zero tolerance for
+            hangout like there's no tomorrow but have zero tolerance for
             hatred.
           </Typography>
           <Typography
