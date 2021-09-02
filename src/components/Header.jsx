@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     height: 86,
   },
+  logo: {
+    width: "50%",
+  },
   toolbar: {
     // flexWrap: "wrap",
     maxWidth: 1072,
@@ -88,25 +91,13 @@ export function Header() {
         className={classes.appBar}
       >
         <Toolbar className={classes.toolbar}>
-          <span
-            role="img"
-            aria-label="monkey"
-            className={
-              isXsScreenAndSmaller
-                ? [classes.emoji, "small"].join(" ")
-                : classes.emoji
-            }
-          >
-            🐵
-          </span>{" "}
-          <Typography
-            variant="h5"
-            color="inherit"
-            noWrap
-            className={classes.toolbarTitle}
-          >
-            MonkeDAO
-          </Typography>
+          <span>
+          <img
+            alt="MonkeDao logo"
+            src="/MonkeDAO_Logo_Positive.png"
+            className={classes.logo}
+          />
+          </span>
           <Box mr={2} height={38}>
             <Button
               href="https://discord.gg/TscZwJ7jbX"
