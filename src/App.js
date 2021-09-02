@@ -136,7 +136,7 @@ const App = () => {
           <Cards />
         </div>
       </div>
-      <Roadmap />
+      {/* <Roadmap /> */}
       <Footer />
     </ThemeProvider>
   );
