@@ -28,7 +28,9 @@ const useStyles = makeStyles((theme) => ({
     height: 86,
   },
   logo: {
-    width: "50%",
+    width: "35%",
+    paddingTop: "24px",
+    paddingBottom: "24px",
   },
   toolbar: {
     // flexWrap: "wrap",
