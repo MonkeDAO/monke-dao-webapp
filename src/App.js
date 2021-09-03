@@ -1,5 +1,4 @@
 import React from "react";
-import { Helmet } from "react-helmet";
 import { Header } from "./components/Header";
 import { Cards } from "./components/Cards";
 import SmoothScroll from "smooth-scroll";
@@ -86,32 +85,6 @@ const App = () => {
   const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down("xs"));
   return (
     <ThemeProvider theme={theme}>
-      <Helmet>
-        <title>MonkeDAO</title>
-        <meta name="title" content="MonkeDAO" />
-        <meta
-          name="description"
-          content="MonkeDAO is a curated community of monkes exclusive to Solana Monkey Business owners"
-        />
-
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://monkedao.io/" />
-        <meta property="og:title" content="MonkeDAO" />
-        <meta
-          property="og:description"
-          content="MonkeDAO is a curated community of monkes exclusive to Solana Monkey Business owners"
-        />
-        <meta property="og:image" content="/MonkeDAO_share.png" />
-
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://monkedao.io/" />
-        <meta property="twitter:title" content="MonkeDAO" />
-        <meta
-          property="twitter:description"
-          content="MonkeDAO is a curated community of monkes exclusive to Solana Monkey Business owners"
-        />
-        <meta property="twitter:image" content="/MonkeDAO_share.png" />
-      </Helmet>
       <CssBaseline />
       <Header />
       <div
