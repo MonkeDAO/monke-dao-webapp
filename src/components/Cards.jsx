@@ -140,6 +140,9 @@ function GridItem({ classes, data, bg }) {
               style={{
                 backgroundColor: data.buttonColor,
                 color: data.buttonTextColor,
+                textTransform: "none",
+                fontFamily: "Open Sans",
+                fontWeight: 700,
               }}
             >
               {buttonContent(data, classes, isXsScreenAndSmaller)}
