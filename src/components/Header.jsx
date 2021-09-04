@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     width: "35%",
     paddingTop: "24px",
     paddingBottom: "24px",
+    minWidth: 168,
   },
   toolbar: {
     // flexWrap: "wrap",
@@ -94,11 +95,11 @@ export function Header() {
       >
         <Toolbar className={classes.toolbar}>
           <span>
-          <img
-            alt="MonkeDao logo"
-            src="/MonkeDAO_Logo_Positive.png"
-            className={classes.logo}
-          />
+            <img
+              alt="MonkeDao logo"
+              src="/MonkeDAO_Logo_Positive.png"
+              className={classes.logo}
+            />
           </span>
           <Box mr={2} height={38}>
             <Button
