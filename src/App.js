@@ -109,7 +109,7 @@ const App = () => {
             className={classes.heroTitle}
             gutterBottom
           >
-            MonkeDAO is a curated community of monkes
+            Welcome to MonkeDAO, the first NFT DAO on Solana.
           </Typography>
           <Typography
             variant="h6"
@@ -118,8 +118,9 @@ const App = () => {
             component="p"
             gutterBottom
           >
-            Within the community, everyone is family. We share alpha, jokes,
-            hangout like there's no tomorrow but have zero tolerance for hatred.
+            We are a community owned and operated, made up exclusively of Solana
+            Monkey Business owners who like to share alpha, laugh and joke, swap
+            skills and work together to enrich the Solana ecosystem.
           </Typography>
           <Typography
             variant="h6"
