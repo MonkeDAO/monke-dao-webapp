@@ -19,6 +19,7 @@ import TimelineSeparator from "@material-ui/lab/TimelineSeparator";
 import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import TimelineDot from "@material-ui/lab/TimelineDot";
+import TimelineOppositeContent from "@material-ui/lab/TimelineOppositeContent";
 
 const theme = createTheme({
   palette: {
@@ -49,9 +50,12 @@ const useStyles = makeStyles((theme) => ({
   roadmapText: {
     color: "black",
     textAlign: "center",
-    marginTop: theme.spacing(3),
     fontFamily: "Open Sans",
+    fontSize: 18,
     paddingBottom: 50,
+    maxWidth: 530,
+    margin: "0 auto",
+    marginTop: theme.spacing(3),
   },
   root: {
     flexGrow: 1,
@@ -75,12 +79,41 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 50,
   },
   cardTitle: {
+    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontSize: 24,
+    fontWeight: 600,
     color: "#875811",
     textAlign: "left",
   },
+  cardText: {
+    color: "#875811",
+    fontFamily: "Open Sans",
+    fontSize: 18,
+    textAlign: "left",
+  },
   inActiveCardTitle: {
+    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
     color: "gray",
     textAlign: "left",
+  },
+  roadmapHeader: {
+    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontWeight: 600,
+    fontSize: 32,
+  },
+  root: {
+    maxWidth: 1090,
+    margin: "0 auto",
+  },
+  timelineDot: {
+    backgroundColor: "#FAC300",
+  },
+  timelineSeperator: {
+    marginTop: 100,
+    marginBottom: -100,
+  },
+  timelineConnector: {
+    backgroundColor: "#FAC300",
   },
 }));
 
@@ -104,7 +137,7 @@ function TimelineCard({ active }) {
           </Typography>
           <Typography
             className={
-              active === true ? classes.cardTitle : classes.inActiveCardTitle
+              active === true ? classes.cardText : classes.inActiveCardTitle
             }
           >
             This is all copy pasted placeholder text. We’ve set up some
@@ -123,55 +156,53 @@ export default function Roadmap(props) {
     <ThemeProvider theme={theme}>
       <Container className={classes.roadmap}>
         <Box className={classes.roadmapContent}>
-          <Typography component="h1" variant="h4" align="center" gutterBottom>
-            Roadmap
-          </Typography>
-          <Typography
-            variant="body2"
-            className={classes.roadmapText}
-            gutterBottom
-          >
-            This is all copy pasted placeholder text. We’ve set up some
-            goalposts for ourselves. Once we hit a target sell through
-            percentage, we will begin to work on realizing the stated goal.
-          </Typography>
           <div className={classes.root}>
-            {/* <Timeline>
+            <Timeline>
               <TimelineItem>
-                <TimelineSeparator>
-                  <TimelineDot />
-                  <TimelineConnector />
-                </TimelineSeparator>
+                <BananaTimeline />
+                <TimelineOppositeContent style={{ flex: 0.1, width: 0 }} />
                 <TimelineContent>
-                <TimelineCard active />
+                  <TimelineCard active />
                 </TimelineContent>
               </TimelineItem>
               <TimelineItem>
-                <TimelineSeparator>
-                  <TimelineDot />
-                  <TimelineConnector />
-                </TimelineSeparator>
+                <BananaTimeline />
+                <TimelineOppositeContent style={{ flex: 0.1, width: 0 }} />
                 <TimelineContent>
-                <TimelineCard active />
+                  <TimelineCard active />
                 </TimelineContent>
               </TimelineItem>
               <TimelineItem>
-                <TimelineSeparator>
-                  <TimelineDot />
-                </TimelineSeparator>
+                <BananaTimeline />
+                <TimelineOppositeContent style={{ flex: 0.1, width: 0 }} />
                 <TimelineContent>
                   {" "}
                   <TimelineCard />
                 </TimelineContent>
               </TimelineItem>
-            </Timeline> */}
-            <TimelineCard active />
-            <TimelineCard active />
-            <TimelineCard active />
-            <TimelineCard />
+            </Timeline>
           </div>
         </Box>
       </Container>
     </ThemeProvider>
+  );
+}
+
+function BananaTimelineIcon() {
+  return (
+    <TimelineDot color="secondary">
+      <img src="/banana_timeline_icon.svg" />
+    </TimelineDot>
+  );
+}
+
+function BananaTimeline({ children }) {
+  const classes = useStyles();
+
+  return (
+    <TimelineSeparator className={classes.timelineSeperator}>
+      <BananaTimelineIcon />
+      <TimelineConnector className={classes.timelineConnector} />
+    </TimelineSeparator>
   );
 }
