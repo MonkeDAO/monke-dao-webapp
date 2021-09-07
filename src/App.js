@@ -118,9 +118,9 @@ const App = () => {
             component="p"
             gutterBottom
           >
-            We are a community owned and operated, made up exclusively of Solana
-            Monkey Business owners who like to share alpha, laugh and joke, swap
-            skills and work together to enrich the Solana ecosystem.
+            We are a community owned and operated DAO, made up exclusively of
+            Solana Monkey Business owners who like to share alpha, laugh and
+            joke, swap skills and work together to enrich the Solana ecosystem.
           </Typography>
           <Typography
             variant="h6"
