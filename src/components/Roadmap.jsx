@@ -7,6 +7,7 @@ import {
   ThemeProvider,
   Typography,
   Paper,
+  useMediaQuery,
 } from "@material-ui/core";
 import {
   BANANA_ICON_YELLOW,
@@ -44,6 +45,14 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(6),
     paddingRight: theme.spacing(6),
+    "&.small": {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+    },
+    "&.extra-small": {
+      paddingLeft: theme.spacing(2),
+      paddingRight: 0,
+    },
   },
   cardTitle: {
     fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
@@ -117,6 +126,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Roadmap(props) {
   const classes = useStyles();
+  const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down("xs"));
+
   const timelineCards = [
     {
       emoji: "🎉",
@@ -271,7 +283,15 @@ export default function Roadmap(props) {
                       />
                     )}
                   </TimelineSeparator>
-                  <TimelineContent className={classes.card}>
+                  <TimelineContent
+                    className={
+                      isXsScreenAndSmaller
+                        ? clsx(classes.card, "extra-small")
+                        : isSmScreenAndSmaller
+                        ? clsx(classes.card, "small")
+                        : classes.card
+                    }
+                  >
                     <Paper
                       elevation={0}
                       className={
