@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# ignore npm package lock (using yarn)
+package-lock.json
