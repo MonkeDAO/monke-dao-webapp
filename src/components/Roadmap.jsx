@@ -1,17 +1,22 @@
 import React from "react";
 import {
   Box,
-  Button,
   Container,
   createTheme,
   makeStyles,
   ThemeProvider,
   Typography,
   Paper,
-  Grid,
 } from "@material-ui/core";
-import yellow from "@material-ui/core/colors/yellow";
-import { BUTTON_YELLOW, TWITTER_BLUE } from "../constants/colors";
+import {
+  BANANA_ICON_YELLOW,
+  BUTTON_YELLOW,
+  LIGHT_GREY,
+  LIGHT_YELLOW,
+  TEXT_BROWN,
+  TEXT_GREY,
+  TWITTER_BLUE,
+} from "../constants/colors";
 
 import Timeline from "@material-ui/lab/Timeline";
 import TimelineItem from "@material-ui/lab/TimelineItem";
@@ -19,7 +24,8 @@ import TimelineSeparator from "@material-ui/lab/TimelineSeparator";
 import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import TimelineDot from "@material-ui/lab/TimelineDot";
-import TimelineOppositeContent from "@material-ui/lab/TimelineOppositeContent";
+import clsx from "clsx";
+import { TimelineOppositeContent } from "@material-ui/lab";
 
 const theme = createTheme({
   palette: {
@@ -33,176 +39,280 @@ const theme = createTheme({
 });
 
 const useStyles = makeStyles((theme) => ({
-  roadmap: {
-    backgroundColor: "white",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    maxWidth: "100%",
-  },
-  roadmapContent: {
-    paddingTop: theme.spacing(6),
-    paddingBottom: theme.spacing(12),
-  },
-  yellowPaper: {
-    backgroundColor: yellow[300],
-  },
-  roadmapText: {
-    color: "black",
-    textAlign: "center",
-    fontFamily: "Open Sans",
-    fontSize: 18,
-    paddingBottom: 50,
-    maxWidth: 530,
-    margin: "0 auto",
-    marginTop: theme.spacing(3),
-  },
-  root: {
-    flexGrow: 1,
-    overflow: "hidden",
-    padding: theme.spacing(0, 3),
-  },
-  paper: {
-    maxWidth: 800,
-    backgroundColor: "#FEF6D8",
-    margin: `${theme.spacing(1)}px auto`,
-    padding: theme.spacing(6),
-    textAlign: "left",
-    marginBottom: 50,
-  },
-  inActivePaper: {
-    maxWidth: 800,
-    backgroundColor: "#d3d3d3",
-    margin: `${theme.spacing(1)}px auto`,
-    padding: theme.spacing(6),
-    textAlign: "left",
-    marginBottom: 50,
+  card: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(6),
+    paddingRight: theme.spacing(6),
   },
   cardTitle: {
     fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
     fontSize: 24,
     fontWeight: 600,
-    color: "#875811",
+    color: TEXT_GREY,
     textAlign: "left",
+    "&.active": {
+      color: TEXT_BROWN,
+    },
   },
-  cardText: {
-    color: "#875811",
+  cardBody: {
     fontFamily: "Open Sans",
     fontSize: 18,
     textAlign: "left",
+    color: TEXT_GREY,
+    marginTop: theme.spacing(2),
+    "&.active": {
+      color: TEXT_BROWN,
+    },
   },
-  inActiveCardTitle: {
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
-    color: "gray",
-    textAlign: "left",
+  connector: {
+    backgroundColor: "#DDD",
+    "&.active": {
+      backgroundColor: BANANA_ICON_YELLOW,
+    },
   },
-  roadmapHeader: {
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
-    fontWeight: 600,
+  dot: {
+    backgroundColor: "#DDD",
+    "&.active": {
+      backgroundColor: BANANA_ICON_YELLOW,
+    },
+    "&.first": {
+      marginTop: theme.spacing(5),
+    },
+    "&.last": {
+      marginBottom: theme.spacing(8),
+    },
+  },
+  introContainer: {
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(5),
+  },
+  paper: {
+    padding: theme.spacing(3),
+    backgroundColor: LIGHT_GREY,
+    "&.active": {
+      backgroundColor: LIGHT_YELLOW,
+    },
+  },
+  sectionTitle: {
     fontSize: 32,
+    fontWeight: "600",
+  },
+  sectionBody: {
+    fontSize: 18,
+    fontFamily: "Open Sans",
+    marginTop: theme.spacing(2.5),
+  },
+  timelineContainer: {
+    paddingBottom: theme.spacing(10),
   },
   root: {
-    maxWidth: 1090,
-    margin: "0 auto",
+    backgroundColor: "#FFF",
+    width: "100%",
   },
-  timelineDot: {
-    backgroundColor: "#FAC300",
-  },
-  timelineSeperator: {
-    marginTop: 100,
-    marginBottom: -100,
-  },
-  timelineConnector: {
-    backgroundColor: "#FAC300",
+  verticallyCenterContent: {
+    display: "none",
   },
 }));
 
-function TimelineCard({ active }) {
+export default function Roadmap(props) {
   const classes = useStyles();
+  const timelineCards = [
+    {
+      emoji: "🎉",
+      emojiAria: "celebration",
+      title: "Launch of MonkeDAO",
+      body: "",
+      isActive: true,
+    },
+    {
+      emoji: "🤝",
+      emojiAria: "handshake",
+      title: "Community Building",
+      body: "",
+      isActive: true,
+    },
+    {
+      emoji: "🏦",
+      emojiAria: "bank",
+      title: "Launch of DAO Treasury",
+      body: "",
+      isActive: false,
+    },
+    {
+      emoji: "✈️",
+      emojiAria: "airplane",
+      title: "Airdrop of MonkeDAO Commemorative Tokens",
+      body: "We will take a snapshot of all verified monkes and airdrop a unique NFT, created by our talented in-house designers.",
+      isActive: false,
+    },
+    {
+      emoji: "🐒️",
+      emojiAria: "monkey",
+      title: "Launch of Monke Pet",
+      body: "A unique NFT collection that provide benefits when held in the same wallet as a Gen2 Monke.",
+      isActive: false,
+    },
+    {
+      emoji: "⚖️",
+      emojiAria: "law",
+      title: "Introduction of DAO Governance Mechanism",
+      body: "",
+      isActive: false,
+    },
+    {
+      emoji: "👕",
+      emojiAria: "shirt",
+      title: "Monke Merchandise",
+      body: "",
+      isActive: false,
+    },
+    {
+      emoji: "📊",
+      emojiAria: "bar-chart",
+      title: "Launch of MonkeTools",
+      body: "A series of useful tools that will automate essential processes for anyone interacting with the Solana ecosystem.",
+      isActive: false,
+    },
+    {
+      emoji: "🏘",
+      emojiAria: "houses",
+      title: "Launch of MonkeDAO Village",
+      body: "More TBA.",
+      isActive: false,
+    },
+    {
+      emoji: "🙊",
+      emojiAria: "monkey",
+      title: "Fractionalization of selected Monkes to increase ownership",
+      body: "More TBA.",
+      isActive: false,
+    },
+
+    {
+      emoji: "📈",
+      emojiAria: "line-graph",
+      title: "Launch of MonkeDAO Capital",
+      body: "More TBA.",
+      isActive: false,
+    },
+  ];
   return (
-    <Paper className={active === true ? classes.paper : classes.inActivePaper}>
-      <Grid container wrap="nowrap" spacing={4}>
-        <Grid item></Grid>
-        <Grid item xs zeroMinWidth>
+    <ThemeProvider theme={theme}>
+      <Box className={classes.root}>
+        <Container maxWidth="sm" className={classes.introContainer}>
           <Typography
-            component="h1"
             variant="h4"
             align="center"
-            className={
-              active === true ? classes.cardTitle : classes.inActiveCardTitle
-            }
-            gutterBottom
+            className={classes.sectionTitle}
           >
-            Roadmap Item Example Heading
+            Roadmap
           </Typography>
           <Typography
-            className={
-              active === true ? classes.cardText : classes.inActiveCardTitle
-            }
+            variant="h6"
+            align="center"
+            className={classes.sectionBody}
+            component="p"
+            gutterBottom
           >
             This is all copy pasted placeholder text. We’ve set up some
             goalposts for ourselves. Once we hit a target sell through
             percentage, we will begin to work on realizing the stated goal.
           </Typography>
-        </Grid>
-      </Grid>
-    </Paper>
-  );
-}
-
-export default function Roadmap(props) {
-  const classes = useStyles();
-  return (
-    <ThemeProvider theme={theme}>
-      <Container className={classes.roadmap}>
-        <Box className={classes.roadmapContent}>
-          <div className={classes.root}>
-            <Timeline>
-              <TimelineItem>
-                <BananaTimeline />
-                <TimelineOppositeContent style={{ flex: 0.1, width: 0 }} />
-                <TimelineContent>
-                  <TimelineCard active />
-                </TimelineContent>
-              </TimelineItem>
-              <TimelineItem>
-                <BananaTimeline />
-                <TimelineOppositeContent style={{ flex: 0.1, width: 0 }} />
-                <TimelineContent>
-                  <TimelineCard active />
-                </TimelineContent>
-              </TimelineItem>
-              <TimelineItem>
-                <BananaTimeline />
-                <TimelineOppositeContent style={{ flex: 0.1, width: 0 }} />
-                <TimelineContent>
-                  {" "}
-                  <TimelineCard />
-                </TimelineContent>
-              </TimelineItem>
-            </Timeline>
-          </div>
-        </Box>
-      </Container>
+        </Container>
+        <Container maxWidth="md" className={classes.timelineContainer}>
+          <Timeline>
+            {timelineCards.map((card, i) => {
+              const isNotFirst = i !== 0;
+              const isNotLast = i !== timelineCards.length - 1;
+              const isActive = card.isActive;
+              const previousIsActive =
+                isNotFirst && timelineCards[i - 1].isActive;
+              return (
+                <TimelineItem key={i}>
+                  <TimelineOppositeContent
+                    className={classes.verticallyCenterContent}
+                    align="right"
+                    variant="body2"
+                    color="textSecondary"
+                  ></TimelineOppositeContent>
+                  <TimelineSeparator>
+                    {isNotFirst && (
+                      <TimelineConnector
+                        className={
+                          previousIsActive
+                            ? clsx(classes.connector, "active")
+                            : classes.connector
+                        }
+                      />
+                    )}
+                    <TimelineDot
+                      className={
+                        !isNotFirst
+                          ? clsx(classes.dot, "first", "active")
+                          : !isNotLast
+                          ? isActive
+                            ? clsx(classes.dot, "last", "active")
+                            : clsx(classes.dot, "last")
+                          : isActive
+                          ? clsx(classes.dot, "active")
+                          : classes.dot
+                      }
+                    >
+                      <img src="/banana_timeline_icon.svg" alt="Banana icon" />
+                    </TimelineDot>
+                    {isNotLast && (
+                      <TimelineConnector
+                        className={
+                          isActive
+                            ? clsx(classes.connector, "active")
+                            : classes.connector
+                        }
+                      />
+                    )}
+                  </TimelineSeparator>
+                  <TimelineContent className={classes.card}>
+                    <Paper
+                      elevation={0}
+                      className={
+                        isActive ? clsx(classes.paper, "active") : classes.paper
+                      }
+                    >
+                      <Typography
+                        variant="h6"
+                        component="h3"
+                        className={
+                          isActive
+                            ? clsx(classes.cardTitle, "active")
+                            : classes.cardTitle
+                        }
+                      >
+                        {
+                          <span role="img" aria-label={card.emojiAria}>
+                            {card.emoji}
+                          </span>
+                        }{" "}
+                        {card.title}
+                      </Typography>
+                      {!!card.body && (
+                        <Typography
+                          className={
+                            isActive
+                              ? clsx(classes.cardBody, "active")
+                              : classes.cardBody
+                          }
+                        >
+                          {card.body}
+                        </Typography>
+                      )}
+                    </Paper>
+                  </TimelineContent>
+                </TimelineItem>
+              );
+            })}
+          </Timeline>
+        </Container>
+      </Box>
     </ThemeProvider>
-  );
-}
-
-function BananaTimelineIcon() {
-  return (
-    <TimelineDot color="secondary">
-      <img src="/banana_timeline_icon.svg" />
-    </TimelineDot>
-  );
-}
-
-function BananaTimeline({ children }) {
-  const classes = useStyles();
-
-  return (
-    <TimelineSeparator className={classes.timelineSeperator}>
-      <BananaTimelineIcon />
-      <TimelineConnector className={classes.timelineConnector} />
-    </TimelineSeparator>
   );
 }

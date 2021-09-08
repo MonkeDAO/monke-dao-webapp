@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#FEF6D8",
       minHeight: "100vh",
       position: "relative",
-      paddingBottom: 300,
+      paddingBottom: 247,
     },
   },
   bananasBackground: {
@@ -118,7 +118,7 @@ const App = () => {
             component="p"
             gutterBottom
           >
-            We are a community owned and operated, made up exclusively of Solana
+            We are community owned and operated, made up exclusively of Solana
             Monkey Business owners who like to share alpha, laugh and joke, swap
             skills and work together to enrich the Solana ecosystem.
           </Typography>
