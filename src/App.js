@@ -27,22 +27,35 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#FEF6D8",
       minHeight: "100vh",
       position: "relative",
-      paddingBottom: 300,
+      paddingBottom: 247,
     },
   },
   bananasBackground: {
-    backgroundImage: "url('bananas.svg')",
-    backgroundAttachment: "fixed",
-    backgroundSize: "contain",
-    backgroundRepeat: "no-repeat",
-    backgroundPositionY: "25%",
+    "&::before": {
+      content: "' '",
+      position: "fixed",
+      width: "100%",
+      height: "100%",
+      top: 0,
+      left: 0,
+      willChange: "transform",
+      backgroundImage: "url('bananas.svg')",
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPositionY: "25%",
+      zIndex: "-1",
+    },
     "&.small-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
-      backgroundSize: "cover",
+      "&::before": {
+        backgroundImage: "url('bananas-muted.svg')",
+        backgroundSize: "cover",
+      },
     },
     "&.xs-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
-      backgroundSize: "contain",
+      "&::before": {
+        backgroundImage: "url('bananas-muted.svg')",
+        backgroundSize: "contain",
+      },
     },
   },
   heroTitle: {
@@ -118,9 +131,9 @@ const App = () => {
             component="p"
             gutterBottom
           >
-            We are a community owned and operated DAO, made up exclusively of
-            Solana Monkey Business owners who like to share alpha, laugh and
-            joke, swap skills and work together to enrich the Solana ecosystem.
+            We are community owned and operated, made up exclusively of Solana
+            Monkey Business owners who like to share alpha, laugh and joke, swap
+            skills and work together to enrich the Solana ecosystem.
           </Typography>
           <Typography
             variant="h6"
@@ -136,7 +149,7 @@ const App = () => {
           <Cards />
         </div>
       </div>
-      {/* <Roadmap /> */}
+      <Roadmap />
       <Footer />
     </ThemeProvider>
   );
