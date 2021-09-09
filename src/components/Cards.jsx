@@ -185,7 +185,9 @@ function buttonContent(
         <img
           alt={buttonAlt && buttonAlt}
           src={buttonImage}
-          className={isXsScreenAndSmaller && classes.buttonImageSmall}
+          className={
+            isXsScreenAndSmaller ? classes.buttonImageSmall : undefined
+          }
         />
       </div>
     );
