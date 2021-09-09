@@ -273,7 +273,14 @@ export default function Roadmap(props) {
                           : classes.dot
                       }
                     >
-                      <img src="/banana_timeline_icon.svg" alt="Banana icon" />
+                      <img
+                        src={
+                          isActive
+                            ? "/banana_timeline_icon.svg"
+                            : "/banana_timeline_inactive_icon.svg"
+                        }
+                        alt="Banana icon"
+                      />
                     </TimelineDot>
                     {isNotLast && (
                       <TimelineConnector
