@@ -227,9 +227,11 @@ export default function Roadmap(props) {
             component="p"
             gutterBottom
           >
-            This is all copy pasted placeholder text. We’ve set up some
-            goalposts for ourselves. Once we hit a target sell through
-            percentage, we will begin to work on realizing the stated goal.
+            The MonkeDAO has only just begun. While we're climbing on treetops
+            right now, Monkes on the Moon is where our journey will take us.
+            Below is a roadmap outlining the milestones we have planned for the
+            future of the DAO, including growth, monetization, investment and
+            more.
           </Typography>
         </Container>
         <Container maxWidth="md" className={classes.timelineContainer}>
