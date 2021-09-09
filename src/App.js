@@ -31,18 +31,31 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bananasBackground: {
-    backgroundImage: "url('bananas.svg')",
-    backgroundAttachment: "fixed",
-    backgroundSize: "contain",
-    backgroundRepeat: "no-repeat",
-    backgroundPositionY: "25%",
+    "&::before": {
+      content: "' '",
+      position: "fixed",
+      width: "100%",
+      height: "100%",
+      top: 0,
+      left: 0,
+      willChange: "transform",
+      backgroundImage: "url('bananas.svg')",
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPositionY: "25%",
+      zIndex: "-1",
+    },
     "&.small-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
-      backgroundSize: "cover",
+      "&::before": {
+        backgroundImage: "url('bananas-muted.svg')",
+        backgroundSize: "cover",
+      },
     },
     "&.xs-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
-      backgroundSize: "contain",
+      "&::before": {
+        backgroundImage: "url('bananas-muted.svg')",
+        backgroundSize: "contain",
+      },
     },
   },
   heroTitle: {
