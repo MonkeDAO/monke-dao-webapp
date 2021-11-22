@@ -1,5 +1,6 @@
 import React from "react";
 import { Header } from "./components/Header";
+import { Banner } from "./components/Banner";
 import { Cards } from "./components/Cards";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -15,6 +16,7 @@ import { TEXT_BROWN } from "./constants/colors";
 import clsx from "clsx";
 import Footer from "./components/Footer";
 import Roadmap from "./components/Roadmap";
+import Validator from "./components/Validator";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -100,6 +102,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
+      <Banner />
       <div
         className={
           isXsScreenAndSmaller
@@ -149,6 +152,7 @@ const App = () => {
           <Cards />
         </div>
       </div>
+      <Validator />
       <Roadmap />
       <Footer />
     </ThemeProvider>
