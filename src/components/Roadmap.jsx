@@ -152,6 +152,13 @@ export default function Roadmap(props) {
       isActive: false,
     },
     {
+      emoji: "⛓️",
+      emojiAria: "chains",
+      title: "Launch of DAO Validator",
+      body: "",
+      isActive: true,
+    },
+    {
       emoji: "✈️",
       emojiAria: "airplane",
       title: "Airdrop MonkeDAO Commemorative Tokens",
