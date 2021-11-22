@@ -8,7 +8,7 @@ import {
   makeStyles,
   ThemeProvider,
   Typography,
-  Paper,
+  Box,
   useMediaQuery,
 } from "@material-ui/core";
 import {
@@ -227,6 +227,7 @@ export default function Validator(props) {
   ];
   return (
     <ThemeProvider theme={theme}>
+      <Box className={classes.root}>
       <Grid
         container
         className={classes.root}
@@ -326,6 +327,7 @@ export default function Validator(props) {
           <Faq />
         </Grid>
       </Grid>
+      </Box>
     </ThemeProvider>
   );
 }
