@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core/styles";
 import { TEXT_BROWN } from "./constants/colors";
 import clsx from "clsx";
+import Validator from "./components/Validator";
 import Footer from "./components/Footer";
 import Roadmap from "./components/Roadmap";
 
@@ -122,6 +123,15 @@ const App = () => {
             className={classes.heroTitle}
             gutterBottom
           >
+            MonkeDAO is a curated community of monkes
+          </Typography>
+          <Typography
+            variant="h6"
+            align="center"
+            className={classes.heroContent}
+            component="p"
+            gutterBottom
+          >
             Welcome to MonkeDAO, the first NFT DAO on Solana.
           </Typography>
           <Typography
@@ -131,15 +141,14 @@ const App = () => {
             component="p"
             gutterBottom
           >
-            We are community owned and operated, made up exclusively of Solana
-            Monkey Business owners who like to share alpha, laugh and joke, swap
-            skills and work together to enrich the Solana ecosystem.
+            We are a community owned and operated, made up exclusively of Solana Monkey Business owners who like to share alpha, laugh and joke, swap skills and work together to enrich the Solana ecosystem.
           </Typography>
           <Typography
             variant="h6"
             align="center"
             className={classes.heroContent}
             component="p"
+            gutterBottom
           >
             We welcome you to the MonkeDAO family!
           </Typography>
@@ -148,6 +157,8 @@ const App = () => {
         <div className={classes.cardsContainer}>
           <Cards />
         </div>
+
+        <Validator />
       </div>
       <Roadmap />
       <Footer />

@@ -144,26 +144,27 @@ export default function Roadmap(props) {
       body: "",
       isActive: true,
     },
+
     {
       emoji: "🏦",
       emojiAria: "bank",
-      title: "Launch DAO Treasury",
+      title: "Launch of DAO Treasury",
       body: "",
-      isActive: false,
+      isActive: true,
     },
     {
-      emoji: "✈️",
-      emojiAria: "airplane",
-      title: "Airdrop MonkeDAO Commemorative Tokens",
-      body: "We will take a snapshot of all verified monkes and airdrop a unique NFT, created by our talented in-house designers.",
-      isActive: false,
-    },
-    {
-      emoji: "🐒️",
+      emoji: "🙊",
       emojiAria: "monkey",
-      title: "Launch Monke Pet",
-      body: "A unique NFT collection that provide benefits when held in the same wallet as a Gen2 Monke.",
-      isActive: false,
+      title: "Purchase of Monke to Fractionalize.",
+      body: "",
+      isActive: true,
+    },
+    {
+      emoji: "⛓",
+      emojiAria: "validator",
+      title: "Launch of DAO Validator",
+      body: "",
+      isActive: true,
     },
     {
       emoji: "⚖️",
@@ -182,29 +183,14 @@ export default function Roadmap(props) {
     {
       emoji: "📊",
       emojiAria: "bar-chart",
-      title: "Launch MonkeTools",
+      title: "Launch of MonkeTools",
       body: "A series of useful tools that will automate essential processes for anyone interacting with the Solana ecosystem.",
       isActive: false,
     },
     {
-      emoji: "🏘",
-      emojiAria: "houses",
-      title: "Launch MonkeDAO Village",
-      body: "More TBA.",
-      isActive: false,
-    },
-    {
-      emoji: "🙊",
-      emojiAria: "monkey",
-      title: "Fractionalization of selected Monkes to increase ownership",
-      body: "More TBA.",
-      isActive: false,
-    },
-
-    {
       emoji: "📈",
       emojiAria: "line-graph",
-      title: "Launch MonkeDAO Capital",
+      title: "Launch of MonkeDAO Capital",
       body: "More TBA.",
       isActive: false,
     },
@@ -227,11 +213,7 @@ export default function Roadmap(props) {
             component="p"
             gutterBottom
           >
-            The MonkeDAO has only just begun. While we're climbing on treetops
-            right now, Monkes on the Moon is where our journey will take us.
-            Below is a roadmap outlining the milestones we have planned for the
-            future of the DAO, including growth, monetization, investment and
-            more.
+            We’ve set up some goalposts for ourselves. Once we hit a target sell through percentage, we will begin to work on realizing the stated goal.
           </Typography>
         </Container>
         <Container maxWidth="md" className={classes.timelineContainer}>
