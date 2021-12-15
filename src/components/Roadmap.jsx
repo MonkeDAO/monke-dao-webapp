@@ -181,13 +181,6 @@ export default function Roadmap(props) {
       isActive: false,
     },
     {
-      emoji: "📊",
-      emojiAria: "bar-chart",
-      title: "Launch of MonkeTools",
-      body: "A series of useful tools that will automate essential processes for anyone interacting with the Solana ecosystem.",
-      isActive: false,
-    },
-    {
       emoji: "📈",
       emojiAria: "line-graph",
       title: "Launch of MonkeDAO Capital",
