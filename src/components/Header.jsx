@@ -32,6 +32,16 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "24px",
     minWidth: 168,
   },
+  intro: {
+    background: "linear-gradient(to right, #71EA9E, #7E3EB0)",
+    padding: "2px 0 2px 0",
+    textAlign: "center",
+    fontSize: "16px",
+    color: "white",
+    width: "100%",
+    lineHeight: "2em",
+    fontFamily: ["Open Sans", "serif"].join(","),
+  },
   toolbar: {
     // flexWrap: "wrap",
     maxWidth: 1072,
@@ -136,6 +146,9 @@ export function Header() {
           </Box>
         </Toolbar>
       </AppBar>
+      <div className={classes.intro}>
+        <p>We're the first decentralized organisation to launch a validator node on Solana.<br />Stake with us and earn up to 7% APY on your SOL! →</p>
+      </div>
     </ThemeProvider>
   );
 }
