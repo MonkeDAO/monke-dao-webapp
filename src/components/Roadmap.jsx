@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
   sectionTitle: {
     fontSize: 32,
     fontWeight: "600",
+    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
   },
   sectionBody: {
     fontSize: 18,
@@ -199,7 +200,7 @@ export default function Roadmap(props) {
           >
             Roadmap
           </Typography>
-          <Typography
+          {/* <Typography
             variant="h6"
             align="center"
             className={classes.sectionBody}
@@ -207,7 +208,7 @@ export default function Roadmap(props) {
             gutterBottom
           >
             We’ve set up some goalposts for ourselves. Once we hit a target sell through percentage, we will begin to work on realizing the stated goal.
-          </Typography>
+          </Typography> */}
         </Container>
         <Container maxWidth="md" className={classes.timelineContainer}>
           <Timeline>

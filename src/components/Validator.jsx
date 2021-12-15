@@ -34,8 +34,12 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     left: "5%"
   },
+  stakingHeader: {
+    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+  },
   stakingIntro: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
+    fontFamily: ["Open Sans", "serif"].join(","),
   },
   stakingIntroSm: {
     textAlign: "center",
@@ -86,6 +90,7 @@ export default function Validator() {
               component="h3"
               variant="h5"
               gutterBottom
+              className={classes.stakingHeader}
             >
               Our validator
             </Typography>

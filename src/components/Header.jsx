@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "16px",
     color: "white",
     width: "100%",
-    lineHeight: "2em"
+    lineHeight: "2em",
+    fontFamily: ["Open Sans", "serif"].join(","),
   },
   toolbar: {
     // flexWrap: "wrap",
