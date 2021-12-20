@@ -5,17 +5,19 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles } from "@material-ui/core/styles";
 import { createTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
+import { Box, Link } from "@material-ui/core";
 import { useMediaQuery } from "@material-ui/core";
+import clsx from "clsx";
+import { TWITTER_BLUE, DISCORD_BLUE } from '../constants/colors';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2A90E8",
+      main: TWITTER_BLUE,
     },
     secondary: {
-      main: "#000000",
-    },
+      main: DISCORD_BLUE,
+    }
   },
 });
 
@@ -25,12 +27,18 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
     backgroundColor: "white",
     height: 86,
+    "&.sm": {
+      height: "auto"
+    }
   },
   logo: {
-    width: "35%",
-    paddingTop: "24px",
-    paddingBottom: "24px",
-    minWidth: 168,
+    width: 168,
+  },
+  titleContainer :{
+    flexGrow: 1,
+    "&.sm": {
+      marginTop: 26
+    }
   },
   intro: {
     background: "linear-gradient(to right, #71EA9E, #7E3EB0)",
@@ -53,11 +61,27 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     // padding: 0,
     padding: `0 ${theme.spacing(2)}`,
+    "&.sm": {
+      display: "block",
+      textAlign: "center",
+      height: "auto"
+    }
+  },
+  social: {
+    height: 38,
+    "&.sm": {
+      display: "inline-block",
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3)
+    }
+  },
+  discord: {
+    marginRight: theme.spacing(2),
   },
   toolbarTitle: {
     padding: `10px`,
     flexGrow: 1,
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Poppins", "Open Sans", "sans-serif"].join(","),
     fontWeight: "600",
     fontSize: 18,
   },
@@ -75,20 +99,16 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "none",
     borderRadius: 8,
     height: 38,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    padding: "8px 16px"
   },
-  twitterLogo: {
+  stakeLink: {
+    color: "white"
+  },
+  buttonLogo: {
     marginRight: 8,
-  },
-  twitterLink: {
-    width: 164,
-  },
-  twitterLinkSmall: {
-    width: 40,
-    minWidth: 40,
-  },
-  discordLink: {
-    width: 116,
-  },
+  }
 }));
 
 export function Header() {
@@ -100,54 +120,62 @@ export function Header() {
         position="sticky"
         color="default"
         elevation={0}
-        className={classes.appBar}
+        className={clsx(classes.appBar, { sm: isXsScreenAndSmaller })}
       >
-        <Toolbar className={classes.toolbar}>
-          <span>
+        <Toolbar className={clsx(classes.toolbar, { sm: isXsScreenAndSmaller })}>
+          <Box className={clsx(classes.titleContainer, { sm: isXsScreenAndSmaller })}>
             <img
               alt="MonkeDao logo"
               src="/MonkeDAO_Logo_Positive.png"
               className={classes.logo}
             />
-          </span>
-          <Box mr={2} height={38}>
+          </Box>
+          <Box className={clsx(classes.social, classes.discord, { sm: isXsScreenAndSmaller })}>
             <Button
               href="https://discord.gg/TscZwJ7jbX"
               color="secondary"
               variant="contained"
-              className={
-                isXsScreenAndSmaller
-                  ? classes.link
-                  : [classes.link, classes.discordLink].join(" ")
-              }
+              className={classes.link}
             >
-              {isXsScreenAndSmaller ? "Join" : "Join us"}
+              <img
+                alt="Discord logo"
+                src="/discord.svg"
+                className={classes.buttonLogo}
+              />
+              Join the Discord
             </Button>
           </Box>
-          <Box height={38}>
+          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
             <Button
               href="https://twitter.com/MonkeDAO"
               color="primary"
               variant="contained"
-              className={[
-                classes.link,
-                isXsScreenAndSmaller
-                  ? classes.twitterLinkSmall
-                  : classes.twitterLink,
-              ].join(" ")}
+              className={classes.link}
             >
               <img
                 alt="Twitter logo"
                 src="/twitter.svg"
-                className={!isXsScreenAndSmaller && classes.twitterLogo}
+                className={classes.buttonLogo}
               />
-              {!isXsScreenAndSmaller && "@MonkeDAO"}
+              Follow us
             </Button>
           </Box>
         </Toolbar>
       </AppBar>
       <div className={classes.intro}>
-        <p>We're the first decentralized organisation to launch a validator node on Solana.<br />Stake with us and earn up to 7% APY on your SOL! →</p>
+        <p>
+          {"We’re the first DAO to launch a staking pool on Solana."}
+          <br />
+          <Link
+            href="https://daopool.monkedao.io/"
+            underline="hover"
+            className={classes.stakeLink}
+            target="_blank"
+            rel="noopener"
+          >
+            Stake with DAOPool to receive daoSOL, while earning up to 7% on your staked SOL! →
+          </Link>
+        </p>
       </div>
     </ThemeProvider>
   );

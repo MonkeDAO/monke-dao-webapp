@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     color: TEXT_GREY,
     textAlign: "left",
     "&.active": {
-      color: TEXT_BROWN,
+      color: "#000000",
     },
   },
   cardBody: {
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     color: TEXT_GREY,
     marginTop: theme.spacing(2),
     "&.active": {
-      color: TEXT_BROWN,
+      color: "#000000",
     },
   },
   connector: {
@@ -82,6 +82,11 @@ const useStyles = makeStyles((theme) => ({
   },
   dot: {
     backgroundColor: "#DDD",
+    width: 24,
+    height: 24,
+    boxShadow: "none",
+    marginBottom: 0,
+    marginTop: 0,
     "&.active": {
       backgroundColor: BANANA_ICON_YELLOW,
     },
@@ -139,53 +144,73 @@ export default function Roadmap(props) {
       isActive: true,
     },
     {
-      emoji: "🤝",
-      emojiAria: "handshake",
-      title: "Community Building",
-      body: "",
-      isActive: true,
-    },
-
-    {
       emoji: "🏦",
       emojiAria: "bank",
-      title: "Launch of DAO Treasury",
-      body: "",
-      isActive: true,
-    },
-    {
-      emoji: "🙊",
-      emojiAria: "monkey",
-      title: "Purchase of Monke to Fractionalize.",
-      body: "",
-      isActive: true,
-    },
-    {
-      emoji: "⛓",
-      emojiAria: "validator",
-      title: "Launch of DAO Validator",
+      title: "Create DAO Treasury",
       body: "",
       isActive: true,
     },
     {
       emoji: "⚖️",
       emojiAria: "law",
-      title: "Introduction of DAO Governance Mechanism",
+      title: "Hold Elections for First Monke Board",
+      body: "",
+      isActive: true,
+    },
+    {
+      emoji: "⛓",
+      emojiAria: "validator",
+      title: "Launch Solana Validator Node",
+      body: "",
+      isActive: true,
+    },
+    {
+      emoji: "🙊",
+      emojiAria: "monkey",
+      title: "Purchase and Fractionalize SMB Mascot",
+      body: "",
+      isActive: true,
+    },
+    {
+      emoji: "💧",
+      emojiAria: "droplet",
+      title: "Launch Solana Community Staking Pool",
+      body: "",
+      isActive: true,
+    },
+    {
+      emoji: "🗃",
+      emojiAria: "card file box",
+      title: "Incorporate MonkeDAO",
       body: "",
       isActive: false,
     },
     {
-      emoji: "👕",
-      emojiAria: "shirt",
-      title: "Monke Merchandise",
+      emoji: "💎",
+      emojiAria: "gem stone",
+      title: "Launch Monkeverse 3D Metaverse ready avatars",
       body: "",
       isActive: false,
     },
     {
-      emoji: "📈",
-      emojiAria: "line-graph",
-      title: "Launch of MonkeDAO Capital",
-      body: "More TBA.",
+      emoji: "🐒",
+      emojiAria: "monkey",
+      title: "Launch Monkeverse NFTs with ecosystem functionality",
+      body: "",
+      isActive: false,
+    },
+    {
+      emoji: "💲",
+      emojiAria: "dollar",
+      title: "Launch $MONKE Token",
+      body: "",
+      isActive: false,
+    },
+    {
+      emoji: "🏛",
+      emojiAria: "building",
+      title: "Launch MonkeDAO Capital",
+      body: "",
       isActive: false,
     },
   ];
@@ -216,8 +241,7 @@ export default function Roadmap(props) {
               const isNotFirst = i !== 0;
               const isNotLast = i !== timelineCards.length - 1;
               const isActive = card.isActive;
-              const previousIsActive =
-                isNotFirst && timelineCards[i - 1].isActive;
+              const nextIsActive = isNotLast && timelineCards[i + 1].isActive;
               return (
                 <TimelineItem key={i}>
                   <TimelineOppositeContent
@@ -230,7 +254,7 @@ export default function Roadmap(props) {
                     {isNotFirst && (
                       <TimelineConnector
                         className={
-                          previousIsActive
+                          isActive
                             ? clsx(classes.connector, "active")
                             : classes.connector
                         }
@@ -249,19 +273,11 @@ export default function Roadmap(props) {
                           : classes.dot
                       }
                     >
-                      <img
-                        src={
-                          isActive
-                            ? "/banana_timeline_icon.svg"
-                            : "/banana_timeline_inactive_icon.svg"
-                        }
-                        alt="Banana icon"
-                      />
                     </TimelineDot>
                     {isNotLast && (
                       <TimelineConnector
                         className={
-                          isActive
+                          nextIsActive
                             ? clsx(classes.connector, "active")
                             : classes.connector
                         }
