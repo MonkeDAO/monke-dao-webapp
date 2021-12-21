@@ -25,55 +25,51 @@ export const scroll = new SmoothScroll('a[href*="#"]', {
 const useStyles = makeStyles((theme) => ({
   "@global": {
     body: {
-      backgroundColor: "#FEF6D8",
       minHeight: "100vh",
       position: "relative",
       paddingBottom: 247,
     },
   },
   bananasBackground: {
-    "&::before": {
-      content: "' '",
-      position: "fixed",
-      width: "100%",
-      height: "100%",
-      top: 0,
-      left: 0,
-      willChange: "transform",
-      backgroundImage: "url('bananas.svg')",
-      backgroundSize: "contain",
-      backgroundRepeat: "no-repeat",
-      backgroundPositionY: "25%",
-      zIndex: "-1",
-    },
+    backgroundImage: "url('bananas.svg')",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    width: "100%",
+    height: "100%",
+    zIndex: "-1",
+
     "&.small-bananas-background": {
-      "&::before": {
-        backgroundImage: "url('bananas-muted.svg')",
-        backgroundSize: "cover",
-      },
+      backgroundImage: "url('bananas-muted.svg')",
+      backgroundSize: "cover",
     },
     "&.xs-bananas-background": {
-      "&::before": {
-        backgroundImage: "url('bananas-muted.svg')",
-        backgroundSize: "contain",
-      },
+      backgroundImage: "url('bananas-muted.svg')",
+      backgroundSize: "contain",
     },
   },
   heroTitle: {
-    color: TEXT_BROWN,
     flexGrow: 1,
     fontWeight: "600",
-    // marginTop: 100,
     marginTop: 0,
+    fontSize: 32,
+    "&.sm": {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2)
+    }
   },
   heroContent: {
-    color: TEXT_BROWN,
     fontFamily: "Open Sans",
     marginTop: theme.spacing(2.5),
+    padding: 0,
+    fontSize: 18,
     "&.container": {
       marginTop: 0,
       paddingTop: theme.spacing(11),
     },
+    "&.sm": {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2)
+    }
   },
   cardsContainer: {
     maxWidth: 1072,
@@ -120,7 +116,7 @@ const App = () => {
             component="h1"
             variant="h4"
             align="center"
-            className={classes.heroTitle}
+            className={clsx(classes.heroTitle, { sm: isXsScreenAndSmaller })}
             gutterBottom
           >
             MonkeDAO is a curated community of monkes
@@ -128,7 +124,7 @@ const App = () => {
           <Typography
             variant="h6"
             align="center"
-            className={classes.heroContent}
+            className={clsx(classes.heroContent, { sm: isXsScreenAndSmaller })}
             component="p"
             gutterBottom
           >
@@ -137,20 +133,11 @@ const App = () => {
           <Typography
             variant="h6"
             align="center"
-            className={classes.heroContent}
+            className={clsx(classes.heroContent, { sm: isXsScreenAndSmaller })}
             component="p"
             gutterBottom
           >
-            We are a community owned and operated, made up exclusively of Solana Monkey Business owners who like to share alpha, laugh and joke, swap skills and work together to enrich the Solana ecosystem.
-          </Typography>
-          <Typography
-            variant="h6"
-            align="center"
-            className={classes.heroContent}
-            component="p"
-            gutterBottom
-          >
-            We welcome you to the MonkeDAO family!
+            We’re working to become the premier decentralized community of Web3, by providing unparalleled value to our members and the Solana ecosystem through community-led projects, connections and innovations.
           </Typography>
         </Container>
 

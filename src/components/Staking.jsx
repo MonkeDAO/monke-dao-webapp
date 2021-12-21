@@ -92,7 +92,7 @@ export default function Staking() {
         align="center"
         gutterBottom
       >
-        How to stake with MonkeDAO
+        How to stake with the MonkeDAO Validator
       </Typography>
 
       <Typography

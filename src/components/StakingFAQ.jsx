@@ -22,8 +22,8 @@ const useAccordionStyles = makeStyles(theme => ({
 
     "& summary": {
       cursor: "pointer",
-      fontWeight: "bold",
-      fontSize: "20px;",
+      fontWeight: "600",
+      fontSize: "18px;",
       listStyle: "none",
       paddingRight: "1.5em",
 
@@ -54,7 +54,7 @@ function Accordion({ items }) {
     <div className={classes.accordion}>
       {
         items.map((item, index) => (
-          <details className={classes.details}>
+          <details key={index} className={classes.details}>
             <summary>{item.title}</summary>
             <p>{item.content}</p>
           </details>

@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   stakingHeader: {
     fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontSize: 32
   },
   stakingIntro: {
     marginBottom: theme.spacing(3),
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
     backgroundColor: "#FFFFFF",
     borderRadius: "8px",
-    padding: "10px 12px",
+    padding: "12px 16px",
     color: "black",
     fontSize: "16px",
     lineHeight: "1em"
@@ -92,7 +93,7 @@ export default function Validator() {
               gutterBottom
               className={classes.stakingHeader}
             >
-              Our validator
+              MonkeDAO Validator
             </Typography>
             <Typography
               component="p"

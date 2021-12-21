@@ -8,7 +8,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@material-ui/core";
-import { BUTTON_YELLOW, TWITTER_BLUE } from "../constants/colors";
+import { DISCORD_BLUE, TWITTER_BLUE } from "../constants/colors";
 
 const theme = createTheme({
   palette: {
@@ -16,7 +16,7 @@ const theme = createTheme({
       main: TWITTER_BLUE,
     },
     secondary: {
-      main: BUTTON_YELLOW,
+      main: DISCORD_BLUE,
     },
   },
 });
@@ -50,14 +50,20 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "none",
     borderRadius: 8,
     height: 38,
-    margin: "0 8px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    padding: "8px 16px",
+    width: "100%"
   },
-  twitterLogo: {
+  buttonLogo: {
     marginRight: 8,
   },
-  twitterLink: {
-    width: 164,
-  },
+  logo: {
+    marginBottom: theme.spacing(3),
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto"
+  }
 }));
 
 export default function Footer(props) {
@@ -67,15 +73,25 @@ export default function Footer(props) {
       <footer className={classes.footer}>
         <Container p={2} maxWidth="sm">
           <Box className={classes.footerContent}>
+            <img
+              src="/monkedao-logo-negative.svg"
+              alt="MonkeDAO Logo"
+              className={classes.logo}
+            />
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Box>
+              <Box marginRight="20px">
                 <Button
                   href="https://discord.gg/TscZwJ7jbX"
                   color="secondary"
                   variant="contained"
                   className={[classes.link, classes.discordLink].join(" ")}
                 >
-                  Join us
+                  <img
+                    alt="Discord logo"
+                    src="/discord.svg"
+                    className={classes.buttonLogo}
+                  />
+                  Join the Discord
                 </Button>
               </Box>
               <Box>
@@ -88,7 +104,7 @@ export default function Footer(props) {
                   <img
                     alt="Twitter logo"
                     src="/twitter.svg"
-                    className={classes.twitterLogo}
+                    className={classes.buttonLogo}
                   />
                   @MonkeDAO
                 </Button>
