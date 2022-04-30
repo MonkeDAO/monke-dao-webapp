@@ -105,3 +105,5 @@ dist
 
 # ignore npm package lock (using yarn)
 package-lock.json
+
+.DS_STORE

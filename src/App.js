@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   heroContent: {
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     marginTop: theme.spacing(2.5),
     padding: 0,
     fontSize: 18,
@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
 const theme = createTheme({
   typography: {
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
   },
 });
 

@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
     textAlign: "center",
     marginTop: theme.spacing(3),
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
   },
   link: {
     textTransform: "none",
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     fontWeight: "600",
     fontSize: 16,
     boxShadow: "none",

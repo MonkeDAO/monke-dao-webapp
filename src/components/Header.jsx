@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     width: "100%",
     lineHeight: "2em",
-    fontFamily: ["Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
   },
   toolbar: {
     // flexWrap: "wrap",
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   toolbarTitle: {
     padding: `10px`,
     flexGrow: 1,
-    fontFamily: ["Poppins", "Open Sans", "sans-serif"].join(","),
+    fontFamily: ["Space Grotesk", "Open Sans", "sans-serif"].join(","),
     fontWeight: "600",
     fontSize: 18,
   },
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     textTransform: "none",
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     fontWeight: "600",
     fontSize: 16,
     boxShadow: "none",

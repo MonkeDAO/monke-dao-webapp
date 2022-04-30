@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardTitle: {
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
     fontSize: 24,
     fontWeight: 600,
     color: TEXT_GREY,
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardBody: {
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     fontSize: 18,
     textAlign: "left",
     color: TEXT_GREY,
@@ -111,11 +111,11 @@ const useStyles = makeStyles((theme) => ({
   sectionTitle: {
     fontSize: 32,
     fontWeight: "600",
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
   },
   sectionBody: {
     fontSize: 18,
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     marginTop: theme.spacing(2.5),
   },
   timelineContainer: {

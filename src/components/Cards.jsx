@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardText: {
     color: "white",
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     fontWeight: "500",
     fontSize: 18,
     marginBottom: 24,
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     paddingTop: 10,
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
     fontWeight: "600",
     fontSize: 24,
     marginBottom: 24,

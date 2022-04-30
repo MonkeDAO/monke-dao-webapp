@@ -35,12 +35,12 @@ const useStyles = makeStyles((theme) => ({
     left: "5%"
   },
   stakingHeader: {
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "Open Sans", "serif"].join(","),
     fontSize: 32
   },
   stakingIntro: {
     marginBottom: theme.spacing(3),
-    fontFamily: ["Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
   },
   stakingIntroSm: {
     textAlign: "center",
