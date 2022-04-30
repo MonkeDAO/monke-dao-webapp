@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     paddingTop: 10,
-    fontFamily: ["Space Grotesk", "serif"].join(","),
+    fontFamily: "Space Grotesk",
     fontWeight: "600",
     fontSize: 24,
     marginBottom: 24,
