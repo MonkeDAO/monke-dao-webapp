@@ -11,7 +11,6 @@ import {
   makeStyles,
   ThemeProvider,
 } from "@material-ui/core/styles";
-import { TEXT_BROWN } from "./constants/colors";
 import clsx from "clsx";
 import Validator from "./components/Validator";
 import Footer from "./components/Footer";
@@ -39,11 +38,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "-1",
 
     "&.small-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
       backgroundSize: "cover",
     },
     "&.xs-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
       backgroundSize: "contain",
     },
   },
