@@ -55,17 +55,17 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardTitle: {
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
     fontSize: 24,
     fontWeight: 600,
     color: TEXT_GREY,
     textAlign: "left",
     "&.active": {
-      color: "#000000",
+      color: "#184623",
     },
   },
   cardBody: {
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     fontSize: 18,
     textAlign: "left",
     color: TEXT_GREY,
@@ -75,20 +75,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   connector: {
-    backgroundColor: "#DDD",
+    backgroundColor: "#ffc919",
     "&.active": {
       backgroundColor: BANANA_ICON_YELLOW,
     },
   },
   dot: {
-    backgroundColor: "#DDD",
+    backgroundColor: "#ffc919",
     width: 24,
     height: 24,
     boxShadow: "none",
     marginBottom: 0,
     marginTop: 0,
     "&.active": {
-      backgroundColor: BANANA_ICON_YELLOW,
+      backgroundColor: '"#ffc919',
     },
     "&.first": {
       marginTop: theme.spacing(5),
@@ -105,24 +105,25 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     backgroundColor: LIGHT_GREY,
     "&.active": {
-      backgroundColor: LIGHT_YELLOW,
+      backgroundColor: 'white',
     },
   },
   sectionTitle: {
+    color: '#184623',
     fontSize: 32,
     fontWeight: "600",
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
   },
   sectionBody: {
     fontSize: 18,
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     marginTop: theme.spacing(2.5),
   },
   timelineContainer: {
     paddingBottom: theme.spacing(10),
   },
   root: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#f3efcd",
     width: "100%",
   },
   verticallyCenterContent: {

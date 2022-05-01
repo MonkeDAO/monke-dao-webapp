@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   "@global": {},
   appBar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
-    backgroundColor: "white",
+    backgroundColor: "#f3efcd",
     height: 86,
     "&.sm": {
       height: "auto"
@@ -41,14 +41,14 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   intro: {
-    background: "linear-gradient(to right, #71EA9E, #7E3EB0)",
+    background: "linear-gradient(to right, #ffc919, #184623)",
     padding: "2px 0 2px 0",
     textAlign: "center",
     fontSize: "16px",
-    color: "white",
+    color: "#f3efcd",
     width: "100%",
     lineHeight: "2em",
-    fontFamily: ["Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
   },
   toolbar: {
     // flexWrap: "wrap",
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   toolbarTitle: {
     padding: `10px`,
     flexGrow: 1,
-    fontFamily: ["Poppins", "Open Sans", "sans-serif"].join(","),
+    fontFamily: ["Space Grotesk", "Open Sans", "sans-serif"].join(","),
     fontWeight: "600",
     fontSize: 18,
   },
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     textTransform: "none",
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     fontWeight: "600",
     fontSize: 16,
     boxShadow: "none",

@@ -15,7 +15,7 @@ const theme = createTheme({
       main: "#2A90E8",
     },
     secondary: {
-      main: "#000000",
+      main: "#184623",
     },
   },
 });
@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
-    fontColor: "white",
-    backgroundColor: "#7E3EB0",
+    fontColor: "#f3efcd",
+    backgroundColor: "#184623",
   },
   cardText: {
-    color: "white",
-    fontFamily: "Open Sans",
+    color: "#f3efcd",
+    fontFamily: "Space Grotesk",
     fontWeight: "500",
     fontSize: 18,
     marginBottom: 24,
@@ -45,10 +45,11 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     paddingTop: 10,
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: "Space Grotesk",
     fontWeight: "600",
     fontSize: 24,
     marginBottom: 24,
+    color: '#f3efcd'
   },
   cardButtons: {
     display: "flex",
@@ -58,14 +59,15 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 10,
     padding: 40,
     textAlign: "left",
-    color: "white",
+    backgroundColor: '#184623',
+    color: "#f3efcd",
     margin: "auto",
     transition: "0.3s",
     boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
     "&:hover": {
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
-    fontColor: "white",
+    fontColor: "#f3efcd",
     width: "100%",
     maxWidth: 496,
     "&.small": {
@@ -110,8 +112,9 @@ const cards = [
     buttonImage: "/discord-blue.svg",
     buttonImageBefore: true,
     buttonAlt: "Discord logo",
-    bg: "#000000",
-    buttonColor: "white",
+    bg: "#184623",
+    buttonColor: "#f3efcd",
+    buttonTextColor: "#184623",
     buttonUrl: "https://discord.gg/TscZwJ7jbX"
   },
   {
@@ -121,9 +124,9 @@ const cards = [
     buttonText: "Visit",
     buttonImage: "/smb-monkey-market-logo.svg",
     buttonAlt: "SMB Monkey Market Logo",
-    bg: "#000000",
-    buttonColor: "white",
-    buttonTextColor: "black",
+    bg: "#184623",
+    buttonColor: "#f3efcd",
+    buttonTextColor: "#184623",
     buttonUrl: "https://market.solanamonkey.business/",
   },
   {
@@ -133,8 +136,10 @@ const cards = [
       `Stake with DAOPool to receive daoSOL, while earning up to 7% on your staked SOL!
 
       We were the the first DAO to launch a validator on Solana, and now we’re the first to launch a staking pool. All of the SOL staked in DAOPool is distributed to the Solana communities’ validators, with the goal of further decentralizing the network while supporting all DAOs across the ecosystem.`,
-    bg: "#000000",
+    bg: "#184623",
     buttonText: "Visit DAOPool →",
+    buttonColor: "#f3efcd",
+    buttonTextColor: "#184623",
     buttonUrl: "https://daopool.monkedao.io/",
     externalLink: true
   }

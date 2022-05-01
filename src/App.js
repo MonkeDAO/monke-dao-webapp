@@ -11,7 +11,6 @@ import {
   makeStyles,
   ThemeProvider,
 } from "@material-ui/core/styles";
-import { TEXT_BROWN } from "./constants/colors";
 import clsx from "clsx";
 import Validator from "./components/Validator";
 import Footer from "./components/Footer";
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bananasBackground: {
-    backgroundImage: "url('bananas.svg')",
+    backgroundColor:'#f3efcd',
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
     width: "100%",
@@ -39,15 +38,14 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "-1",
 
     "&.small-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
       backgroundSize: "cover",
     },
     "&.xs-bananas-background": {
-      backgroundImage: "url('bananas-muted.svg')",
       backgroundSize: "contain",
     },
   },
   heroTitle: {
+    color: '#184623',
     flexGrow: 1,
     fontWeight: "600",
     marginTop: 0,
@@ -58,7 +56,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   heroContent: {
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
+    color: '#184623',
     marginTop: theme.spacing(2.5),
     padding: 0,
     fontSize: 18,
@@ -85,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const theme = createTheme({
   typography: {
-    fontFamily: ["Poppins", "Open Sans", "serif"].join(","),
+    fontFamily: ["Space Grotesk", "serif"].join(","),
   },
 });
 

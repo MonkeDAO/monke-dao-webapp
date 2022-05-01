@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     width: 116,
   },
   footer: {
-    backgroundColor: "#000",
+    backgroundColor: "#184623",
     position: "absolute",
     bottom: 0,
     left: 0,
@@ -37,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(12),
   },
   footerText: {
-    color: "#fff",
+    color: "#f3efcd",
     textAlign: "center",
     marginTop: theme.spacing(3),
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
   },
   link: {
     textTransform: "none",
-    fontFamily: "Open Sans",
+    fontFamily: "Space Grotesk",
     fontWeight: "600",
     fontSize: 16,
     boxShadow: "none",
@@ -62,7 +62,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     display: "block",
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
+    width: '75%',
+    height: '75%'
   }
 }));
 
