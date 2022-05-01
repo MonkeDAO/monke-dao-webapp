@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
   },
   bananasBackground: {
     backgroundColor:'#f3efcd',
-    backgroundImage: "url('bananas.svg')",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
     width: "100%",
