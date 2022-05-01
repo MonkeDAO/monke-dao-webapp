@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bananasBackground: {
+    backgroundColor:'#f3efcd',
     backgroundImage: "url('bananas.svg')",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   heroTitle: {
+    color: '#184623',
     flexGrow: 1,
     fontWeight: "600",
     marginTop: 0,
@@ -59,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   heroContent: {
     fontFamily: "Space Grotesk",
+    color: '#184623',
     marginTop: theme.spacing(2.5),
     padding: 0,
     fontSize: 18,

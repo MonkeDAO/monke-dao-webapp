@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   "@global": {},
   appBar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
-    backgroundColor: "white",
+    backgroundColor: "#f3efcd",
     height: 86,
     "&.sm": {
       height: "auto"
@@ -41,11 +41,11 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   intro: {
-    background: "linear-gradient(to right, #71EA9E, #7E3EB0)",
+    background: "linear-gradient(to right, #ffc919, #184623)",
     padding: "2px 0 2px 0",
     textAlign: "center",
     fontSize: "16px",
-    color: "white",
+    color: "#f3efcd",
     width: "100%",
     lineHeight: "2em",
     fontFamily: ["Space Grotesk", "serif"].join(","),

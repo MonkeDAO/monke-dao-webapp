@@ -7,18 +7,18 @@ import StakingFAQ from "./StakingFAQ";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#fffff",
+      main: "#184623",
     },
     secondary: {
-      main: "#000000",
+      main: "#f3efcd",
     },
   },
 });
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    backgroundColor: "#000000",
-    color: "#FFFFFF",
+    backgroundColor: "#184623",
+    color: "#f3efcd",
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(10),
   },
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   solanabeach: {
     display: "inline-block",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f3efcd",
     borderRadius: "8px",
     padding: "12px 16px",
     color: "black",
