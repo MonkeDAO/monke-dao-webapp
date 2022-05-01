@@ -62,7 +62,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     display: "block",
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
+    width: '75%',
+    height: '75%'
   }
 }));
 
