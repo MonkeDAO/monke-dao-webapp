@@ -122,8 +122,8 @@ const cards = [
     description:
       "Buy your first monke from the Solana Monkey Business Marketplace.",
     buttonText: "Visit",
-    buttonImage: "/smb-monkey-market-logo.svg",
-    buttonAlt: "SMB Monkey Market Logo",
+    buttonImage: "/smb-market.svg",
+    buttonAlt: "SMB Market Logo",
     bg: "#184623",
     buttonColor: "#f3efcd",
     buttonTextColor: "#184623",
