@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import {
   Box,
   Container,
@@ -16,8 +22,6 @@ import {
   BANANA_ICON_YELLOW,
   BUTTON_YELLOW,
   LIGHT_GREY,
-  LIGHT_YELLOW,
-  TEXT_BROWN,
   TEXT_GREY,
   TWITTER_BLUE,
 } from '../constants/colors';
@@ -27,11 +31,15 @@ import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
-import TimelineDot from '@material-ui/lab/TimelineDot';
 import clsx from 'clsx';
 import { TimelineOppositeContent } from '@material-ui/lab';
 import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
-
+import { useAnchorWallet } from '@solana/wallet-adapter-react';
+import { getCreatorAnnouncements } from '../utils/notif';
+import {
+  BlockchainEnvironment,
+  useNotifiClient,
+} from '@notifi-network/notifi-react-hooks';
 const theme = createTheme({
   palette: {
     primary: {
@@ -227,89 +235,125 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Announcements(props) {
+  const wallet: any = useAnchorWallet();
   const classes = useStyles();
   const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down('sm'));
   const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down('xs'));
+  const [timelineCards, setTimelineCards] = useState([]);
+  let env = BlockchainEnvironment.MainNetBeta;
+  const { data, logIn, fetchData, isAuthenticated, createAlert, updateAlert } =
+    useNotifiClient({
+      dappAddress: '',
+      walletPublicKey: '',
+      env,
+    });
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [telegram, setTelegram] = useState('');
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleSubscribe = async () => {
+    const alertResult = await createAlert({
+      name: `${realm?.account.name} notifications`,
+      emailAddress: email === '' ? null : email,
+      phoneNumber: phone.length < 12 ? null : phone,
+      telegramId: telegram === '' ? null : telegram,
+      sourceId: source?.id ?? '',
+      filterId: filter?.id ?? '',
+    })
 
-  const timelineCards = [
-    {
-      emoji: '🎉',
-      emojiAria: 'celebration',
-      title: 'Launch MonkeDAO',
-      body: '',
-      isActive: true,
-    },
-    {
-      emoji: '🏦',
-      emojiAria: 'bank',
-      title: 'Create DAO Treasury',
-      body: '',
-      isActive: true,
-    },
-    {
-      emoji: '⚖️',
-      emojiAria: 'law',
-      title: 'Hold Elections for First Monke Board',
-      body: '',
-      isActive: true,
-    },
-    {
-      emoji: '⛓',
-      emojiAria: 'validator',
-      title: 'Launch Solana Validator Node',
-      body: '',
-      isActive: true,
-    },
-    {
-      emoji: '🙊',
-      emojiAria: 'monkey',
-      title: 'Purchase and Fractionalize SMB Mascot',
-      body: '',
-      isActive: true,
-    },
-    {
-      emoji: '💧',
-      emojiAria: 'droplet',
-      title: 'Launch Solana Community Staking Pool',
-      body: '',
-      isActive: true,
-    },
-    {
-      emoji: '🗃',
-      emojiAria: 'card file box',
-      title: 'Incorporate MonkeDAO',
-      body: '',
-      isActive: false,
-    },
-    {
-      emoji: '💎',
-      emojiAria: 'gem stone',
-      title: 'Launch Monkeverse 3D Metaverse ready avatars',
-      body: '',
-      isActive: false,
-    },
-    {
-      emoji: '🐒',
-      emojiAria: 'monkey',
-      title: 'Launch Monkeverse NFTs with ecosystem functionality',
-      body: '',
-      isActive: false,
-    },
-    {
-      emoji: '💲',
-      emojiAria: 'dollar',
-      title: 'Launch $MONKE Token',
-      body: '',
-      isActive: false,
-    },
-    {
-      emoji: '🏛',
-      emojiAria: 'building',
-      title: 'Launch MonkeDAO Capital',
-      body: '',
-      isActive: false,
-    },
-  ];
+    if (alertResult) {
+      if (alertResult.targetGroup?.telegramTargets?.length > 0) {
+        const target = alertResult.targetGroup?.telegramTargets[0]
+        if (target && !target.isConfirmed) {
+          if (target.confirmationUrl) {
+            window.open(target.confirmationUrl)
+          }
+        }
+      }
+    }
+  }
+    setOpen(false);
+  };
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value
+    if (val.length > 1) {
+      val = val.substring(2)
+    }
+
+    const re = /^[0-9\b]+$/
+    if (val === '' || (re.test(val) && val.length <= 10)) {
+      setPhone('+1' + val)
+    }
+  }
+
+
+  useEffect(() => {
+    try {
+      (async () => {
+        const publicAnnouncements = await getCreatorAnnouncements();
+        const timelineCardsObject = publicAnnouncements.map((announcement) => {
+          return {
+            emoji: '',
+            emojiAria: '',
+            title: announcement.variables[2].value,
+            body: announcement.variables[1].value,
+            date: announcement.date,
+            isActive: true,
+          };
+        });
+        setTimelineCards(timelineCardsObject);
+      })();
+    } catch {
+      console.log('error');
+    }
+  }, [wallet]);
+
+  const formCard = (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Subscribe</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          To subscribe to MonkeDAO announcements, please enter your email or
+          phone number.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          margin='dense'
+          id='name'
+          label='Email Address'
+          type='email'
+          fullWidth
+          variant='standard'
+          onChange={handleEmail}
+        />
+        <TextField
+          autoFocus
+          margin='dense'
+          id='name'
+          label='Phone Number'
+          type='phone'
+          fullWidth
+          variant='standard'
+          onChange={handlePhone}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleSubscribe}>Subscribe</Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar
@@ -332,40 +376,28 @@ export default function Announcements(props) {
               className={classes.logo}
             />
           </Box>
-          <WalletMultiButton />
           <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
           >
-            <Button
-              href='/announcements'
+            {/* <Button
+              href='/'
               color='secondary'
               variant='contained'
               className={classes.link}
+              onClick={handleClickOpen}
             >
               <img
                 alt='Announcements logo'
                 src='/speaker.png'
                 className={classes.plusLogo}
               />
-              Announcements
-            </Button>
+              Subscribe
+            </Button> */}
           </Box>
           <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <Button
-              href='https://twitter.com/MonkeDAO'
-              color='primary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Twitter logo'
-                src='/twitter.svg'
-                className={classes.buttonLogo}
-              />
-              Follow us
-            </Button>
+            <WalletMultiButton />
           </Box>
         </Toolbar>
       </AppBar>
@@ -378,7 +410,11 @@ export default function Announcements(props) {
           >
             Announcements
           </Typography>
+          <Button variant='contained' onClick={handleClickOpen}>
+            Subscribe +
+          </Button>
         </Container>
+
         <Container maxWidth='md' className={classes.timelineContainer}>
           <Timeline>
             {timelineCards.map((card, i) => {
@@ -463,6 +499,7 @@ export default function Announcements(props) {
             })}
           </Timeline>
         </Container>
+        {formCard}
       </Box>
     </ThemeProvider>
   );
