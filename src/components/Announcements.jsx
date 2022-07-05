@@ -332,7 +332,7 @@ export default function Announcements(props) {
               className={classes.logo}
             />
           </Box>
-          {/* <WalletMultiButton /> */}
+          <WalletMultiButton />
           <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,

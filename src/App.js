@@ -25,16 +25,13 @@ import {
 	WalletProvider,
 } from '@solana/wallet-adapter-react';
 import {
-	getPhantomWallet,
-	getSlopeWallet,
-	getSolflareWallet,
-	getSolletExtensionWallet,
-	getSolletWallet,
+  PhantomWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import {
   createDefaultAuthorizationResultCache,
   SolanaMobileWalletAdapter,
 } from '@solana-mobile/wallet-adapter-mobile';
+import * as anchor from '@project-serum/anchor';
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -111,6 +108,15 @@ const theme = createTheme({
 const App = () => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
   const network = WalletAdapterNetwork.Devnet;
+  const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
+  const config = {
+    /** Optional commitment level */
+    commitment: 'finalized',
+    /** Optional Disable retring calls when server responds with HTTP 429 (Too Many Requests) */
+    disableRetryOnRateLimit: false,
+    /** time to allow for the server to initially process a transaction (in milliseconds) */
+    confirmTransactionInitialTimeout: 150000,
+  };
   const connection = new anchor.web3.Connection(
     rpcHost ? rpcHost : anchor.web3.clusterApiUrl('devnet'),
     config
@@ -122,16 +128,12 @@ const App = () => {
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
   // Only the wallets you configure here will be compiled into your application, and only the dependencies
   // of wallets that your users connect to will be loaded.
-	const wallets = useMemo(
-		() => [
-			getPhantomWallet(),
-			getSolflareWallet(),
-			getSlopeWallet(),
-			getSolletWallet({ network }),
-			getSolletExtensionWallet({ network }),
-		],
-		[]
-	);
+  const wallets = useMemo(
+    () => [
+        new PhantomWalletAdapter(),
+    ],
+    [network]
+);
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
