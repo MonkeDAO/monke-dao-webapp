@@ -34,7 +34,7 @@ import TimelineContent from '@material-ui/lab/TimelineContent';
 import clsx from 'clsx';
 import { TimelineOppositeContent } from '@material-ui/lab';
 import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
-import { useAnchorWallet } from '@solana/wallet-adapter-react';
+import { useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
 import { getCreatorAnnouncements } from '../utils/notif';
 import {
   BlockchainEnvironment,
@@ -236,6 +236,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Announcements(props) {
   const wallet: any = useAnchorWallet();
+  const { publicKey, signMessage } = useWallet();
   const classes = useStyles();
   const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down('sm'));
   const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down('xs'));
@@ -243,58 +244,87 @@ export default function Announcements(props) {
   let env = BlockchainEnvironment.MainNetBeta;
   const { data, logIn, fetchData, isAuthenticated, createAlert, updateAlert } =
     useNotifiClient({
-      dappAddress: '',
-      walletPublicKey: '',
+      dappAddress: 'monkedao',
+      walletPublicKey: wallet?.publicKey?.toString() ?? '',
       env,
     });
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [isAuthed, setIsAuthed] = useState(false);
   const [telegram, setTelegram] = useState('');
   const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
+  const handleClickOpen = (e) => {
+    e.preventDefault();
+    console.log("hi");
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
   const handleSubscribe = async () => {
-    const alertResult = await createAlert({
-      name: `${realm?.account.name} notifications`,
-      emailAddress: email === '' ? null : email,
-      phoneNumber: phone.length < 12 ? null : phone,
-      telegramId: telegram === '' ? null : telegram,
-      sourceId: source?.id ?? '',
-      filterId: filter?.id ?? '',
-    })
-
-    if (alertResult) {
-      if (alertResult.targetGroup?.telegramTargets?.length > 0) {
-        const target = alertResult.targetGroup?.telegramTargets[0]
-        if (target && !target.isConfirmed) {
-          if (target.confirmationUrl) {
-            window.open(target.confirmationUrl)
-          }
-        }
+    console.log("hi", email, phone, telegram);
+    if (wallet && publicKey) {
+    const signature = await signMessage(publicKey.toBuffer());
+    try {
+      await logIn({signMessage: signature});
+      if (email || telegram) {
+        await createAlert({
+        name: `MonkeDAO holder notifications`,
+        emailAddress: email === '' ? null : email,
+        telegramId: telegram === '' ? null : telegram,
+        // sourceId: source?.id ?? '',
+        // filterId: filter?.id ?? '',
+      });
+    }
+    } catch (e) {
+      if (e) {
+        console.log("Invalid Signature");
       }
     }
-  }
+    }
+
+    // const alertResult = await createAlert({
+    //   name: `${realm?.account.name} notifications`,
+    //   emailAddress: email === '' ? null : email,
+    //   phoneNumber: phone.length < 12 ? null : phone,
+    //   telegramId: telegram === '' ? null : telegram,
+    //   sourceId: source?.id ?? '',
+    //   filterId: filter?.id ?? '',
+    // })
+
+    // if (alertResult) {
+    //   if (alertResult.targetGroup?.telegramTargets?.length > 0) {
+    //     const target = alertResult.targetGroup?.telegramTargets[0]
+    //     if (target && !target.isConfirmed) {
+    //       if (target.confirmationUrl) {
+    //         window.open(target.confirmationUrl)
+    //       }
+    //     }
+    //   }
+    // }
+  //}
     setOpen(false);
   };
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let val = e.target.value
-    if (val.length > 1) {
-      val = val.substring(2)
-    }
-
-    const re = /^[0-9\b]+$/
-    if (val === '' || (re.test(val) && val.length <= 10)) {
-      setPhone('+1' + val)
-    }
+  const handleTelegram = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTelegram(e.target.value);
   }
+
+  // const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   let val = e.target.value;
+  //   if (val.length > 1) {
+  //     val = val.substring(2);
+  //   }
+
+  //   const re = /^[0-9\b]+$/
+  //   if (val === '' || (re.test(val) && val.length <= 10)) {
+  //     setPhone('+1' + val)
+  //   }
+  // // }
+  // }
 
 
   useEffect(() => {
@@ -340,11 +370,11 @@ export default function Announcements(props) {
           autoFocus
           margin='dense'
           id='name'
-          label='Phone Number'
-          type='phone'
+          label='Telegram ID'
+          type='text'
           fullWidth
           variant='standard'
-          onChange={handlePhone}
+          onChange={handleTelegram}
         />
       </DialogContent>
       <DialogActions>
@@ -381,7 +411,7 @@ export default function Announcements(props) {
               sm: isXsScreenAndSmaller,
             })}
           >
-            {/* <Button
+            <Button
               href='/'
               color='secondary'
               variant='contained'
@@ -394,7 +424,7 @@ export default function Announcements(props) {
                 className={classes.plusLogo}
               />
               Subscribe
-            </Button> */}
+            </Button>
           </Box>
           <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
             <WalletMultiButton />
@@ -410,9 +440,9 @@ export default function Announcements(props) {
           >
             Announcements
           </Typography>
-          <Button variant='contained' onClick={handleClickOpen}>
+          {/* <Button variant='contained' onClick={handleClickOpen}>
             Subscribe +
-          </Button>
+          </Button> */}
         </Container>
 
         <Container maxWidth='md' className={classes.timelineContainer}>
