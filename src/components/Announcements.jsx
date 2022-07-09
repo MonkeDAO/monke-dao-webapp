@@ -454,6 +454,18 @@ export default function Announcements(props) {
     if (dataAfterCreation.alerts.find((x) => x.name === MONKEDAO_ANNOUNCEMENTS)) {
       setMonkeDaoChecked(true);
     }
+
+    if (dataAfterCreation?.emailTargets?.length > 0) {
+      setEmail(dataAfterCreation?.emailTargets[0]?.emailAddress);
+    }
+
+    if (dataAfterCreation?.telegramTargets?.length > 0) {
+      setTelegram(dataAfterCreation?.telegramTargets[0]?.telegramId);
+    }
+
+    // if (dataAfterCreation?.smsTargets?.length > 0) {
+    //   setTelegram(dataAfterCreation?.smsTargets[0]?.UNKNOWN);
+    // }
   };
 
   const runCreateSource = async (data) => {
@@ -519,6 +531,7 @@ export default function Announcements(props) {
           label='Email Address'
           type='email'
           fullWidth
+          value={email}
           variant='standard'
           onChange={handleEmail}
         />
@@ -531,6 +544,7 @@ export default function Announcements(props) {
           label='Telegram ID'
           type='text'
           fullWidth
+          value={telegram}
           variant='standard'
           onChange={handleTelegram}
         />
