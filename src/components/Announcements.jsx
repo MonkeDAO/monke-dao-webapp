@@ -8,6 +8,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Switch from '@mui/material/Switch';
+import MuiPhoneNumber from 'material-ui-phone-number';
 import {
   Box,
   Container,
@@ -17,6 +19,8 @@ import {
   Typography,
   Paper,
   useMediaQuery,
+  FormGroup,
+  FormControlLabel,
 } from '@material-ui/core';
 import {
   BANANA_ICON_YELLOW,
@@ -234,6 +238,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const MONKEDAO_ANNOUNCEMENTS = 'MonkeDAO Announcements';
+const EVENT_ANNOUNCEMENTS = 'Events & Updates';
+const WHITELIST_ANNOUNCEMENTS = 'Upcoming Whitelist Access';
+const MONKEDAO_SOURCE = 'smb__creatorUpdates';
+const EVENT_SOURCE = 'smb__eventsAndUpdates';
+const WHITELIST_SOURCE = 'smb__accessInstructions';
 export default function Announcements(props) {
   const wallet: any = useAnchorWallet();
   const { publicKey, signMessage } = useWallet();
@@ -241,8 +251,17 @@ export default function Announcements(props) {
   const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down('sm'));
   const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down('xs'));
   const [timelineCards, setTimelineCards] = useState([]);
+  const [wlChecked, setWLChecked] = useState(false);
+  const [eventChecked, setEventsChecked] = useState(false);
+  const [monkeDaoChecked, setMonkeDaoChecked] = useState(false);
+  const alertMap = [
+    { type: 'smb__creatorUpdates', name: MONKEDAO_ANNOUNCEMENTS },
+    { type: 'smb__eventsAndUpdates', name: EVENT_ANNOUNCEMENTS },
+    { type: 'smb__accessInstructions', name: WHITELIST_ANNOUNCEMENTS },
+  ];
+
   let env = BlockchainEnvironment.MainNetBeta;
-  const { data, logIn, fetchData, isAuthenticated, createAlert, updateAlert } =
+  const { data, logIn, fetchData, createAlert, createSource, deleteAlert } =
     useNotifiClient({
       dappAddress: 'monkedao',
       walletPublicKey: wallet?.publicKey?.toString() ?? '',
@@ -255,55 +274,162 @@ export default function Announcements(props) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = (e) => {
     e.preventDefault();
-    console.log("hi");
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleWlChecked = () => {
+    setWLChecked(!wlChecked);
+  };
+  const handleEventChecked = () => {
+    setEventsChecked(!eventChecked);
+  };
+  const handleDaoChecked = () => {
+    setMonkeDaoChecked(!monkeDaoChecked);
+  };
+
+  const doesAlertExist = (name) => {
+    return data?.alerts?.some((alert) => alert.name === name);
+  };
+
+  const doesSourceExist = (type) => {
+    return data?.sources?.some((source) => source.type === type);
+  };
+
   const handleSubscribe = async () => {
-    console.log("hi", email, phone, telegram);
-    if (wallet && publicKey) {
-    const signature = await signMessage(publicKey.toBuffer());
-    try {
-      await logIn({signMessage: signature});
-      if (email || telegram) {
-        await createAlert({
-        name: `MonkeDAO holder notifications`,
-        emailAddress: email === '' ? null : email,
-        telegramId: telegram === '' ? null : telegram,
-        // sourceId: source?.id ?? '',
-        // filterId: filter?.id ?? '',
-      });
-    }
-    } catch (e) {
-      if (e) {
-        console.log("Invalid Signature");
+    console.log('contact', email, telegram, data);
+    let source = data.sources;
+    if (wallet && publicKey && (email || telegram)) {
+      try {
+        let sourcePromises = [];
+        let eventPromises = [];
+          if (wlChecked) {
+            doesSourceExist(WHITELIST_SOURCE) && sourcePromises.push(
+              runCreateSource({
+                name: WHITELIST_SOURCE,
+              })
+            )
+            doesAlertExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+              name: WHITELIST_ANNOUNCEMENTS,
+              emailAddress: email === '' ? null : email,
+              telegramId: telegram === '' ? null : telegram,
+              phoneNumber: phone === '' ? null : phone,
+              sourceId: source.id ?? '',
+              filterId: source.applicableFilters[0].id ?? '',
+            }));
+            // check if alert exists
+            // if not call create alert
+          } else if (!wlChecked) {
+            let alertToDelete = data.alerts.find((x) =>
+              x.name.includes(WHITELIST_ANNOUNCEMENTS)
+            );
+            doesAlertExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(
+              deleteAlert({
+                id: alertToDelete.id,
+              })
+            );
+          }
+          if (eventChecked) {
+            doesSourceExist(EVENT_SOURCE) && sourcePromises.push(
+              runCreateSource({
+                name: EVENT_SOURCE,
+              })
+            )
+            doesAlertExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+              name: EVENT_ANNOUNCEMENTS,
+              emailAddress: email === '' ? null : email,
+              telegramId: telegram === '' ? null : telegram,
+              phoneNumber: phone === '' ? null : phone,
+              sourceId: source.id ?? '',
+              filterId: source.applicableFilters[0].id ?? '',
+            }));
+            // check if alert exists
+            // if not call create alert
+          } else if (!eventChecked) {
+            let alertToDelete = data.alerts.find((x) =>
+              x.name.includes(EVENT_ANNOUNCEMENTS)
+            );
+            doesAlertExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(
+              deleteAlert({
+                id: alertToDelete.id,
+              })
+            );
+          }
+          if (monkeDaoChecked) {
+            doesSourceExist(MONKEDAO_SOURCE) && sourcePromises.push(
+              runCreateSource({
+                name: MONKEDAO_SOURCE,
+              })
+            )
+            doesAlertExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+              name: MONKEDAO_ANNOUNCEMENTS,
+              emailAddress: email === '' ? null : email,
+              telegramId: telegram === '' ? null : telegram,
+              phoneNumber: phone === '' ? null : phone,
+              sourceId: source.id ?? '',
+              filterId: source.applicableFilters[0].id ?? '',
+            }));
+            // check if alert exists
+            // if not call create alert
+          } else if (!monkeDaoChecked) {
+            let alertToDelete = data.alerts.find((x) =>
+              x.name.includes(MONKEDAO_ANNOUNCEMENTS)
+            );
+            doesAlertExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(
+              deleteAlert({
+                id: alertToDelete.id,
+              })
+            );
+          }
+          
+        // }
+        console.log('promises', eventPromises);
+        await Promise.all(sourcePromises);
+        await Promise.all(eventPromises);
+        const dataAfterCreation = await fetchData();
+        console.log('data after creation', dataAfterCreation);
+      } catch (e) {
+        if (e) {
+          console.log('Invalid Signature', e);
+        }
       }
-    }
-    }
 
-    // const alertResult = await createAlert({
-    //   name: `${realm?.account.name} notifications`,
-    //   emailAddress: email === '' ? null : email,
-    //   phoneNumber: phone.length < 12 ? null : phone,
-    //   telegramId: telegram === '' ? null : telegram,
-    //   sourceId: source?.id ?? '',
-    //   filterId: filter?.id ?? '',
-    // })
-
-    // if (alertResult) {
-    //   if (alertResult.targetGroup?.telegramTargets?.length > 0) {
-    //     const target = alertResult.targetGroup?.telegramTargets[0]
-    //     if (target && !target.isConfirmed) {
-    //       if (target.confirmationUrl) {
-    //         window.open(target.confirmationUrl)
-    //       }
-    //     }
-    //   }
-    // }
-  //}
     setOpen(false);
+  }
+};
+
+  const runCreateAlert = async (data) => {
+    return await createAlert({
+      name: data.alertName,
+      emailAddress: data.email === '' ? null : data.email,
+      telegramId: data.telegram === '' ? null : data.telegram,
+      phoneNumber: data.phone === '' ? null : data.phone,
+      sourceId: data.source.id ?? '',
+      filterId: data.source.applicableFilters[0].id ?? '',
+    });
+  };
+
+  const updateStateChecked = () => {
+    console.log('updating state', data);
+    if (data.alerts.find((x) => x.name === WHITELIST_ANNOUNCEMENTS)) {
+      setWLChecked(true);
+    }
+    if (data.alerts.find((x) => x.name === EVENT_ANNOUNCEMENTS)) {
+      setEventsChecked(true);
+    }
+    if (data.alerts.find((x) => x.name === MONKEDAO_ANNOUNCEMENTS)) {
+      setMonkeDaoChecked(true);
+    }
+  };
+
+  const runCreateSource = async (data) => {
+    await createSource({
+      name: data.name,
+      blockchainAddress: data.name,
+      type: 'BROADCAST',
+    });
   };
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -311,21 +437,25 @@ export default function Announcements(props) {
 
   const handleTelegram = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTelegram(e.target.value);
-  }
+  };
 
-  // const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   let val = e.target.value;
-  //   if (val.length > 1) {
-  //     val = val.substring(2);
-  //   }
+  const handlePhone = (value: any) => {
+    console.log('phone', value);
 
-  //   const re = /^[0-9\b]+$/
-  //   if (val === '' || (re.test(val) && val.length <= 10)) {
-  //     setPhone('+1' + val)
-  //   }
-  // // }
-  // }
+    const formattedPhoneNum = `+${value.replace(/\D+/gi, '')}`;
+    console.log('phone formatted:', formattedPhoneNum);
 
+    setPhone(formattedPhoneNum);
+    // let val = e.target.value;
+    // if (val.length > 1) {
+    //   val = val.substring(2);
+    // }
+
+    // const re = /^[0-9\b]+$/;
+    // if (val === '' || (re.test(val) && val.length <= 10)) {
+    //   setPhone('+1' + val);
+    // }
+  };
 
   useEffect(() => {
     try {
@@ -342,6 +472,12 @@ export default function Announcements(props) {
           };
         });
         setTimelineCards(timelineCardsObject);
+        if (wallet && publicKey) {
+          await logIn({ signMessage });
+          const newData = await fetchData();
+          console.log('logged in', data, newData);
+          updateStateChecked();
+        }
       })();
     } catch {
       console.log('error');
@@ -366,6 +502,8 @@ export default function Announcements(props) {
           variant='standard'
           onChange={handleEmail}
         />
+        <br />
+        <br />
         <TextField
           autoFocus
           margin='dense'
@@ -376,6 +514,37 @@ export default function Announcements(props) {
           variant='standard'
           onChange={handleTelegram}
         />
+        <br />
+        <br />
+        <MuiPhoneNumber
+          name='phone'
+          label='Phone Number'
+          data-cy='user-phone'
+          defaultCountry={'us'}
+          value={phone}
+          onChange={handlePhone}
+        />
+        <br />
+        <br />
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch checked={monkeDaoChecked} onChange={handleDaoChecked} />
+            }
+            label='MonkeDAO Announcements'
+          />
+          <FormControlLabel
+            control={
+              <Switch checked={eventChecked} onChange={handleEventChecked} />
+            }
+            label='Events & Updates'
+            onChange={handleEventChecked}
+          />
+          <FormControlLabel
+            control={<Switch checked={wlChecked} onChange={handleWlChecked} />}
+            label='Upcoming Whitelist Access'
+          />
+        </FormGroup>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
