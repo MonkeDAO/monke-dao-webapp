@@ -505,16 +505,9 @@ export default function Announcements(props) {
     }
   }, [wallet]);
 
-  const formCard = (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Subscribe</DialogTitle>
+  const subscribeForm = (
+    <><DialogTitle>Subscribe</DialogTitle>
       <DialogContent>
-        {handleSubscribeCalled ? (
-        <DialogContentText>
-          {contentForModal}
-        </DialogContentText>
-    </Dialog>
-  ) : (<div>
         <DialogContentText>
           To subscribe to MonkeDAO announcements, please enter your email or
           phone number.
@@ -576,8 +569,19 @@ export default function Announcements(props) {
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleSubscribe}>Subscribe</Button>
-      </DialogActions>)}
-    </Dialog></div>
+      </DialogActions></>)
+
+  const formCard = (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>Subscribe</DialogTitle>
+      {handleSubscribeCalled ? (
+        <DialogContent>
+          <DialogContentText>
+            {contentForModal}
+          </DialogContentText>
+        </DialogContent>
+      ) : subscribeForm}
+    </Dialog >
   );
 
   return (
@@ -725,6 +729,7 @@ export default function Announcements(props) {
             })}
           </Timeline>
         </Container>
+        {formCard}
       </Box>
     </ThemeProvider>
   );
