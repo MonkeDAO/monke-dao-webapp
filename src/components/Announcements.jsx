@@ -254,6 +254,7 @@ export default function Announcements(props) {
   const [wlChecked, setWLChecked] = useState(false);
   const [eventChecked, setEventsChecked] = useState(false);
   const [monkeDaoChecked, setMonkeDaoChecked] = useState(false);
+  const [telegramConfirmationUrl, setTelegramConfirmationUrl] = useState('');
   const alertMap = [
     { type: 'smb__creatorUpdates', name: MONKEDAO_ANNOUNCEMENTS },
     { type: 'smb__eventsAndUpdates', name: EVENT_ANNOUNCEMENTS },
@@ -271,12 +272,15 @@ export default function Announcements(props) {
   const [phone, setPhone] = useState('');
   const [isAuthed, setIsAuthed] = useState(false);
   const [telegram, setTelegram] = useState('');
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [handleSubscribeCalled, setHandleSubscribeCalled] = useState(false);
+  const [contentForModal, setContentForModal] = useState('');
   const handleClickOpen = (e) => {
     e.preventDefault();
     setOpen(true);
   };
   const handleClose = () => {
+    setHandleSubscribeCalled(false);
     setOpen(false);
   };
 
@@ -297,144 +301,137 @@ export default function Announcements(props) {
   const doesSourceNotExist = (type) => {
     return !data?.sources?.some((source) => source.name === type);
   };
- 
-  const getAlert = async (name, fetch = false) => {
-    let localData = data;
-    if(fetch) {
-      localData = await fetchData();
-    }
-    return localData?.alerts?.find((alert) => alert.name === name);
-  };
 
-  const getSource = async (type, fetch = false) => {
-    let localData = data;
-    if(fetch) {
-      localData = await fetchData();
-    }
-    return localData?.sources?.find((source) => source.name === type);
+  const getSource = (type) => {
+    return data?.sources?.find((source) => source.name === type);
   };
 
   const handleSubscribe = async () => {
-    console.log('contact', email, telegram, data);
     if (wallet && publicKey && (email || telegram)) {
       try {
         let sourcePromises = [];
         let eventPromises = [];
-          if (wlChecked) {
-            let source = getSource(WHITELIST_SOURCE);
-            console.log('source >>>>>',source);
-            doesSourceNotExist(WHITELIST_SOURCE) && sourcePromises.push(
-              runCreateSource({
-                name: WHITELIST_SOURCE,
-              })
-            );
-          }
-          if (eventChecked) {
-            let source = getSource(EVENT_SOURCE);
-            console.log('source >>>>>',source);
-            doesSourceNotExist(EVENT_SOURCE) && sourcePromises.push(
-              runCreateSource({
-                name: EVENT_SOURCE,
-              })
-            );
-          }
-          if (monkeDaoChecked) {
-            let source = getSource(MONKEDAO_SOURCE);
-            console.log('source >>>>>', source);
-            doesSourceNotExist(MONKEDAO_SOURCE) && sourcePromises.push(
-              runCreateSource({
-                name: MONKEDAO_SOURCE,
-              })
-            );
-          }
-          await Promise.all(sourcePromises);
-          if (wlChecked) {
-            let source = getSource(WHITELIST_SOURCE);
-            doesAlertNotExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
-              name: WHITELIST_ANNOUNCEMENTS,
-              emailAddress: email === '' ? null : email,
-              telegramId: telegram === '' ? null : telegram,
-              phoneNumber: phone === '' ? null : phone,
-              sourceId: source?.id ?? '',
-              filterId: source?.applicableFilters[0]?.id ?? '',
-            }));
-            // check if alert exists
-            // if not call create alert
-          } else if (!wlChecked) {
-            let alertToDelete = data.alerts.find((x) =>
-              x.name.includes(WHITELIST_ANNOUNCEMENTS)
-            );
-            console.log('alertToDelete', alertToDelete, alertToDelete.id);
-            !doesAlertNotExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(
-              deleteAlert({
-                id: alertToDelete.id,
-              })
-            );
-          }
-          if (eventChecked) {
-            let source = getSource(EVENT_SOURCE, true);
-            doesAlertNotExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
-              name: EVENT_ANNOUNCEMENTS,
-              emailAddress: email === '' ? null : email,
-              telegramId: telegram === '' ? null : telegram,
-              phoneNumber: phone === '' ? null : phone,
-              sourceId: source.id ?? '',
-              filterId: source.applicableFilters[0].id ?? '',
-            }));
-            // check if alert exists
-            // if not call create alert
-          } else if (!eventChecked) {
-            let alertToDelete = data.alerts.find((x) =>
-              x.name.includes(EVENT_ANNOUNCEMENTS)
-            );
-            console.log('alertToDelete', alertToDelete, alertToDelete.id);
-            !doesAlertNotExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(
-              deleteAlert({
-                id: alertToDelete.id,
-              })
-            );
-          }
-          if (monkeDaoChecked) {
-            let source = getSource(MONKEDAO_SOURCE, true);
-            doesAlertNotExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
-              name: MONKEDAO_ANNOUNCEMENTS,
-              emailAddress: email === '' ? null : email,
-              telegramId: telegram === '' ? null : telegram,
-              phoneNumber: phone === '' ? null : phone,
-              sourceId: source.id ?? '',
-              filterId: source.applicableFilters[0].id ?? '',
-            }));
-            // check if alert exists
-            // if not call create alert
-          } else if (!monkeDaoChecked) {
-            let alertToDelete = data.alerts.find((x) =>
-              x.name.includes(MONKEDAO_ANNOUNCEMENTS)
-            );
-            console.log('alertToDelete', alertToDelete, alertToDelete.id);
-            !doesAlertNotExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(
-              deleteAlert({
-                id: alertToDelete.id,
-              })
-            );
-          }
+        if (wlChecked) {
+          let source = getSource(WHITELIST_SOURCE);
+          doesSourceNotExist(WHITELIST_SOURCE) && sourcePromises.push(
+            runCreateSource({
+              name: WHITELIST_SOURCE,
+            })
+          );
+        }
+        if (eventChecked) {
+          let source = getSource(EVENT_SOURCE);
+          doesSourceNotExist(EVENT_SOURCE) && sourcePromises.push(
+            runCreateSource({
+              name: EVENT_SOURCE,
+            })
+          );
+        }
+        if (monkeDaoChecked) {
+          let source = getSource(MONKEDAO_SOURCE);
+          console.log('source >>>>>', source);
+          doesSourceNotExist(MONKEDAO_SOURCE) && sourcePromises.push(
+            runCreateSource({
+              name: MONKEDAO_SOURCE,
+            })
+          );
+        }
+        await Promise.all(sourcePromises);
+        if (wlChecked) {
+          let source = getSource(WHITELIST_SOURCE);
+          doesAlertNotExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+            name: WHITELIST_ANNOUNCEMENTS,
+            emailAddress: email === '' ? null : email,
+            telegramId: telegram === '' ? null : telegram,
+            phoneNumber: phone === '' ? null : phone,
+            sourceId: source?.id ?? '',
+            filterId: source?.applicableFilters[0]?.id ?? '',
+          }));
+          // check if alert exists
+          // if not call create alert
+        } else if (!wlChecked) {
+          let alertToDelete = data.alerts.find((x) =>
+            x.name.includes(WHITELIST_ANNOUNCEMENTS)
+          );
+          !doesAlertNotExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(
+            deleteAlert({
+              alertId: alertToDelete.id,
+            })
+          );
+        }
+        if (eventChecked) {
+          let source = getSource(EVENT_SOURCE, true);
+          doesAlertNotExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+            name: EVENT_ANNOUNCEMENTS,
+            emailAddress: email === '' ? null : email,
+            telegramId: telegram === '' ? null : telegram,
+            phoneNumber: phone === '' ? null : phone,
+            sourceId: source.id ?? '',
+            filterId: source.applicableFilters[0].id ?? '',
+          }));
+          // check if alert exists
+          // if not call create alert
+        } else if (!eventChecked) {
+          let alertToDelete = data.alerts.find((x) =>
+            x.name.includes(EVENT_ANNOUNCEMENTS)
+          );
+          console.log('alertToDelete', alertToDelete, alertToDelete.id);
+          !doesAlertNotExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(
+            deleteAlert({
+              alertId: alertToDelete.id,
+            })
+          );
+        }
+        if (monkeDaoChecked) {
+          let source = getSource(MONKEDAO_SOURCE, true);
+          doesAlertNotExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+            name: MONKEDAO_ANNOUNCEMENTS,
+            emailAddress: email === '' ? null : email,
+            telegramId: telegram === '' ? null : telegram,
+            phoneNumber: phone === '' ? null : phone,
+            sourceId: source.id ?? '',
+            filterId: source.applicableFilters[0].id ?? '',
+          }));
+          // check if alert exists
+          // if not call create alert
+        } else if (!monkeDaoChecked) {
+          let alertToDelete = data.alerts.find((x) =>
+            x.name.includes(MONKEDAO_ANNOUNCEMENTS)
+          );
+          console.log('alertToDelete', alertToDelete, alertToDelete.id);
+          !doesAlertNotExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(
+            deleteAlert({
+              alertId: alertToDelete.id,
+            })
+          );
+        }
         // }
         console.log('promises', eventPromises);
         const eventsSucceded = await Promise.all(eventPromises);
         console.log('eventsSucceded', eventsSucceded);
         const dataAfterCreation = await fetchData();
-        console.log('data after creation', dataAfterCreation);
+        if (dataAfterCreation) {
+          setTelegramConfirmationUrl(
+            dataAfterCreation.telegramTargets[0].confirmationUrl
+          );
+        }
+        let content = 'Check your email for verification if you entered one. Texts are automatically subscribed.';
+        if (telegramConfirmationUrl) {
+          content = content + `Please confirm you want to receive telegram notifications at ${telegramConfirmationUrl}`;
+        }
+        setContentForModal(content);
       } catch (e) {
         if (e) {
           console.log('Invalid Signature', e);
+          setContentForModal('Something went wrong. Refresh and try again.');
         }
       }
-
-    setOpen(false);
-  }
-};
+      setHandleSubscribeCalled(true);
+      setOpen(false);
+    }
+  };
 
   const runCreateAlert = async (data) => {
-    console.log('dataaaaaaa>>>>>', data);
     return await createAlert({
       name: data.name,
       emailAddress: data.emailAddress,
@@ -481,15 +478,6 @@ export default function Announcements(props) {
     console.log('phone formatted:', formattedPhoneNum);
 
     setPhone(formattedPhoneNum);
-    // let val = e.target.value;
-    // if (val.length > 1) {
-    //   val = val.substring(2);
-    // }
-
-    // const re = /^[0-9\b]+$/;
-    // if (val === '' || (re.test(val) && val.length <= 10)) {
-    //   setPhone('+1' + val);
-    // }
   };
 
   useEffect(() => {
@@ -521,6 +509,12 @@ export default function Announcements(props) {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Subscribe</DialogTitle>
       <DialogContent>
+        {handleSubscribeCalled ? (
+        <DialogContentText>
+          {contentForModal}
+        </DialogContentText>
+    </Dialog>
+  ) : (<div>
         <DialogContentText>
           To subscribe to MonkeDAO announcements, please enter your email or
           phone number.
@@ -582,8 +576,8 @@ export default function Announcements(props) {
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleSubscribe}>Subscribe</Button>
-      </DialogActions>
-    </Dialog>
+      </DialogActions>)}
+    </Dialog></div>
   );
 
   return (
@@ -687,8 +681,8 @@ export default function Announcements(props) {
                       isXsScreenAndSmaller
                         ? clsx(classes.card, 'extra-small')
                         : isSmScreenAndSmaller
-                        ? clsx(classes.card, 'small')
-                        : classes.card
+                          ? clsx(classes.card, 'small')
+                          : classes.card
                     }
                   >
                     <Paper
@@ -731,7 +725,6 @@ export default function Announcements(props) {
             })}
           </Timeline>
         </Container>
-        {formCard}
       </Box>
     </ThemeProvider>
   );
