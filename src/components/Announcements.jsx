@@ -329,7 +329,6 @@ export default function Announcements(props) {
         }
         if (monkeDaoChecked) {
           let source = getSource(MONKEDAO_SOURCE);
-          console.log('source >>>>>', source);
           doesSourceNotExist(MONKEDAO_SOURCE) && sourcePromises.push(
             runCreateSource({
               name: MONKEDAO_SOURCE,
@@ -375,7 +374,6 @@ export default function Announcements(props) {
           let alertToDelete = data.alerts.find((x) =>
             x.name.includes(EVENT_ANNOUNCEMENTS)
           );
-          console.log('alertToDelete', alertToDelete, alertToDelete.id);
           !doesAlertNotExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(
             deleteAlert({
               alertId: alertToDelete.id,
@@ -398,7 +396,6 @@ export default function Announcements(props) {
           let alertToDelete = data.alerts.find((x) =>
             x.name.includes(MONKEDAO_ANNOUNCEMENTS)
           );
-          console.log('alertToDelete', alertToDelete, alertToDelete.id);
           !doesAlertNotExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(
             deleteAlert({
               alertId: alertToDelete.id,
@@ -406,10 +403,9 @@ export default function Announcements(props) {
           );
         }
         // }
-        console.log('promises', eventPromises);
         const eventsSucceded = await Promise.all(eventPromises);
-        console.log('eventsSucceded', eventsSucceded);
         const dataAfterCreation = await fetchData();
+        console.log('dataAfterCreation', dataAfterCreation);
         if (dataAfterCreation) {
           setTelegramConfirmationUrl(
             dataAfterCreation.telegramTargets[0].confirmationUrl
@@ -417,7 +413,8 @@ export default function Announcements(props) {
         }
         let content = 'Check your email for verification if you entered one. Texts are automatically subscribed.';
         if (telegramConfirmationUrl) {
-          content = content + `Please confirm you want to receive telegram notifications at ${telegramConfirmationUrl}`;
+          const link = (<a href={telegramConfirmationUrl}>here</a>);
+          content = content + `{' '}Please confirm you want to receive telegram notifications at{' '}; ${link}`;
         }
         setContentForModal(content);
       } catch (e) {
@@ -427,7 +424,6 @@ export default function Announcements(props) {
         }
       }
       setHandleSubscribeCalled(true);
-      setOpen(false);
     }
   };
 
@@ -444,7 +440,6 @@ export default function Announcements(props) {
 
   const updateStateChecked = async () => {
     const dataAfterCreation = await fetchData();
-    console.log('updating state', dataAfterCreation);
     if (dataAfterCreation.alerts.find((x) => x.name === WHITELIST_ANNOUNCEMENTS)) {
       setWLChecked(true);
     }
@@ -484,11 +479,7 @@ export default function Announcements(props) {
   };
 
   const handlePhone = (value) => {
-    console.log('phone', value);
-
     const formattedPhoneNum = `+${value.replace(/\D+/gi, '')}`;
-    console.log('phone formatted:', formattedPhoneNum);
-
     setPhone(formattedPhoneNum);
   };
 
