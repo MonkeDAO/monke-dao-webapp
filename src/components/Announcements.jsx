@@ -245,7 +245,7 @@ const MONKEDAO_SOURCE = 'smb__creatorUpdates';
 const EVENT_SOURCE = 'smb__eventsAndUpdates';
 const WHITELIST_SOURCE = 'smb__accessInstructions';
 export default function Announcements(props) {
-  const wallet: any = useAnchorWallet();
+  const wallet = useAnchorWallet();
   const { publicKey, signMessage } = useWallet();
   const classes = useStyles();
   const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down('sm'));
@@ -290,12 +290,20 @@ export default function Announcements(props) {
     setMonkeDaoChecked(!monkeDaoChecked);
   };
 
-  const doesAlertExist = (name) => {
-    return data?.alerts?.some((alert) => alert.name === name);
+  const doesAlertNotExist = (name) => {
+    return !data?.alerts?.some((alert) => alert.name === name);
   };
 
-  const doesSourceExist = (type) => {
-    return data?.sources?.some((source) => source.type === type);
+  const doesSourceNotExist = (type) => {
+    return !data?.sources?.some((source) => source.type === type);
+  };
+ 
+  const getAlert = (name) => {
+    return data?.alerts?.find((alert) => alert.name === name);
+  };
+
+  const getSource = (type) => {
+    return data?.sources?.find((source) => source.type === type);
   };
 
   const handleSubscribe = async () => {
@@ -306,18 +314,18 @@ export default function Announcements(props) {
         let sourcePromises = [];
         let eventPromises = [];
           if (wlChecked) {
-            doesSourceExist(WHITELIST_SOURCE) && sourcePromises.push(
+            doesSourceNotExist(WHITELIST_SOURCE) && sourcePromises.push(
               runCreateSource({
                 name: WHITELIST_SOURCE,
               })
             )
-            doesAlertExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+            doesAlertNotExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
               name: WHITELIST_ANNOUNCEMENTS,
               emailAddress: email === '' ? null : email,
               telegramId: telegram === '' ? null : telegram,
               phoneNumber: phone === '' ? null : phone,
-              sourceId: source.id ?? '',
-              filterId: source.applicableFilters[0].id ?? '',
+              sourceId: '',
+              filterId: '',
             }));
             // check if alert exists
             // if not call create alert
@@ -325,25 +333,25 @@ export default function Announcements(props) {
             let alertToDelete = data.alerts.find((x) =>
               x.name.includes(WHITELIST_ANNOUNCEMENTS)
             );
-            doesAlertExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(
+            doesAlertNotExist(WHITELIST_ANNOUNCEMENTS) && eventPromises.push(
               deleteAlert({
                 id: alertToDelete.id,
               })
             );
           }
           if (eventChecked) {
-            doesSourceExist(EVENT_SOURCE) && sourcePromises.push(
+            doesSourceNotExist(EVENT_SOURCE) && sourcePromises.push(
               runCreateSource({
                 name: EVENT_SOURCE,
               })
             )
-            doesAlertExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+            doesAlertNotExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
               name: EVENT_ANNOUNCEMENTS,
               emailAddress: email === '' ? null : email,
               telegramId: telegram === '' ? null : telegram,
               phoneNumber: phone === '' ? null : phone,
-              sourceId: source.id ?? '',
-              filterId: source.applicableFilters[0].id ?? '',
+              sourceId: '',
+              filterId: '',
             }));
             // check if alert exists
             // if not call create alert
@@ -351,25 +359,25 @@ export default function Announcements(props) {
             let alertToDelete = data.alerts.find((x) =>
               x.name.includes(EVENT_ANNOUNCEMENTS)
             );
-            doesAlertExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(
+            doesAlertNotExist(EVENT_ANNOUNCEMENTS) && eventPromises.push(
               deleteAlert({
                 id: alertToDelete.id,
               })
             );
           }
           if (monkeDaoChecked) {
-            doesSourceExist(MONKEDAO_SOURCE) && sourcePromises.push(
+            doesSourceNotExist(MONKEDAO_SOURCE) && sourcePromises.push(
               runCreateSource({
                 name: MONKEDAO_SOURCE,
               })
             )
-            doesAlertExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
+            doesAlertNotExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(runCreateAlert({
               name: MONKEDAO_ANNOUNCEMENTS,
               emailAddress: email === '' ? null : email,
               telegramId: telegram === '' ? null : telegram,
               phoneNumber: phone === '' ? null : phone,
-              sourceId: source.id ?? '',
-              filterId: source.applicableFilters[0].id ?? '',
+              sourceId: '',
+              filterId: '',
             }));
             // check if alert exists
             // if not call create alert
@@ -377,7 +385,7 @@ export default function Announcements(props) {
             let alertToDelete = data.alerts.find((x) =>
               x.name.includes(MONKEDAO_ANNOUNCEMENTS)
             );
-            doesAlertExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(
+            doesAlertNotExist(MONKEDAO_ANNOUNCEMENTS) && eventPromises.push(
               deleteAlert({
                 id: alertToDelete.id,
               })
@@ -387,7 +395,8 @@ export default function Announcements(props) {
         // }
         console.log('promises', eventPromises);
         await Promise.all(sourcePromises);
-        await Promise.all(eventPromises);
+        const eventsSucceded = await Promise.all(eventPromises);
+        console.log('eventsSucceded', eventsSucceded);
         const dataAfterCreation = await fetchData();
         console.log('data after creation', dataAfterCreation);
       } catch (e) {
@@ -431,15 +440,15 @@ export default function Announcements(props) {
       type: 'BROADCAST',
     });
   };
-  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmail = (e) => {
     setEmail(e.target.value);
   };
 
-  const handleTelegram = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTelegram = (e) => {
     setTelegram(e.target.value);
   };
 
-  const handlePhone = (value: any) => {
+  const handlePhone = (value) => {
     console.log('phone', value);
 
     const formattedPhoneNum = `+${value.replace(/\D+/gi, '')}`;
