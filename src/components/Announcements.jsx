@@ -413,8 +413,7 @@ export default function Announcements(props) {
         }
         let content = 'Check your email for verification if you entered one. Texts are automatically subscribed.';
         if (telegramConfirmationUrl) {
-          const link = (<a href={telegramConfirmationUrl}>here</a>);
-          content = content + `{' '}Please confirm you want to receive telegram notifications at{' '}; ${link}`;
+          content = content + `Please confirm you want to receive telegram notifications at ${telegramConfirmationUrl}`;
         }
         setContentForModal(content);
       } catch (e) {
