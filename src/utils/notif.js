@@ -6,7 +6,7 @@ export const getCreatorAnnouncements = async (topicName: string) => {
         body: JSON.stringify({
           query: `
           query PublicUserTopicPost {
-            publicUserTopicPost(getPublicUserTopicPostInput: {topicName: "thebryanjun__creatorUpdates"}) {
+            publicUserTopicPost(getPublicUserTopicPostInput: {topicName: "smb__creatorUpdates"}) {
               nodes {
                 id
                 topicName
