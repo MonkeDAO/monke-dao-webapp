@@ -9,6 +9,7 @@ import { Box, Link } from '@material-ui/core';
 import { useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 import { TWITTER_BLUE, DISCORD_BLUE } from '../constants/colors';
+import {NotificationsButton} from "@dialectlabs/react-ui";
 
 const theme = createTheme({
   palette: {
@@ -161,23 +162,22 @@ export function Header() {
             </Button>
           </Box> */}
           <Box
-            className={clsx(classes.social, classes.discord, {
+            className={clsx(classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
           >
-            <Button
-              href='/announcements'
-              color='secondary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Announcements logo'
-                src='/speaker.png'
-                className={classes.plusLogo}
-              />
-              Announcements
-            </Button>
+            <NotificationsButton
+              dialectId="monkedao-notifications"
+              pollingInterval={5000}
+              notifications={[{
+                  name: 'MonkeDAO Announcements', detail: ''
+                }, {
+                  name: 'Events & Updates', detail: ''
+                }, {
+                  name: 'Upcoming Whitelist Access', detail: ''
+                }]
+              }
+            />
           </Box>
           {/* <Box
             className={clsx(classes.social, classes.discord, {
