@@ -79,6 +79,16 @@ const useStyles = makeStyles((theme) => ({
   discord: {
     marginRight: theme.spacing(2),
   },
+  bell: {
+    marginRight: theme.spacing(2),
+    '&.sm': {
+      display: 'inline-block',
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      // In order to align bell button with Social
+      verticalAlign: 'bottom',
+    },
+  },
   toolbarTitle: {
     padding: `10px`,
     flexGrow: 1,
@@ -162,7 +172,7 @@ export function Header() {
             </Button>
           </Box> */}
           <Box
-            className={clsx(classes.discord, {
+            className={clsx(classes.bell, {
               sm: isXsScreenAndSmaller,
             })}
           >
