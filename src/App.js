@@ -21,8 +21,8 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
 import { ConnectionConfig, clusterApiUrl } from '@solana/web3.js';
 import {
-	ConnectionProvider,
-	WalletProvider,
+  ConnectionProvider, useWallet,
+  WalletProvider,
 } from '@solana/wallet-adapter-react';
 import {
   PhantomWalletAdapter,
@@ -32,6 +32,14 @@ import {
   SolanaMobileWalletAdapter,
 } from '@solana-mobile/wallet-adapter-mobile';
 import * as anchor from '@project-serum/anchor';
+import {
+  Backend,
+  DialectContextProvider,
+  DialectThemeProvider,
+  DialectUiManagementProvider,
+  TokenStore
+} from "@dialectlabs/react-ui";
+import {convertWalletToDialectWallet} from "./utils/notif";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -105,10 +113,44 @@ const theme = createTheme({
   },
 });
 
+const RPC_URL = process.env.REACT_APP_SOLANA_RPC_HOST;
+
+const DialectProviders = ({ children }) => {
+  const wallet = useWallet();
+  const dialectWallet = useMemo(() => convertWalletToDialectWallet(wallet), [wallet]);
+
+  // Basic configuration for dialect. Target mainnet-beta and dialect cloud production environment
+  const dialectConfig = useMemo(
+      () => ({
+        backends: [Backend.DialectCloud, Backend.Solana],
+        environment: 'production',
+        solana: {
+          rpcUrl: RPC_URL
+        },
+        dialectCloud: {
+          tokenStore: TokenStore.createLocalStorage(),
+        },
+      }),
+[]
+);
+
+  return (
+      <DialectContextProvider
+          config={dialectConfig}
+          wallet={dialectWallet}
+      >
+        <DialectThemeProvider theme="dark">
+          <DialectUiManagementProvider>
+            {children}
+          </DialectUiManagementProvider>
+        </DialectThemeProvider>
+      </DialectContextProvider>
+  );
+}
+
 const App = () => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
   const network = WalletAdapterNetwork.Devnet;
-  const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
   const config = {
     /** Optional commitment level */
     commitment: 'finalized',
@@ -118,7 +160,7 @@ const App = () => {
     confirmTransactionInitialTimeout: 150000,
   };
   const connection = new anchor.web3.Connection(
-    rpcHost ? rpcHost : anchor.web3.clusterApiUrl('devnet'),
+    RPC_URL ? RPC_URL : anchor.web3.clusterApiUrl('devnet'),
     config
   );
   
@@ -138,12 +180,13 @@ const App = () => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletDialogProvider>
-          <Router>
-            <Routes>
-              <Route path='/announcements' element={<Announcements />} />
-              <Route path='/' element={<Home />} />
-            </Routes>
-          </Router>
+          <DialectProviders>
+            <Router>
+              <Routes>
+                <Route path='/' element={<Home />} />
+              </Routes>
+            </Router>
+          </DialectProviders>
         </WalletDialogProvider>
       </WalletProvider>
     </ConnectionProvider>
