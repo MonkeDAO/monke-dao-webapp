@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Header } from './components/Header';
 import { Cards } from './components/Cards';
 import SmoothScroll from 'smooth-scroll';
+import '@dialectlabs/react-ui/index.css';
 import './App.css';
 
 import { Container, Typography, useMediaQuery } from '@material-ui/core';
@@ -15,14 +16,13 @@ import clsx from 'clsx';
 import Validator from './components/Validator';
 import Footer from './components/Footer';
 import Roadmap from './components/Roadmap';
-import Announcements from './components/Announcements';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
-import { ConnectionConfig, clusterApiUrl } from '@solana/web3.js';
+import {ConnectionConfig, clusterApiUrl, PublicKey} from '@solana/web3.js';
 import {
-	ConnectionProvider,
-	WalletProvider,
+  ConnectionProvider, useWallet,
+  WalletProvider,
 } from '@solana/wallet-adapter-react';
 import {
   PhantomWalletAdapter,
@@ -32,6 +32,14 @@ import {
   SolanaMobileWalletAdapter,
 } from '@solana-mobile/wallet-adapter-mobile';
 import * as anchor from '@project-serum/anchor';
+import {
+  Backend, defaultVariables,
+  DialectContextProvider,
+  DialectThemeProvider,
+  DialectUiManagementProvider,
+  TokenStore
+} from "@dialectlabs/react-ui";
+import {convertWalletToDialectWallet} from "./utils/notif";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -45,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
       position: 'relative',
       paddingBottom: 247,
     },
+    '.dialect': {
+      fontFamily: 'Space Grotesk, serif',
+    }
   },
   bananasBackground: {
     backgroundColor: '#f3efcd',
@@ -99,16 +110,134 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const useDialectStyles = makeStyles((theme) => ({
+  // Dialect Styles
+  primaryBg: {
+    backgroundColor: '#f3efcd',
+  },
+  primaryText: {
+    color: '#184623'
+  },
+  highlight: {
+    backgroundColor: '#ffffff',
+  },
+  toggleBackground: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+  },
+  bold: {
+    fontWeight: 'bold'
+  },
+  notificationButton: {
+    backgroundColor: '#184623',
+    color: '#f3efcd',
+    width: theme.spacing(5),
+    height: theme.spacing(5)
+  },
+  notificationWrapper: {
+    top: theme.spacing(6)
+  },
+  notificationModal: {
+    border: '1px solid #A5973D',
+    borderRadius: 10,
+  },
+  header: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2)
+  },
+  button: {
+    backgroundColor: '#184623',
+    color: '#f3efcd',
+    borderColor: '#184623'
+  },
+  logo: {
+    '& svg': {
+      marginTop: theme.spacing(0.4)
+    },
+  },
+  fontFamilyOverride: {
+    fontFamily: 'Space Grotesk, serif',
+    '&::placeholder': {
+      fontFamily: 'Space Grotesk, serif',
+    }
+  }
+}))
+
 const theme = createTheme({
   typography: {
     fontFamily: ['Space Grotesk', 'serif'].join(','),
   },
 });
 
+const RPC_URL = process.env.REACT_APP_SOLANA_RPC_HOST;
+const MONKE_DAO_PUBLIC_KEY = new PublicKey('BiM9z9TiFFtXF1oh62QBWG8EJycMTDcQ4tfKBhFyuope');
+
+const DialectProviders = ({ children }) => {
+  const classes = useDialectStyles();
+  const wallet = useWallet();
+  const dialectWallet = useMemo(() => convertWalletToDialectWallet(wallet), [wallet]);
+
+  // Basic configuration for dialect. Target mainnet-beta and dialect cloud production environment
+  const dialectConfig = useMemo(
+    () => ({
+      backends: [Backend.DialectCloud, Backend.Solana],
+      environment: 'production',
+      solana: {
+        rpcUrl: RPC_URL
+      },
+      dialectCloud: {
+        tokenStore: TokenStore.createLocalStorage(),
+      },
+    }),
+[]
+  );
+
+  const themeVariables = useMemo(() => ({
+    light: {
+      textStyles: {
+        body: `${defaultVariables.light.textStyles.body} ${classes.bold}`,
+        small: `${defaultVariables.light.textStyles.small} ${classes.bold}`,
+        bigText: `${defaultVariables.light.textStyles.bigText} ${classes.bold}`,
+        header: `${defaultVariables.light.textStyles.header} ${classes.bold}`,
+        link: `${defaultVariables.light.textStyles.link} ${classes.bold}`,
+      },
+      colors: {
+        bg: classes.primaryBg,
+        primary: classes.primaryText,
+        accent: classes.primaryText,
+        highlight: classes.highlight,
+        // Hack to fix logo spacing
+        highlightSolid: `${defaultVariables.light.colors.highlightSolid} ${classes.logo}`,
+        toggleBackground: classes.toggleBackground
+      },
+      bellButton: classes.notificationButton,
+      modal: classes.notificationModal,
+      modalWrapper: `${defaultVariables.light.modalWrapper} ${classes.notificationWrapper}`,
+      header: `${defaultVariables.light.header} ${classes.header}`,
+      button: `${defaultVariables.light.button} ${classes.button}`,
+      input: `${defaultVariables.light.input} ${classes.fontFamilyOverride}`,
+      outlinedInput: `${defaultVariables.light.outlinedInput} ${classes.fontFamilyOverride}`,
+      textArea: `${defaultVariables.light.textArea} ${classes.fontFamilyOverride}`,
+    }
+  }), [classes]);
+
+  return (
+    <DialectContextProvider
+      config={dialectConfig}
+      wallet={dialectWallet}
+      dapp={MONKE_DAO_PUBLIC_KEY}
+    >
+      <DialectUiManagementProvider>
+        <DialectThemeProvider theme="light" variables={themeVariables}>
+          {children}
+        </DialectThemeProvider>
+      </DialectUiManagementProvider>
+    </DialectContextProvider>
+  );
+}
+
 const App = () => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
   const network = WalletAdapterNetwork.Devnet;
-  const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
   const config = {
     /** Optional commitment level */
     commitment: 'finalized',
@@ -118,7 +247,7 @@ const App = () => {
     confirmTransactionInitialTimeout: 150000,
   };
   const connection = new anchor.web3.Connection(
-    rpcHost ? rpcHost : anchor.web3.clusterApiUrl('devnet'),
+    RPC_URL ? RPC_URL : anchor.web3.clusterApiUrl('devnet'),
     config
   );
   
@@ -138,12 +267,13 @@ const App = () => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletDialogProvider>
-          <Router>
-            <Routes>
-              <Route path='/announcements' element={<Announcements />} />
-              <Route path='/' element={<Home />} />
-            </Routes>
-          </Router>
+          <DialectProviders>
+            <Router>
+              <Routes>
+                <Route path='/' element={<Home />} />
+              </Routes>
+            </Router>
+          </DialectProviders>
         </WalletDialogProvider>
       </WalletProvider>
     </ConnectionProvider>

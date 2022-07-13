@@ -9,6 +9,8 @@ import { Box, Link } from '@material-ui/core';
 import { useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 import { TWITTER_BLUE, DISCORD_BLUE } from '../constants/colors';
+import {NotificationsButton} from "@dialectlabs/react-ui";
+import {WalletMultiButton} from "@solana/wallet-adapter-material-ui";
 
 const theme = createTheme({
   palette: {
@@ -69,6 +71,9 @@ const useStyles = makeStyles((theme) => ({
   },
   social: {
     height: 38,
+    '&:not(:last-child)': {
+      marginRight: theme.spacing(2),
+    },
     '&.sm': {
       display: 'inline-block',
       marginTop: theme.spacing(2),
@@ -77,6 +82,16 @@ const useStyles = makeStyles((theme) => ({
   },
   discord: {
     marginRight: theme.spacing(2),
+  },
+  bell: {
+    marginRight: theme.spacing(2),
+    '&.sm': {
+      display: 'inline-block',
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      // In order to align bell button with Social
+      verticalAlign: 'bottom',
+    },
   },
   toolbarTitle: {
     padding: `10px`,
@@ -161,23 +176,25 @@ export function Header() {
             </Button>
           </Box> */}
           <Box
-            className={clsx(classes.social, classes.discord, {
+            className={clsx(classes.bell, {
               sm: isXsScreenAndSmaller,
             })}
           >
-            <Button
-              href='/announcements'
-              color='secondary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Announcements logo'
-                src='/speaker.png'
-                className={classes.plusLogo}
-              />
-              Announcements
-            </Button>
+            <NotificationsButton
+              dialectId="monkedao-notifications"
+              pollingInterval={5000}
+              notifications={[{
+                  name: 'MonkeDAO Announcements', detail: ''
+                }, {
+                  name: 'Events & Updates', detail: ''
+                }, {
+                  name: 'Upcoming Whitelist Access', detail: ''
+                }]
+              }
+            />
+          </Box>
+          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
+            <WalletMultiButton />
           </Box>
           {/* <Box
             className={clsx(classes.social, classes.discord, {
