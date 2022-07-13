@@ -268,6 +268,9 @@ export default function Announcements(props) {
       walletPublicKey: wallet?.publicKey?.toString() ?? '',
       env,
     });
+
+  const [isNotifiLoggedIn, setNotifiLoggedIn] = useState(false);
+  const [isNotifiLoggingIn, setNotifiLoggingIn] = useState(false);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isAuthed, setIsAuthed] = useState(false);
@@ -460,6 +463,8 @@ export default function Announcements(props) {
     // if (dataAfterCreation?.smsTargets?.length > 0) {
     //   setTelegram(dataAfterCreation?.smsTargets[0]?.UNKNOWN);
     // }
+
+    setNotifiLoggedIn(true);
   };
 
   const runCreateSource = async (data) => {
@@ -610,7 +615,7 @@ export default function Announcements(props) {
               className={classes.logo}
             />
           </Box>
-          <Box
+          {(wallet && publicKey && isNotifiLoggedIn && <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
@@ -629,7 +634,7 @@ export default function Announcements(props) {
               />
               Subscribe
             </Button>
-          </Box>
+          </Box>) || null }
           <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
             <WalletMultiButton />
           </Box>
@@ -648,6 +653,13 @@ export default function Announcements(props) {
             Subscribe +
           </Button> */}
         </Container>
+
+        {(wallet && publicKey && !isNotifiLoggedIn && (
+          <Container maxWidth='md' className={classes.timelineContainer}>
+            Please approve message transaction to login with Notifi to configure announcement subscription.
+            </Container>
+          ))
+          || null }
 
         <Container maxWidth='md' className={classes.timelineContainer}>
           <Timeline>
