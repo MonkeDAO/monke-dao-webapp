@@ -69,6 +69,16 @@ const useStyles = makeStyles((theme) => ({
       height: 'auto',
     },
   },
+  socialContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: theme.spacing(2),
+    '&.sm': {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      gap: theme.spacing(1)
+    },
+  },
   social: {
     height: 38,
     '&:not(:last-child)': {
@@ -175,60 +185,59 @@ export function Header() {
               Subscribe
             </Button>
           </Box> */}
-          <Box
-            className={clsx(classes.bell, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <NotificationsButton
-              dialectId="monkedao-notifications"
-              pollingInterval={5000}
-              notifications={[{
-                  name: 'MonkeDAO Announcements', detail: ''
-                }, {
-                  name: 'Events & Updates', detail: ''
-                }, {
-                  name: 'Upcoming Whitelist Access', detail: ''
-                }]
-              }
-            />
-          </Box>
-          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <WalletMultiButton />
-          </Box>
-          {/* <Box
-            className={clsx(classes.social, classes.discord, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <Button
-              href='https://discord.gg/TscZwJ7jbX'
-              color='secondary'
-              variant='contained'
-              className={classes.link}
+          <Box className={clsx(classes.socialContainer, { sm: isXsScreenAndSmaller })}>
+            <Box
             >
-              <img
-                alt='Discord logo'
-                src='/discord.svg'
-                className={classes.buttonLogo}
+              <NotificationsButton
+                dialectId="monkedao-notifications"
+                pollingInterval={5000}
+                notifications={[{
+                    name: 'MonkeDAO Announcements', detail: ''
+                  }, {
+                    name: 'Events & Updates', detail: ''
+                  }, {
+                    name: 'Upcoming Whitelist Access', detail: ''
+                  }]
+                }
               />
-              Join the Discord
-            </Button>
-          </Box> */}
-          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <Button
-              href='https://twitter.com/MonkeDAO'
-              color='primary'
-              variant='contained'
-              className={classes.link}
+            </Box>
+            <Box >
+              <WalletMultiButton />
+            </Box>
+            {/* <Box
+              className={clsx(classes.social, classes.discord, {
+                sm: isXsScreenAndSmaller,
+              })}
             >
-              <img
-                alt='Twitter logo'
-                src='/twitter.svg'
-                className={classes.buttonLogo}
-              />
-              Follow us
-            </Button>
+              <Button
+                href='https://discord.gg/TscZwJ7jbX'
+                color='secondary'
+                variant='contained'
+                className={classes.link}
+              >
+                <img
+                  alt='Discord logo'
+                  src='/discord.svg'
+                  className={classes.buttonLogo}
+                />
+                Join the Discord
+              </Button>
+            </Box> */}
+            <Box >
+              <Button
+                href='https://twitter.com/MonkeDAO'
+                color='primary'
+                variant='contained'
+                className={classes.link}
+              >
+                <img
+                  alt='Twitter logo'
+                  src='/twitter.svg'
+                  className={classes.buttonLogo}
+                />
+                Follow us
+              </Button>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
