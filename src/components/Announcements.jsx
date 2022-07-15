@@ -357,7 +357,7 @@ export default function Announcements(props) {
         name,
         emailAddress: email === '' ? null : email,
         telegramId: telegram === '' ? null : telegram,
-        phoneNumber: phone === '' ? null : phone,
+        phoneNumber: phone.length < 4 ? null : phone,
         sourceId: source.id,
         filterId: source.applicableFilters[0]?.id ?? '',
       }).then(fetchData);
