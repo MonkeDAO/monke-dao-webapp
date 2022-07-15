@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Link from '@mui/material/Link';
-import Switch from '@mui/material/Switch';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Link from '@material-ui/core/Link';
+import Switch from '@material-ui/core/Switch';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import {
   Box,
@@ -39,12 +40,10 @@ import TimelineContent from '@material-ui/lab/TimelineContent';
 import clsx from 'clsx';
 import { TimelineOppositeContent } from '@material-ui/lab';
 import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
-import { useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
+import { useAnchorWallet, useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { getCreatorAnnouncements } from '../utils/notif';
-import {
-  BlockchainEnvironment,
-  useNotifiClient,
-} from '@notifi-network/notifi-react-hooks';
+import { useNotifiClient } from '@notifi-network/notifi-react-hooks';
+import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
 const theme = createTheme({
   palette: {
     primary: {
@@ -245,9 +244,19 @@ const WHITELIST_ANNOUNCEMENTS = 'Upcoming Whitelist Access';
 const MONKEDAO_SOURCE = 'smb__creatorUpdates';
 const EVENT_SOURCE = 'smb__eventsAndUpdates';
 const WHITELIST_SOURCE = 'smb__accessInstructions';
+
+const getAlert = (data, name) => {
+  return data?.alerts?.find((alert) => alert.name === name);
+}
+
+const getSource = (data, name) => {
+  return data?.sources?.find((source) => source.name === name);
+};
+
 export default function Announcements(props) {
   const wallet = useAnchorWallet();
-  const { publicKey, signMessage } = useWallet();
+  const { publicKey, signMessage, sendTransaction } = useWallet();
+  const { connection } = useConnection();
   const classes = useStyles();
   const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down('sm'));
   const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down('xs'));
@@ -255,6 +264,7 @@ export default function Announcements(props) {
   const [wlChecked, setWLChecked] = useState(false);
   const [eventChecked, setEventsChecked] = useState(false);
   const [monkeDaoChecked, setMonkeDaoChecked] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [telegramConfirmationUrl, setTelegramConfirmationUrl] = useState('');
   const alertMap = [
     { type: 'smb__creatorUpdates', name: MONKEDAO_ANNOUNCEMENTS },
@@ -262,19 +272,27 @@ export default function Announcements(props) {
     { type: 'smb__accessInstructions', name: WHITELIST_ANNOUNCEMENTS },
   ];
 
-  let env = BlockchainEnvironment.MainNetBeta;
-  const { logIn, fetchData, createAlert, createSource, deleteAlert, updateAlert, isInitialized, isAuthenticated } =
+  const {
+    beginLoginViaTransaction,
+    completeLoginViaTransaction,
+    logIn,
+    fetchData,
+    createAlert,
+    createSource,
+    deleteAlert,
+    updateAlert,
+    data,
+    isAuthenticated,
+    isInitialized,
+  } =
     useNotifiClient({
       dappAddress: 'monkedao',
-      walletPublicKey: wallet?.publicKey?.toString() ?? '',
-      env,
+      walletPublicKey: publicKey?.toBase58() ?? '',
+      env: 'Production',
     });
 
-  const [isNotifiLoggedIn, setNotifiLoggedIn] = useState(false);
-  const [isNotifiLoggingIn, setNotifiLoggingIn] = useState(false);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [isAuthed, setIsAuthed] = useState(false);
   const [telegram, setTelegram] = useState('');
   const [open, setOpen] = useState(false);
   const [handleSubscribeCalled, setHandleSubscribeCalled] = useState(false);
@@ -298,14 +316,6 @@ export default function Announcements(props) {
     setMonkeDaoChecked(!monkeDaoChecked);
   };
 
-  const getAlert = (data, name) => {
-    return data?.alerts?.find((alert) => alert.name === name);
-  }
-
-  const getSource = (data, name) => {
-    return data?.sources?.find((source) => source.name === name);
-  };
-
   const updateSubscription = (data, name, source) => {
     if (source) {
       return createOrUpdateAlert(data, {
@@ -315,11 +325,11 @@ export default function Announcements(props) {
         phoneNumber: phone === '' ? null : phone,
         sourceId: source.id,
         filterId: source.applicableFilters[0]?.id ?? '',
-      });
+      }).then(fetchData);
     } else {
       return maybeDeleteAlert(data, {
         name,
-      });
+      }).then(fetchData);
     }
   }
 
@@ -335,13 +345,13 @@ export default function Announcements(props) {
         
         const [wlSource, eventSource, monkeDaoSource] = await Promise.all(sourcePromises);
 
-        const eventPromises = [];
-        eventPromises.push(updateSubscription(freshData, WHITELIST_ANNOUNCEMENTS, wlSource));
-        eventPromises.push(updateSubscription(freshData, EVENT_ANNOUNCEMENTS, eventSource));
-        eventPromises.push(updateSubscription(freshData, MONKEDAO_ANNOUNCEMENTS, monkeDaoSource));
+        // Create alerts serially because of a bug in SDK
+        let eventPromises = Promise.resolve(freshData);
+        eventPromises = eventPromises.then(data => updateSubscription(data, WHITELIST_ANNOUNCEMENTS, wlSource))
+        eventPromises = eventPromises.then(data => updateSubscription(data, EVENT_ANNOUNCEMENTS, eventSource))
+        eventPromises = eventPromises.then(data => updateSubscription(data, MONKEDAO_ANNOUNCEMENTS, monkeDaoSource));
 
-        await Promise.all(eventPromises);
-        const dataAfterAlertCreation = await fetchData();
+        const dataAfterAlertCreation = await eventPromises;
         const unverifiedTelegramTarget = dataAfterAlertCreation.telegramTargets.find(telegramTarget => !!telegramTarget.confirmationUrl);
         
         let content = 'Check your email for verification if you entered one. Texts are automatically subscribed.';
@@ -417,18 +427,19 @@ export default function Announcements(props) {
   };
 
   const reflectNotifiData = useCallback((data) => {
+    console.log('reflect', data);
     // Look for email and target associated with an alert
     let emailTarget = undefined;
+    let smsTarget = undefined;
     let telegramTarget = undefined;
-    let hasAnyAlert = false;
 
     // Defined in here to capture the variables in scope
     function handleAlert(name, toggleSetter) {
       const alert = getAlert(data, name);
       if (alert) {
         emailTarget = alert.targetGroup?.emailTargets?.[0];
+        smsTarget = alert.targetGroup?.smsTargets?.[0];
         telegramTarget = alert.targetGroup?.telegramTargets?.[0];
-        hasAnyAlert = true;
         toggleSetter(true);
       } else {
         toggleSetter(false);
@@ -438,23 +449,21 @@ export default function Announcements(props) {
     handleAlert(EVENT_ANNOUNCEMENTS, setEventsChecked);
     handleAlert(MONKEDAO_ANNOUNCEMENTS, setMonkeDaoChecked);
 
-    if (!hasAnyAlert) {
-      emailTarget = data.emailTargets?.[0];
-    } else {
+    if (emailTarget) {
       // Find by id from the data to get latest data
       emailTarget = data.emailTargets?.find(email => email.id === emailTarget?.id);
-    }
-    if (emailTarget) {
-      setEmail(emailTarget.emailAddress);
+      setEmail(emailTarget?.emailAddress);
     }
 
-    if (!hasAnyAlert) {
-      telegramTarget = data.telegramTargets?.[0];
-    } else {
-      telegramTarget = data.telegramTargets?.find(telegram => telegram.id === telegramTarget?.id);
+    if (smsTarget) {
+      // Find by id from the data to get latest data
+      smsTarget = data.smsTargets?.find(sms => sms.id === smsTarget?.id);
+      setPhone(smsTarget?.phoneNumber ?? '');
     }
+
     if (telegramTarget) {
-      setTelegram(telegramTarget.telegramId);
+      telegramTarget = data.telegramTargets?.find(telegram => telegram.id === telegramTarget?.id);
+      setTelegram(telegramTarget?.telegramId);
       setTelegramConfirmationUrl(telegramTarget.confirmationUrl);
     } else {
       setTelegramConfirmationUrl('');
@@ -477,33 +486,101 @@ export default function Announcements(props) {
         });
         setTimelineCards(timelineCardsObject);
       })();
-    } catch {
-      console.log('error');
+    } catch (e) {
+      console.log('error', e);
     }
   }, [wallet]);
 
-  const initializedNotifiState = useRef(false);
-  useEffect(() => {
-    if (!initializedNotifiState.current) {
-      if (wallet && publicKey && isInitialized) {
-        initializedNotifiState.current = true;
-
-        try {
-          (async () => {
-            if (!isAuthenticated) {
-              await logIn({ signMessage });
-            }
-            
-            const dataAfterLoggingIn = await fetchData();
-            reflectNotifiData(dataAfterLoggingIn);
-            setNotifiLoggedIn(true);
-          })();
-        } catch {
-          console.log('error');
-        }
-      }
+  const handleSoftware = useCallback(async () => {
+    setIsLoggingIn(true);
+    try {
+      await logIn({ signMessage });
+      const dataAfterLoggingIn = await fetchData();
+      reflectNotifiData(dataAfterLoggingIn);
+    } catch (e) {
+      console.log('error', e);
     }
-  }, [wallet, publicKey, isInitialized, isAuthenticated, logIn, signMessage, fetchData, reflectNotifiData]);
+    setIsLoggingIn(false);
+  }, [fetchData, logIn, reflectNotifiData, signMessage]);
+
+  const isNotifiInitialized = useRef(false);
+  useEffect(() => {
+    if (isNotifiInitialized.current) {
+      if (!publicKey) {
+        isNotifiInitialized.current = false;
+      }
+      return;
+    }
+
+    if (isInitialized && isAuthenticated && publicKey && data) {
+      isNotifiInitialized.current = true;
+      reflectNotifiData(data);
+    }
+  }, [reflectNotifiData, data, isInitialized, isAuthenticated, publicKey]);
+
+  const broadcastMemo = useCallback(async (logValue) => {
+    const latestBlockHash = await connection.getLatestBlockhash();
+
+    const txn = new Transaction();
+    txn.recentBlockhash = latestBlockHash.blockhash;
+    txn.feePayer = publicKey;
+    txn.add(
+      new TransactionInstruction({
+        keys: [
+          {
+            pubkey: publicKey,
+            isSigner: true,
+            isWritable: false,
+          }
+        ],
+        data: Buffer.from(logValue, "utf-8"),
+        programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+      })
+    );
+
+    const blockHashAgain = await connection.getLatestBlockhash();
+    const signature = await sendTransaction(txn, connection);
+    await connection.confirmTransaction({
+      blockhash: blockHashAgain.blockhash,
+        lastValidBlockHeight: blockHashAgain.lastValidBlockHeight,
+        signature,
+    });
+
+    return signature;
+  }, [connection, publicKey, sendTransaction]);
+
+  const handleHardware = useCallback(async () => {
+    setIsLoggingIn(true);
+    try {
+      const { logValue } = await beginLoginViaTransaction();
+      const signature = await broadcastMemo(logValue);
+      await completeLoginViaTransaction({ transactionSignature: signature });
+      const dataAfterLoggingIn = await fetchData();
+      reflectNotifiData(dataAfterLoggingIn);
+    } catch (e) {
+      console.log('error', e);
+    }
+    setIsLoggingIn(false);
+  }, [beginLoginViaTransaction, broadcastMemo, completeLoginViaTransaction, fetchData, reflectNotifiData]);
+
+  const logInForm = (
+    <><DialogTitle>Log In to Notifi</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Sign a message with your wallet to log in to Notifi
+          <br />
+          <br />
+          Using a hardware wallet requires you to broadcast a transaction.
+          <br />
+          This will cost gas!
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button disabled={isLoggingIn} onClick={handleSoftware}>Software Wallet</Button>
+        <Button disabled={isLoggingIn} onClick={handleHardware}>Hardware Wallet</Button>
+      </DialogActions>
+    </>
+  );
 
   const subscribeForm = (
     <><DialogTitle>Subscribe</DialogTitle>
@@ -568,7 +645,7 @@ export default function Announcements(props) {
             control={
               <Switch checked={eventChecked} onChange={handleEventChecked} />
             }
-            label='Events & Updates'
+            label='Events &amp; Updates'
             onChange={handleEventChecked}
           />
           <FormControlLabel
@@ -591,12 +668,13 @@ export default function Announcements(props) {
             {contentForModal}
           </DialogContentText>
         </DialogContent>
-      ) : subscribeForm}
+      ) : isAuthenticated ? subscribeForm : logInForm}
     </Dialog >
   );
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <AppBar
         position='sticky'
         color='default'
@@ -617,13 +695,12 @@ export default function Announcements(props) {
               className={classes.logo}
             />
           </Box>
-          {(wallet && publicKey && isNotifiLoggedIn && <Box
+          {(wallet && publicKey && <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
           >
             <Button
-              href='/'
               color='secondary'
               variant='contained'
               className={classes.link}
@@ -638,7 +715,7 @@ export default function Announcements(props) {
             </Button>
           </Box>) || null }
           <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <WalletMultiButton />
+            <WalletMultiButton className={clsx(classes.social, classes.link)} />
           </Box>
         </Toolbar>
       </AppBar>
@@ -656,7 +733,7 @@ export default function Announcements(props) {
           </Button> */}
         </Container>
 
-        {(wallet && publicKey && !isNotifiLoggedIn && (
+        {(wallet && publicKey && !isAuthenticated && (
           <Container maxWidth='md' className={classes.timelineContainer}>
             Please approve message transaction to login with Notifi to configure announcement subscription.
             </Container>

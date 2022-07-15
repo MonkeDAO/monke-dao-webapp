@@ -16,10 +16,10 @@ import Validator from './components/Validator';
 import Footer from './components/Footer';
 import Roadmap from './components/Roadmap';
 import Announcements from './components/Announcements';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
-import { ConnectionConfig, clusterApiUrl } from '@solana/web3.js';
+import { clusterApiUrl } from '@solana/web3.js';
 import {
 	ConnectionProvider,
 	WalletProvider,
@@ -27,11 +27,6 @@ import {
 import {
   PhantomWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
-import {
-  createDefaultAuthorizationResultCache,
-  SolanaMobileWalletAdapter,
-} from '@solana-mobile/wallet-adapter-mobile';
-import * as anchor from '@project-serum/anchor';
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -107,21 +102,7 @@ const theme = createTheme({
 
 const App = () => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
-  const network = WalletAdapterNetwork.Devnet;
-  const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
-  const config = {
-    /** Optional commitment level */
-    commitment: 'finalized',
-    /** Optional Disable retring calls when server responds with HTTP 429 (Too Many Requests) */
-    disableRetryOnRateLimit: false,
-    /** time to allow for the server to initially process a transaction (in milliseconds) */
-    confirmTransactionInitialTimeout: 150000,
-  };
-  const connection = new anchor.web3.Connection(
-    rpcHost ? rpcHost : anchor.web3.clusterApiUrl('devnet'),
-    config
-  );
-  
+  const network = WalletAdapterNetwork.Mainnet;
   // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
@@ -132,7 +113,7 @@ const App = () => {
     () => [
         new PhantomWalletAdapter(),
     ],
-    [network]
+    []
 );
   return (
     <ConnectionProvider endpoint={endpoint}>
