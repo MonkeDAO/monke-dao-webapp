@@ -11,6 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Link from '@material-ui/core/Link';
 import Switch from '@material-ui/core/Switch';
+import Checkbox from '@material-ui/core/Checkbox';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import {
   Box,
@@ -23,13 +24,14 @@ import {
   useMediaQuery,
   FormGroup,
   FormControlLabel,
+  IconButton,
+  InputAdornment,
 } from '@material-ui/core';
 import {
   BANANA_ICON_YELLOW,
   BUTTON_YELLOW,
   LIGHT_GREY,
   TEXT_GREY,
-  TWITTER_BLUE,
 } from '../constants/colors';
 
 import Timeline from '@material-ui/lab/Timeline';
@@ -41,7 +43,7 @@ import clsx from 'clsx';
 import { TimelineOppositeContent } from '@material-ui/lab';
 import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
 import { useAnchorWallet, useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { getCreatorAnnouncements } from '../utils/notif';
+import { getCreatorAnnouncements, getPublicTopics } from '../utils/notif';
 import { useNotifiClient } from '@notifi-network/notifi-react-hooks';
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
 const theme = createTheme({
@@ -50,7 +52,7 @@ const theme = createTheme({
       main: BUTTON_YELLOW,
     },
     secondary: {
-      main: BUTTON_YELLOW,
+      main: '#498D5E',
     },
   },
   typography: {
@@ -59,9 +61,11 @@ const theme = createTheme({
   overrides: {
     MuiPaper: {
       root: {
-        backgroundColor: '#f3efcd',
+        backgroundColor: '#184623',
+        color: "#f3efcd",
+      },
+      rounded: {
         borderRadius: 8,
-        color: "#184623",
       }
     },
     MuiTypography: {
@@ -73,6 +77,26 @@ const theme = createTheme({
       root: {
         color: 'inherit',
       },
+    },
+    MuiDialogActions: {
+      root: {
+        paddingBottom: 24,
+      },
+      spacing: {
+        ':not(:first-child)': {
+          marginLeft: 30,
+        }
+      }
+    },
+    MuiDialogContent: {
+      root: {
+        paddingTop: 16,
+      },
+    },
+    MuiDialogTitle: {
+      root: {
+        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      }
     },
     MuiFormLabel: {
       root: {
@@ -266,22 +290,90 @@ const useStyles = makeStyles((theme) => ({
   verticallyCenterContent: {
     display: 'none',
   },
+  closeButton: {
+    position: 'absolute',
+    right: '16px',
+    float: 'right',
+  },
+  titleText: {
+    display: 'inline-block',
+    width: '100%',
+    textAlign: 'center',
+  },
+  checkbox: {
+    color: BUTTON_YELLOW,
+  },
+  centeredControls: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  notCenteredControls: {
+    alignSelf: 'center',
+    display: 'flex',
+    width: 'fit-content',
+    flexDirection: 'column',
+    alignItems: 'start',
+    margin: 'auto',
+  },
+  centeredActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconTextField: {
+    color: '#184623',
+    border: `2px solid rgba(0, 0, 0, 0)`,
+    backgroundColor: '#F2EFD0',
+    borderRadius: 8,
+    padding: 8,
+    '&:focus-within': {
+      borderColor: BUTTON_YELLOW,
+    }
+  },
+  inputAdornment: {
+    marginTop: '0px !important',
+  },
+  smsInputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 8,
+    marginBottom: 4,
+    paddingTop: 6,
+    paddingBottom: 7,
+  },
+  smsIcon: {
+    marginRight: 8,
+  },
 }));
-
-const MONKEDAO_ANNOUNCEMENTS = 'MonkeDAO Announcements';
-const EVENT_ANNOUNCEMENTS = 'Events & Updates';
-const WHITELIST_ANNOUNCEMENTS = 'Upcoming Whitelist Access';
-const MONKEDAO_SOURCE = 'smb__creatorUpdates';
-const EVENT_SOURCE = 'smb__eventsAndUpdates';
-const WHITELIST_SOURCE = 'smb__accessInstructions';
 
 const getAlert = (data, name) => {
   return data?.alerts?.find((alert) => alert.name === name);
 }
 
 const getSource = (data, name) => {
-  return data?.sources?.find((source) => source.name === name);
+  return data?.sources?.find((source) => source.blockchainAddress === name);
 };
+
+const areTargetsEmpty = (data) => {
+  return (data?.emailTargets?.length ?? 0) === 0
+    && (data?.smsTargets?.length ?? 0) === 0
+    && (data?.telegramTargets?.length ?? 0) === 0;
+}
+
+const DialogHeader = (props) => {
+  const classes = useStyles();
+  return <DialogTitle className={classes.titleText}>
+    {props.hasNoData ?
+      'Get announcement notifications' :
+      'Notification settings'
+    }
+    <IconButton className={classes.closeButton} size="small" onClick={props.onClickClose}>
+      <img alt='close' src='/x.svg'/>
+    </IconButton>
+  </DialogTitle>
+}
 
 export default function Announcements(props) {
   const wallet = useAnchorWallet();
@@ -291,16 +383,10 @@ export default function Announcements(props) {
   const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down('sm'));
   const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down('xs'));
   const [timelineCards, setTimelineCards] = useState([]);
-  const [wlChecked, setWLChecked] = useState(false);
-  const [eventChecked, setEventsChecked] = useState(false);
-  const [monkeDaoChecked, setMonkeDaoChecked] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [telegramConfirmationUrl, setTelegramConfirmationUrl] = useState('');
-  const alertMap = [
-    { type: 'smb__creatorUpdates', name: MONKEDAO_ANNOUNCEMENTS },
-    { type: 'smb__eventsAndUpdates', name: EVENT_ANNOUNCEMENTS },
-    { type: 'smb__accessInstructions', name: WHITELIST_ANNOUNCEMENTS },
-  ];
+  const [unverifiedEmailTarget, setUnverifiedEmailTarget] = useState(null);
+  const [publicTopics, setPublicTopics] = useState([]);
 
   const {
     beginLoginViaTransaction,
@@ -311,6 +397,7 @@ export default function Announcements(props) {
     createSource,
     deleteAlert,
     updateAlert,
+    sendEmailTargetVerification,
     data,
     isAuthenticated,
     isInitialized,
@@ -325,31 +412,27 @@ export default function Announcements(props) {
   const [phone, setPhone] = useState('');
   const [telegram, setTelegram] = useState('');
   const [open, setOpen] = useState(false);
-  const [handleSubscribeCalled, setHandleSubscribeCalled] = useState(false);
   const [useHardwareWallet, setUseHardwareWallet] = useState(false);
+
+  const hasNoData = areTargetsEmpty(data);
 
   const handleClickOpen = (e) => {
     e.preventDefault();
     setOpen(true);
   };
   const handleClose = () => {
-    setHandleSubscribeCalled(false);
     setOpen(false);
   };
+  const [checkedStates, setCheckedStates] = useState({});
 
-  const handleWlChecked = () => {
-    setWLChecked(!wlChecked);
-  };
-  const handleEventChecked = () => {
-    setEventsChecked(!eventChecked);
-  };
-  const handleDaoChecked = () => {
-    setMonkeDaoChecked(!monkeDaoChecked);
-  };
+  const handleTopicChecked = useCallback((topicName) => {
+    setCheckedStates((state) => ({ ...state, [topicName]: !state[topicName] }));
+  }, []);
 
   const handleHardwareWalletToggled = () => {
     setUseHardwareWallet(!useHardwareWallet);
   };
+
 
   const updateSubscription = (data, name, source) => {
     if (source) {
@@ -371,35 +454,32 @@ export default function Announcements(props) {
   const handleSubscribe = async () => {
     if (wallet && publicKey && (email || telegram)) {
       try {
-        const sourcePromises = [];
-
         const freshData = await fetchData();
-        sourcePromises.push(wlChecked ? ensureSource(freshData, WHITELIST_SOURCE) : Promise.resolve(undefined));
-        sourcePromises.push(eventChecked ? ensureSource(freshData, EVENT_SOURCE) : Promise.resolve(undefined));
-        sourcePromises.push(monkeDaoChecked ? ensureSource(freshData, MONKEDAO_SOURCE) : Promise.resolve(undefined));
-        
-        const [wlSource, eventSource, monkeDaoSource] = await Promise.all(sourcePromises);
+
+        const currentTopics = [...publicTopics];
+        const currentCheckedState = {
+          ...checkedStates,
+        };
+
+        await Promise.all(currentTopics.map(topic => {
+          return currentCheckedState[topic.topicName] ? ensureSource(freshData, topic.topicName) : Promise.resolve(undefined);
+        }));
 
         // Create alerts serially because of a bug in SDK
-        let eventPromises = Promise.resolve(freshData);
-        eventPromises = eventPromises.then(data => updateSubscription(data, WHITELIST_ANNOUNCEMENTS, wlSource))
-        eventPromises = eventPromises.then(data => updateSubscription(data, EVENT_ANNOUNCEMENTS, eventSource))
-        eventPromises = eventPromises.then(data => updateSubscription(data, MONKEDAO_ANNOUNCEMENTS, monkeDaoSource));
+        const dataAfterSources = await fetchData();
+        let eventPromises = Promise.resolve(dataAfterSources);
+        currentTopics.forEach(topic => {
+          const source = currentCheckedState[topic.topicName] ? getSource(dataAfterSources, topic.topicName) : undefined;
+          eventPromises = eventPromises.then(data => updateSubscription(data, topic.displayName, source));
+        });
 
         const dataAfterAlertCreation = await eventPromises;
-        const unverifiedTelegramTarget = dataAfterAlertCreation.telegramTargets.find(telegramTarget => !!telegramTarget.confirmationUrl);
-        
-        if (unverifiedTelegramTarget) {
-          const confirmationUrl = unverifiedTelegramTarget.confirmationUrl;
-          setTelegramConfirmationUrl(confirmationUrl);
-        }
         reflectNotifiData(dataAfterAlertCreation);
       } catch (e) {
         if (e) {
           console.log('Invalid Signature', e);
         }
       }
-      setHandleSubscribeCalled(true);
     }
   };
 
@@ -446,10 +526,16 @@ export default function Announcements(props) {
   };
   const handleEmail = (e) => {
     setEmail(e.target.value);
+    const targets = data?.emailTargets ?? [];
+    const maybeTarget = targets.find(target => target?.emailAddress === e.target.value.toLowerCase());
+    setUnverifiedEmailTarget((maybeTarget && !maybeTarget.isConfirmed) ? maybeTarget : null);
   };
 
   const handleTelegram = (e) => {
     setTelegram(e.target.value);
+    const targets = data?.telegramTargets ?? [];
+    const maybeTarget = targets.find(target => target?.telegramId === e.target.value.toLowerCase());
+    setTelegramConfirmationUrl(maybeTarget?.telegramConfirmationUrl ?? '');
   };
 
   const handlePhone = (value) => {
@@ -458,38 +544,44 @@ export default function Announcements(props) {
   };
 
   const reflectNotifiData = useCallback((data) => {
-    console.log('reflect', data);
     // Look for email and target associated with an alert
     let emailTarget = undefined;
     let smsTarget = undefined;
     let telegramTarget = undefined;
+    let checkedStates = {};
 
     // Defined in here to capture the variables in scope
-    function handleAlert(name, toggleSetter) {
-      const alert = getAlert(data, name);
+    function handleAlert(topic) {
+      const alert = getAlert(data, topic.displayName);
       if (alert) {
         emailTarget = alert.targetGroup?.emailTargets?.[0];
         smsTarget = alert.targetGroup?.smsTargets?.[0];
         telegramTarget = alert.targetGroup?.telegramTargets?.[0];
-        toggleSetter(true);
+        checkedStates[topic.topicName] = true;
       } else {
-        toggleSetter(false);
+        checkedStates[topic.topicName] = false;
       }
     }
-    handleAlert(WHITELIST_ANNOUNCEMENTS, setWLChecked);
-    handleAlert(EVENT_ANNOUNCEMENTS, setEventsChecked);
-    handleAlert(MONKEDAO_ANNOUNCEMENTS, setMonkeDaoChecked);
+
+    publicTopics.forEach(handleAlert);
+    setCheckedStates(checkedStates);
 
     if (emailTarget) {
       // Find by id from the data to get latest data
       emailTarget = data.emailTargets?.find(email => email.id === emailTarget?.id);
       setEmail(emailTarget?.emailAddress);
+      setUnverifiedEmailTarget((emailTarget && !emailTarget.isConfirmed) ? emailTarget : null);
+    } else {
+      setEmail('');
+      setUnverifiedEmailTarget(null);
     }
 
     if (smsTarget) {
       // Find by id from the data to get latest data
       smsTarget = data.smsTargets?.find(sms => sms.id === smsTarget?.id);
       setPhone(smsTarget?.phoneNumber ?? '');
+    } else {
+      setPhone('');
     }
 
     if (telegramTarget) {
@@ -497,14 +589,20 @@ export default function Announcements(props) {
       setTelegram(telegramTarget?.telegramId);
       setTelegramConfirmationUrl(telegramTarget.confirmationUrl);
     } else {
+      setTelegram('');
       setTelegramConfirmationUrl('');
     }
-  }, []);
+  }, [publicTopics]);
 
   useEffect(() => {
     try {
       (async () => {
-        const publicAnnouncements = await getCreatorAnnouncements();
+        const [topics, publicAnnouncements] = await Promise.all([
+          getPublicTopics(),
+          getCreatorAnnouncements(),
+        ]);
+
+        setPublicTopics(topics);
         const timelineCardsObject = publicAnnouncements.map((announcement) => {
           return {
             emoji: '',
@@ -520,7 +618,7 @@ export default function Announcements(props) {
     } catch (e) {
       console.log('error', e);
     }
-  }, [wallet]);
+  }, []);
 
   const handleSoftware = useCallback(async () => {
     setIsLoggingIn(true);
@@ -543,11 +641,11 @@ export default function Announcements(props) {
       return;
     }
 
-    if (isInitialized && isAuthenticated && publicKey && data) {
+    if (isInitialized && isAuthenticated && publicKey && data && publicTopics.length > 0) {
       isNotifiInitialized.current = true;
       reflectNotifiData(data);
     }
-  }, [reflectNotifiData, data, isInitialized, isAuthenticated, publicKey]);
+  }, [reflectNotifiData, data, isInitialized, isAuthenticated, publicKey, publicTopics]);
 
   const broadcastMemo = useCallback(async (logValue) => {
     const latestBlockHash = await connection.getLatestBlockhash();
@@ -580,6 +678,11 @@ export default function Announcements(props) {
     return signature;
   }, [connection, publicKey, sendTransaction]);
 
+  // Disabled if No alerts selected and inputs are empty
+  const isSubscribeDisabled =
+    !Object.keys(checkedStates).some(key => checkedStates[key])
+    || (email === '' && telegram === '' && phone.length < 4);
+
   const handleHardware = useCallback(async () => {
     setIsLoggingIn(true);
     try {
@@ -603,7 +706,8 @@ export default function Announcements(props) {
   }, [handleHardware, handleSoftware, useHardwareWallet]);
 
   const logInForm = (
-    <><DialogTitle>Log In to Notifi</DialogTitle>
+    <>
+      <DialogHeader hasNoData={hasNoData} onClickClose={handleClose}  />
       <DialogContent>
         <DialogContentText>
           Sign a message with your wallet to log in to Notifi
@@ -613,121 +717,120 @@ export default function Announcements(props) {
           <br />
           This will cost gas!
         </DialogContentText>
-        <FormGroup>
+        <FormGroup  className={classes.centeredControls}>
           <FormControlLabel
             control={
-              <Switch checked={useHardwareWallet} onChange={handleHardwareWalletToggled} />
+              <Checkbox className={classes.checkbox} color="primary" checked={useHardwareWallet} onChange={handleHardwareWalletToggled} />
             }
             label='Use Hardware Wallet'
           />
         </FormGroup>
       </DialogContent>
-      <DialogActions>
-        <Button className={classes.link} color="secondary" variant="contained" disabled={isLoggingIn} onClick={handleLogIn}>Log In</Button>
+      <DialogActions className={classes.centeredActions}>
+        <Button className={classes.link} color="primary" variant="contained" disabled={isLoggingIn} onClick={handleLogIn}>Log In</Button>
       </DialogActions>
     </>
   );
 
   const subscribeForm = (
-    <><DialogTitle>Subscribe</DialogTitle>
+    <><DialogHeader hasNoData={hasNoData} onClickClose={handleClose} />
       <DialogContent>
         <DialogContentText>
-          To subscribe to MonkeDAO announcements, please enter your email or
-          phone number.
+          To subscribe to MonkeDAO announcements, please enter your your email address, Telegram ID, and/or phone number.
         </DialogContentText>
         <TextField
           autoFocus
-          margin='dense'
           id='name'
-          label='Email Address'
           type='email'
-          fullWidth
           value={email}
+          className={classes.iconTextField}
+          margin='dense'
+          fullWidth
           variant='standard'
           onChange={handleEmail}
+          InputProps={{
+            className: classes.textFieldInput,
+            disableUnderline: true,
+            startAdornment: (
+              <InputAdornment className={classes.inputAdornment} position="start" variant='filled'>
+                <img alt='Email Address' src='/icn-mail.svg' />
+              </InputAdornment>
+            ),
+            endAdornment: (unverifiedEmailTarget
+              ? <Link href="#" color="secondary" onClick={() => {
+                  sendEmailTargetVerification({ targetId: unverifiedEmailTarget.id })
+                    .catch(e => { console.log(e, 'error') })
+                }} target="_blank" rel="noopener">Resend&nbsp;Verification</Link>
+              : null
+            )
+          }}
         />
-        <br />
         <br />
         <TextField
-          autoFocus
-          margin='dense'
           id='name'
-          label='Telegram ID'
           type='text'
-          fullWidth
+          margin='dense'
           value={telegram}
+          className={classes.iconTextField}
+          fullWidth
           variant='standard'
           onChange={handleTelegram}
-        />
-        {telegramConfirmationUrl ? <>
-          <br />
-          <Link
-            color="inherit"
-            href={telegramConfirmationUrl}
-            target="_blank"
-            rel="noopener">
-              Click here to verify your Telegram ID
-          </Link>
-        </> : null}
-        <br />
-        <br />
-        <MuiPhoneNumber
-          name='phone'
-          label='Phone Number'
-          data-cy='user-phone'
-          defaultCountry={'us'}
-          value={phone}
-          onChange={handlePhone}
+          InputProps={{
+            className: classes.textFieldInput,
+            disableUnderline: true,
+            startAdornment: (
+              <InputAdornment className={classes.inputAdornment} position="start" variant='filled'>
+                <img alt='Telegram ID' src='/icn-telegram.svg' />
+              </InputAdornment>
+            ),
+            endAdornment: (telegramConfirmationUrl
+              ? <Link color="secondary" href={telegramConfirmationUrl} target="_blank" rel="noopener">Verify&nbsp;telegram</Link>
+              : null
+            )
+          }}
         />
         <br />
+        <div className={clsx(classes.iconTextField, classes.smsInputContainer)}>
+          <img className={classes.smsIcon} alt='Phone Number' src='/icn-sms.svg' />
+          <MuiPhoneNumber
+            name='phone'
+            data-cy='user-phone'
+            defaultCountry={'us'}
+            value={phone}
+            fullWidth
+            variant='standard'
+            onChange={handlePhone}
+            InputProps={{
+              className: classes.textFieldInput,
+              disableUnderline: true,
+            }}
+          />
+        </div>
         <br />
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch checked={monkeDaoChecked} onChange={handleDaoChecked} />
-            }
-            label='MonkeDAO Announcements'
-          />
-          <FormControlLabel
-            control={
-              <Switch checked={eventChecked} onChange={handleEventChecked} />
-            }
-            label='Events &amp; Updates'
-            onChange={handleEventChecked}
-          />
-          <FormControlLabel
-            control={<Switch checked={wlChecked} onChange={handleWlChecked} />}
-            label='Upcoming Whitelist Access'
-          />
+        <FormGroup className={classes.notCenteredControls}>
+          {publicTopics.map(topic => {
+            const { topicName, displayName } = topic;
+            return (<FormControlLabel key={topicName}
+              control={
+                <Switch
+                  color='primary'
+                  checked={checkedStates[topicName]}
+                  onChange={() => handleTopicChecked(topicName)} />
+              }
+              label={displayName}
+            />)
+          })}
         </FormGroup>
       </DialogContent>
-      <DialogActions>
-        <Button className={classes.link} color="secondary" variant="contained" onClick={handleClose}>Cancel</Button>
-        <Button className={classes.link} color="secondary" variant="contained" onClick={handleSubscribe}>Subscribe</Button>
+      <DialogActions className={classes.centeredActions}>
+        <Button disabled={hasNoData ? isSubscribeDisabled : false} className={classes.link} color="primary" variant="contained" onClick={handleSubscribe}>
+          {hasNoData ? 'Subscribe' : 'Update Settings'}
+        </Button>
       </DialogActions></>)
 
   const formCard = (
-    <Dialog open={open} onClose={handleClose}>
-      {handleSubscribeCalled ? (
-        <>
-        <DialogTitle>You're Subscribed</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Check your email for verification if you entered one. Texts are automatically subscribed.
-            <br />
-            <br />
-          </DialogContentText>
-          {telegramConfirmationUrl ? <DialogContentText>
-            Please confirm you want to receive telegram notifications at <Link href={telegramConfirmationUrl} target="_blank" rel="noopener">{telegramConfirmationUrl}</Link>
-            <br />
-            <br />
-          </DialogContentText> : null}
-        </DialogContent>
-        <DialogActions>
-          <Button className={classes.link} color="secondary" variant="contained" onClick={handleClose}>Okay</Button>
-        </DialogActions>
-        </>
-      ) : isAuthenticated ? subscribeForm : logInForm}
+    <Dialog open={open} onClose={handleClose} fullScreen={isXsScreenAndSmaller}>
+      {isAuthenticated ? subscribeForm : logInForm}
     </Dialog >
   );
 
@@ -792,12 +895,13 @@ export default function Announcements(props) {
           </Button> */}
         </Container>
 
-        {(wallet && publicKey && !isAuthenticated && (
+        {(wallet && publicKey && !isAuthenticated) ? (
           <Container maxWidth='md' className={classes.timelineContainer}>
-            Please approve message transaction to login with Notifi to configure announcement subscription.
-            </Container>
-          ))
-          || null }
+            <Typography align="center">
+              Please approve message transaction to login with Notifi to configure announcement subscription.
+            </Typography>
+          </Container>
+        ) : null}
 
         <Container maxWidth='md' className={classes.timelineContainer}>
           <Timeline>

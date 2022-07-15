@@ -28,3 +28,29 @@ export const getCreatorAnnouncements = async (topicName: string) => {
       return [];
     }
   };
+
+  export const getPublicTopics = async () => {
+    try {
+      const response = await fetch("https://api.notifi.network/gql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `
+          query PublicTopics {
+            publicTopics(input: { collectionName: "smb" }) {
+              nodes {
+                topicName
+                displayName
+              }
+            }
+          }
+        `,
+        }),
+      });
+      const result = await response.json();
+      return result.data?.publicTopics?.nodes ?? [];
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  }

@@ -1687,25 +1687,25 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@notifi-network/notifi-axios-adapter@^0.25.1":
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/@notifi-network/notifi-axios-adapter/-/notifi-axios-adapter-0.25.1.tgz#c578a518f92570747f83e091fc0f9d64df53aa62"
-  integrity sha512-IMc61pN5dLyCkJyItCyh0eop9BuwgqawPvBBqA8wVCsUZXBJSfflwoEzWjwxlHLmugdDJ32z+csDJ7UukIoeng==
+"@notifi-network/notifi-axios-adapter@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@notifi-network/notifi-axios-adapter/-/notifi-axios-adapter-0.27.0.tgz#01e1d0357690e48d9d8e33ad0034e5d891991b27"
+  integrity sha512-W+xTq3o5mEfu6Ur4y7nlltJzDYYOPmmftjfW0uwTS3BKP+Od6ZnDp78sr2TIzH1v7Zi/IrK90fev+OM/DvKpYg==
   dependencies:
-    "@notifi-network/notifi-axios-utils" "^0.25.1"
+    "@notifi-network/notifi-axios-utils" "^0.27.0"
 
-"@notifi-network/notifi-axios-utils@^0.25.1":
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/@notifi-network/notifi-axios-utils/-/notifi-axios-utils-0.25.1.tgz#d43b0d835928bbf7660b5092f77b89ed58578dec"
-  integrity sha512-deszkjHy7+MeUHOg4UnDVzgRyLJmRpJY2FXuFGvuotod7I2mxUxL5RgtIiGdfE0v1fc5VFXcyRvW15zdt1xdKQ==
+"@notifi-network/notifi-axios-utils@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@notifi-network/notifi-axios-utils/-/notifi-axios-utils-0.27.0.tgz#2163283d4c3d9eb717b07e25a98fcefc8a0aa481"
+  integrity sha512-NZHF5hyOL9sh4EsTjaQDoiI8Z5SpwvYMd5MceC2be29TrxHBel9mB/KAkbiTcEgeJQDMBPDNosnqlFFyRdzjvA==
 
-"@notifi-network/notifi-react-hooks@^0.25.1":
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/@notifi-network/notifi-react-hooks/-/notifi-react-hooks-0.25.1.tgz#29f5a610ad700d0faf1e259d49684267de4bfe15"
-  integrity sha512-t+2n7v9Vvuk1amgcFOf+dNjrnd+aNYSc0lLoqnZzfdjzvCi7oB+13y6PGkwvXawR22fm4xlXBBSh0VLiNo6qTg==
+"@notifi-network/notifi-react-hooks@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@notifi-network/notifi-react-hooks/-/notifi-react-hooks-0.27.0.tgz#7e68bc3dad34c7517fac03adbad4ba076de6841e"
+  integrity sha512-5cB11Pf5T9tOL5NmbGbJV6hXNe38VVGbWJc8+AxPwwJmVsGzmxyEeA+gluPSNix+RuBRHF7zhPyVzJmEzqVmPQ==
   dependencies:
-    "@notifi-network/notifi-axios-adapter" "^0.25.1"
-    "@notifi-network/notifi-axios-utils" "^0.25.1"
+    "@notifi-network/notifi-axios-adapter" "^0.27.0"
+    "@notifi-network/notifi-axios-utils" "^0.27.0"
     axios "^0.26.0"
     localforage "^1.10.0"
     typedoc-plugin-missing-exports "^0.22.6"
