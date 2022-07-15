@@ -92,6 +92,35 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
+  walletPaper: { // The solana wallet ui uses mui v5, so the theme doesn't work and we need specific selectors
+    borderRadius: '8px !important',
+    '& .MuiDialogTitle-root': {
+      backgroundColor: '#184623 !important',
+      color: '#f3efcd',
+      fontFamily: ['Space Grotesk', 'serif'].join(','),
+      '& .MuiIconButton-root': {
+        color: '#f3efcd !important'
+      }
+    },
+    '& .MuiDialogContent-root': {
+      backgroundColor: '#f3efcd !important',
+      paddingBottom: '8px !important',
+      '& .MuiList-root': {
+        backgroundColor: '#f3efcd !important',
+        padding: 0,
+      },
+      '& .MuiListItem-root': {
+        '& .MuiButton-root': {
+            color: '#184623 !important',
+            fontFamily: ['Space Grotesk', 'serif'].join(','),
+            textTransform: 'none !important',
+        },
+        '& .MuiSvgIcon-root': {
+            color: '#184623 !important',
+        },
+      },
+    },
+  },
 }));
 
 const theme = createTheme({
@@ -121,18 +150,37 @@ const App = () => {
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
-        <WalletDialogProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <StyledWalletDialogProvider>
           <Router>
             <Routes>
               <Route path='/announcements' element={<Announcements />} />
               <Route path='/' element={<Home />} />
             </Routes>
           </Router>
-        </WalletDialogProvider>
+        </StyledWalletDialogProvider>
+        </ThemeProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
 };
+
+const StyledWalletDialogProvider = ({ children }) => {
+  const classes = useStyles();
+
+  return <WalletDialogProvider
+    classes={{
+      container: classes.walletPaper,
+    }}
+    PaperProps={{
+      classes: {
+        root: classes.walletPaper,
+      },
+    }}>
+    {children}
+  </WalletDialogProvider>;
+}
 
 const Home = () => {
   const classes = useStyles();
@@ -140,7 +188,6 @@ const Home = () => {
   const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down('xs'));
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
       <Header />
       <div
         className={

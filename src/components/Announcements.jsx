@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -836,7 +835,6 @@ export default function Announcements(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
       <AppBar
         position='sticky'
         color='default'
