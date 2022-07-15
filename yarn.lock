@@ -4142,11 +4142,6 @@ cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-country-flag-icons@^1.4.10:
-  version "1.5.5"
-  resolved "https://registry.yarnpkg.com/country-flag-icons/-/country-flag-icons-1.5.5.tgz#04a41c83e2ea38ea28054d4e3eff9d1ce16aec1c"
-  integrity sha512-k4WXZ/WvWOSiYXRG1n8EYHNr1m/IX0GffKqAidaet5DrJsDOmJ8Q/8JvvONhZNnKYg24s4lvsm+9og1HcuIU/g==
-
 create-ecdh@^4.0.0:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.4.tgz#d6e7f4bffa66736085a0762fd3a632684dabcc4e"
@@ -7492,13 +7487,16 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-material-ui-phone-number@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/material-ui-phone-number/-/material-ui-phone-number-3.0.0.tgz#4ea0d045f50af26db0994816520095be57d20dc1"
-  integrity sha512-wZX1PYv990nJUBko93AQxIfvFARHfMtnV/UT1/hVnbJP5x/K7MDuT5T2/ckIG6xyqTZ/wCcHdEK1P60uTOORwA==
+material-ui-phone-number@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/material-ui-phone-number/-/material-ui-phone-number-2.2.6.tgz#918518230121425065125e337505189587e3e8aa"
+  integrity sha512-eLGDK9wgvdj2oj+jgmctNtDFznbY7evnuX5hA5OLs5MU5rtE1N4Qs/drRJm3vFct6KOwEwYfaO6XQ+zFUKiI7Q==
   dependencies:
-    country-flag-icons "^1.4.10"
-    lodash "^4.17.21"
+    clsx "^1.0.4"
+    lodash "^4.17.14"
+    prop-types "^15.7.2"
+    react "^16.8.0"
+    react-dom "^16.8.0"
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -8928,6 +8926,16 @@ react-dom@18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-dom@^16.8.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
+  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
+
 react-error-overlay@^6.0.10:
   version "6.0.10"
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.10.tgz"
@@ -9026,6 +9034,15 @@ react-transition-group@^4.4.0, react-transition-group@^4.4.2:
     "@babel/runtime" "^7.5.5"
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
+    prop-types "^15.6.2"
+
+react@^16.8.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
+  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
     prop-types "^15.6.2"
 
 react@^18.2.0:
@@ -9363,6 +9380,14 @@ saxes@^5.0.1:
   integrity sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==
   dependencies:
     xmlchars "^2.2.0"
+
+scheduler@^0.19.1:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
+  integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 scheduler@^0.23.0:
   version "0.23.0"

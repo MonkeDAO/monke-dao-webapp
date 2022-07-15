@@ -47,12 +47,42 @@ import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
 const theme = createTheme({
   palette: {
     primary: {
-      main: TWITTER_BLUE,
+      main: BUTTON_YELLOW,
     },
     secondary: {
       main: BUTTON_YELLOW,
     },
   },
+  typography: {
+    fontFamily: ['Space Grotesk', 'Open Sans', 'sans-serif'].join(','),
+  },
+  overrides: {
+    MuiPaper: {
+      root: {
+        backgroundColor: '#f3efcd',
+        borderRadius: 8,
+        color: "#184623",
+      }
+    },
+    MuiTypography: {
+      colorTextSecondary: {
+        color: 'inherit',
+      },
+    },
+    MuiInputBase: {
+      root: {
+        color: 'inherit',
+      },
+    },
+    MuiFormLabel: {
+      root: {
+        color: '#184623',
+        focused: {
+          color: BUTTON_YELLOW,
+        }
+      },
+    },
+  }
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -296,7 +326,8 @@ export default function Announcements(props) {
   const [telegram, setTelegram] = useState('');
   const [open, setOpen] = useState(false);
   const [handleSubscribeCalled, setHandleSubscribeCalled] = useState(false);
-  const [contentForModal, setContentForModal] = useState('');
+  const [useHardwareWallet, setUseHardwareWallet] = useState(false);
+
   const handleClickOpen = (e) => {
     e.preventDefault();
     setOpen(true);
@@ -314,6 +345,10 @@ export default function Announcements(props) {
   };
   const handleDaoChecked = () => {
     setMonkeDaoChecked(!monkeDaoChecked);
+  };
+
+  const handleHardwareWalletToggled = () => {
+    setUseHardwareWallet(!useHardwareWallet);
   };
 
   const updateSubscription = (data, name, source) => {
@@ -354,18 +389,14 @@ export default function Announcements(props) {
         const dataAfterAlertCreation = await eventPromises;
         const unverifiedTelegramTarget = dataAfterAlertCreation.telegramTargets.find(telegramTarget => !!telegramTarget.confirmationUrl);
         
-        let content = 'Check your email for verification if you entered one. Texts are automatically subscribed.';
         if (unverifiedTelegramTarget) {
           const confirmationUrl = unverifiedTelegramTarget.confirmationUrl;
           setTelegramConfirmationUrl(confirmationUrl);
-          content = content + ` Please confirm you want to receive telegram notifications at ${confirmationUrl}`;
         }
-        setContentForModal(content);
         reflectNotifiData(dataAfterAlertCreation);
       } catch (e) {
         if (e) {
           console.log('Invalid Signature', e);
-          setContentForModal('Something went wrong. Refresh and try again.');
         }
       }
       setHandleSubscribeCalled(true);
@@ -563,6 +594,14 @@ export default function Announcements(props) {
     setIsLoggingIn(false);
   }, [beginLoginViaTransaction, broadcastMemo, completeLoginViaTransaction, fetchData, reflectNotifiData]);
 
+  const handleLogIn = useCallback(async () => {
+    if (useHardwareWallet) {
+      await handleHardware();
+    } else {
+      await handleSoftware();
+    }
+  }, [handleHardware, handleSoftware, useHardwareWallet]);
+
   const logInForm = (
     <><DialogTitle>Log In to Notifi</DialogTitle>
       <DialogContent>
@@ -574,10 +613,17 @@ export default function Announcements(props) {
           <br />
           This will cost gas!
         </DialogContentText>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch checked={useHardwareWallet} onChange={handleHardwareWalletToggled} />
+            }
+            label='Use Hardware Wallet'
+          />
+        </FormGroup>
       </DialogContent>
       <DialogActions>
-        <Button disabled={isLoggingIn} onClick={handleSoftware}>Software Wallet</Button>
-        <Button disabled={isLoggingIn} onClick={handleHardware}>Hardware Wallet</Button>
+        <Button className={classes.link} color="secondary" variant="contained" disabled={isLoggingIn} onClick={handleLogIn}>Log In</Button>
       </DialogActions>
     </>
   );
@@ -616,10 +662,11 @@ export default function Announcements(props) {
         {telegramConfirmationUrl ? <>
           <br />
           <Link
+            color="inherit"
             href={telegramConfirmationUrl}
             target="_blank"
             rel="noopener">
-              Click to confirm
+              Click here to verify your Telegram ID
           </Link>
         </> : null}
         <br />
@@ -655,19 +702,31 @@ export default function Announcements(props) {
         </FormGroup>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubscribe}>Subscribe</Button>
+        <Button className={classes.link} color="secondary" variant="contained" onClick={handleClose}>Cancel</Button>
+        <Button className={classes.link} color="secondary" variant="contained" onClick={handleSubscribe}>Subscribe</Button>
       </DialogActions></>)
 
   const formCard = (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Subscribe</DialogTitle>
       {handleSubscribeCalled ? (
+        <>
+        <DialogTitle>You're Subscribed</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {contentForModal}
+            Check your email for verification if you entered one. Texts are automatically subscribed.
+            <br />
+            <br />
           </DialogContentText>
+          {telegramConfirmationUrl ? <DialogContentText>
+            Please confirm you want to receive telegram notifications at <Link href={telegramConfirmationUrl} target="_blank" rel="noopener">{telegramConfirmationUrl}</Link>
+            <br />
+            <br />
+          </DialogContentText> : null}
         </DialogContent>
+        <DialogActions>
+          <Button className={classes.link} color="secondary" variant="contained" onClick={handleClose}>Okay</Button>
+        </DialogActions>
+        </>
       ) : isAuthenticated ? subscribeForm : logInForm}
     </Dialog >
   );

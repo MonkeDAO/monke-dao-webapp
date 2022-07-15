@@ -95,6 +95,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const theme = createTheme({
+  palette: {
+    type: 'light',
+  },
   typography: {
     fontFamily: ['Space Grotesk', 'serif'].join(','),
   },
