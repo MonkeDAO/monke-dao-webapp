@@ -750,6 +750,7 @@ export default function Announcements(props) {
           InputProps={{
             className: classes.textFieldInput,
             disableUnderline: true,
+            placeholder: 'Email Address',
             startAdornment: (
               <InputAdornment className={classes.inputAdornment} position="start" variant='filled'>
                 <img alt='Email Address' src='/icn-mail.svg' />
@@ -777,6 +778,7 @@ export default function Announcements(props) {
           InputProps={{
             className: classes.textFieldInput,
             disableUnderline: true,
+            placeholder: 'Telegram ID',
             startAdornment: (
               <InputAdornment className={classes.inputAdornment} position="start" variant='filled'>
                 <img alt='Telegram ID' src='/icn-telegram.svg' />
@@ -801,6 +803,7 @@ export default function Announcements(props) {
             onChange={handlePhone}
             InputProps={{
               className: classes.textFieldInput,
+              placeholder: 'Phone Number',
               disableUnderline: true,
             }}
           />
