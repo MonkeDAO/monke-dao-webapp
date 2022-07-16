@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@dialectlabs/react-ui": "^1.0.0-beta.15",
+    "@dialectlabs/react-ui": "^1.0.0-beta.19",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@material-ui/core": "^4.12.3",
