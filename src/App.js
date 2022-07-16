@@ -236,7 +236,7 @@ const DialectProviders = ({ children }) => {
       return false;
     }
     const nfts = await metaplex.nfts().findAllByOwner(wallet.publicKey).run();
-    return nfts.map(it => it.collection).some(it => MONKE_DAY_NFT_COLLECTION_KEY.equals(it.key));
+    return nfts.map(it => it.collection).filter(it => Boolean(it)).some(it => MONKE_DAY_NFT_COLLECTION_KEY.equals(it.key));
   }, [wallet, metaplex]);
 
   return (
