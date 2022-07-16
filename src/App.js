@@ -136,11 +136,15 @@ const useDialectStyles = makeStyles((theme) => ({
     height: theme.spacing(5)
   },
   notificationWrapper: {
-    top: theme.spacing(6)
+    [theme.breakpoints.up('sm')]: {
+      top: theme.spacing(6)
+    }
   },
   notificationModal: {
-    border: '1px solid #A5973D',
-    borderRadius: 10,
+    [theme.breakpoints.up('sm')]: {
+      border: '1px solid #A5973D',
+      borderRadius: 10,
+    }
   },
   header: {
     paddingLeft: theme.spacing(2),
