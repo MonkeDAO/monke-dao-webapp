@@ -191,6 +191,7 @@ export function Header() {
               <NotificationsButton
                 dialectId="monkedao-notifications"
                 pollingInterval={5000}
+                channels={['sms', 'email', 'telegram', 'web3']}
                 notifications={[{
                     name: 'MonkeDAO Announcements', detail: ''
                   }, {
