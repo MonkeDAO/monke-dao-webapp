@@ -5,13 +5,12 @@ export const convertWalletToDialectWallet = (wallet) => ({
     !wallet.connecting &&
     !wallet.disconnecting &&
     Boolean(wallet.publicKey),
-  signMessage: wallet.signMessage,
   signTransaction: wallet.signTransaction,
   signAllTransactions: wallet.signAllTransactions,
   // In case Sollet will become an option
   diffieHellman: wallet.wallet?.adapter?._wallet?.diffieHellman
     ? async (pubKey) => {
-      return wallet.wallet?.adapter?._wallet?.diffieHellman(pubKey);
-    }
+        return wallet.wallet?.adapter?._wallet?.diffieHellman(pubKey);
+      }
     : undefined,
 });

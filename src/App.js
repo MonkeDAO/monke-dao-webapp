@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Cards } from './components/Cards';
 import SmoothScroll from 'smooth-scroll';
@@ -21,7 +21,7 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
 import {ConnectionConfig, clusterApiUrl, PublicKey} from '@solana/web3.js';
 import {
-  ConnectionProvider, useWallet,
+  ConnectionProvider, useConnection, useWallet,
   WalletProvider,
 } from '@solana/wallet-adapter-react';
 import {
@@ -40,6 +40,8 @@ import {
   TokenStore
 } from "@dialectlabs/react-ui";
 import {convertWalletToDialectWallet} from "./utils/notif";
+import { Metaplex } from "@metaplex-foundation/js";
+import { fontSize } from '@mui/system';
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -170,6 +172,7 @@ const theme = createTheme({
 
 const RPC_URL = process.env.REACT_APP_SOLANA_RPC_HOST;
 const MONKE_DAO_PUBLIC_KEY = new PublicKey('BiM9z9TiFFtXF1oh62QBWG8EJycMTDcQ4tfKBhFyuope');
+const MONKE_DAY_NFT_COLLECTION_KEY = new PublicKey('SMBH3wF6baUj6JWtzYvqcKuj2XCKWDqQxzspY12xPND');
 
 const DialectProviders = ({ children }) => {
   const classes = useDialectStyles();
@@ -179,7 +182,7 @@ const DialectProviders = ({ children }) => {
   // Basic configuration for dialect. Target mainnet-beta and dialect cloud production environment
   const dialectConfig = useMemo(
     () => ({
-      backends: [Backend.DialectCloud, Backend.Solana],
+      backends: [Backend.DialectCloud],
       environment: 'production',
       solana: {
         rpcUrl: RPC_URL
@@ -220,11 +223,24 @@ const DialectProviders = ({ children }) => {
     }
   }), [classes]);
 
+  const {connection} = useConnection();
+
+  const metaplex = useMemo(() => new Metaplex(connection), [connection]);
+
+  const gate = useCallback(async () => {
+    if (!wallet.publicKey) {
+      return false;
+    }
+    const nfts = await metaplex.nfts().findAllByOwner(wallet.publicKey).run();
+    return nfts.map(it => it.collection).some(it => MONKE_DAY_NFT_COLLECTION_KEY.equals(it.key));
+  }, [wallet, metaplex]);
+
   return (
     <DialectContextProvider
       config={dialectConfig}
       wallet={dialectWallet}
       dapp={MONKE_DAO_PUBLIC_KEY}
+      gate={gate}
     >
       <DialectUiManagementProvider>
         <DialectThemeProvider theme="light" variables={themeVariables}>
@@ -237,7 +253,7 @@ const DialectProviders = ({ children }) => {
 
 const App = () => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
-  const network = WalletAdapterNetwork.Devnet;
+  const network = WalletAdapterNetwork.Mainnet;
   const config = {
     /** Optional commitment level */
     commitment: 'finalized',
@@ -247,13 +263,10 @@ const App = () => {
     confirmTransactionInitialTimeout: 150000,
   };
   const connection = new anchor.web3.Connection(
-    RPC_URL ? RPC_URL : anchor.web3.clusterApiUrl('devnet'),
+    RPC_URL ? RPC_URL : anchor.web3.clusterApiUrl(network),
     config
   );
   
-  // You can also provide a custom RPC endpoint.
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
   // Only the wallets you configure here will be compiled into your application, and only the dependencies
   // of wallets that your users connect to will be loaded.
@@ -264,7 +277,7 @@ const App = () => {
     [network]
 );
   return (
-    <ConnectionProvider endpoint={endpoint}>
+    <ConnectionProvider endpoint={connection.rpcEndpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletDialogProvider>
           <DialectProviders>
