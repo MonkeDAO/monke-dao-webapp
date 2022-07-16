@@ -9,6 +9,8 @@ import { Box, Link } from '@material-ui/core';
 import { useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 import { TWITTER_BLUE, DISCORD_BLUE } from '../constants/colors';
+import {NotificationsButton} from "@dialectlabs/react-ui";
+import {WalletMultiButton} from "@solana/wallet-adapter-material-ui";
 
 const theme = createTheme({
   palette: {
@@ -67,8 +69,21 @@ const useStyles = makeStyles((theme) => ({
       height: 'auto',
     },
   },
+  socialContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: theme.spacing(2),
+    '&.sm': {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      gap: theme.spacing(1)
+    },
+  },
   social: {
     height: 38,
+    '&:not(:last-child)': {
+      marginRight: theme.spacing(2),
+    },
     '&.sm': {
       display: 'inline-block',
       marginTop: theme.spacing(2),
@@ -77,6 +92,16 @@ const useStyles = makeStyles((theme) => ({
   },
   discord: {
     marginRight: theme.spacing(2),
+  },
+  bell: {
+    marginRight: theme.spacing(2),
+    '&.sm': {
+      display: 'inline-block',
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      // In order to align bell button with Social
+      verticalAlign: 'bottom',
+    },
   },
   toolbarTitle: {
     padding: `10px`,
@@ -160,58 +185,60 @@ export function Header() {
               Subscribe
             </Button>
           </Box> */}
-          <Box
-            className={clsx(classes.social, classes.discord, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <Button
-              href='/announcements'
-              color='secondary'
-              variant='contained'
-              className={classes.link}
+          <Box className={clsx(classes.socialContainer, { sm: isXsScreenAndSmaller })}>
+            <Box
             >
-              <img
-                alt='Announcements logo'
-                src='/speaker.png'
-                className={classes.plusLogo}
+              <NotificationsButton
+                dialectId="monkedao-notifications"
+                pollingInterval={5000}
+                channels={['sms', 'email', 'telegram', 'web3']}
+                notifications={[{
+                    name: 'MonkeDAO Announcements', detail: ''
+                  }, {
+                    name: 'Events & Updates', detail: ''
+                  }, {
+                    name: 'Upcoming Whitelist Access', detail: ''
+                  }]
+                }
               />
-              Announcements
-            </Button>
-          </Box>
-          {/* <Box
-            className={clsx(classes.social, classes.discord, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <Button
-              href='https://discord.gg/TscZwJ7jbX'
-              color='secondary'
-              variant='contained'
-              className={classes.link}
+            </Box>
+            <Box >
+              <WalletMultiButton />
+            </Box>
+            {/* <Box
+              className={clsx(classes.social, classes.discord, {
+                sm: isXsScreenAndSmaller,
+              })}
             >
-              <img
-                alt='Discord logo'
-                src='/discord.svg'
-                className={classes.buttonLogo}
-              />
-              Join the Discord
-            </Button>
-          </Box> */}
-          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <Button
-              href='https://twitter.com/MonkeDAO'
-              color='primary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Twitter logo'
-                src='/twitter.svg'
-                className={classes.buttonLogo}
-              />
-              Follow us
-            </Button>
+              <Button
+                href='https://discord.gg/TscZwJ7jbX'
+                color='secondary'
+                variant='contained'
+                className={classes.link}
+              >
+                <img
+                  alt='Discord logo'
+                  src='/discord.svg'
+                  className={classes.buttonLogo}
+                />
+                Join the Discord
+              </Button>
+            </Box> */}
+            <Box >
+              <Button
+                href='https://twitter.com/MonkeDAO'
+                color='primary'
+                variant='contained'
+                className={classes.link}
+              >
+                <img
+                  alt='Twitter logo'
+                  src='/twitter.svg'
+                  className={classes.buttonLogo}
+                />
+                Follow us
+              </Button>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
