@@ -186,22 +186,6 @@ export function Header() {
             </Button>
           </Box> */}
           <Box className={clsx(classes.socialContainer, { sm: isXsScreenAndSmaller })}>
-            <Box
-            >
-              <NotificationsButton
-                dialectId="monkedao-notifications"
-                pollingInterval={5000}
-                channels={['sms', 'email', 'telegram', 'web3']}
-                notifications={[{
-                    name: 'MonkeDAO Announcements', detail: ''
-                  }, {
-                    name: 'Events & Updates', detail: ''
-                  }, {
-                    name: 'Upcoming Whitelist Access', detail: ''
-                  }]
-                }
-              />
-            </Box>
             <Box >
               <WalletMultiButton />
             </Box>
@@ -238,6 +222,22 @@ export function Header() {
                 />
                 Follow us
               </Button>
+            </Box>
+            <Box
+            >
+              <NotificationsButton
+                dialectId="monkedao-notifications"
+                pollingInterval={5000}
+                channels={['sms', 'email', 'telegram', 'web3']}
+                notifications={[{
+                    name: 'MonkeDAO Announcements', detail: ''
+                  }, {
+                    name: 'Events & Updates', detail: ''
+                  }, {
+                    name: 'Upcoming Whitelist Access', detail: ''
+                  }]
+                }
+              />
             </Box>
           </Box>
         </Toolbar>

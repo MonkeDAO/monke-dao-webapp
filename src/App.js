@@ -115,13 +115,13 @@ const useStyles = makeStyles((theme) => ({
 const useDialectStyles = makeStyles((theme) => ({
   // Dialect Styles
   primaryBg: {
-    backgroundColor: '#f3efcd',
+    backgroundColor: '#254526',
   },
   primaryText: {
-    color: '#184623'
+    color: '#f3efcd',
   },
   highlight: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#436047',
   },
   toggleBackground: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)'
@@ -142,7 +142,7 @@ const useDialectStyles = makeStyles((theme) => ({
   },
   notificationModal: {
     [theme.breakpoints.up('sm')]: {
-      border: '1px solid #A5973D',
+      border: '1px solid #436047',
       borderRadius: 10,
     }
   },
@@ -151,11 +151,12 @@ const useDialectStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2)
   },
   button: {
-    backgroundColor: '#184623',
-    color: '#f3efcd',
+    backgroundColor: '#f3efcd',
+    color: '#254526',
     borderColor: '#184623'
   },
   logo: {
+    backgroundColor: '#436047',
     '& svg': {
       marginTop: theme.spacing(0.4)
     },
