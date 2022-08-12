@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Header } from './components/Header';
 import { Cards } from './components/Cards';
 import SmoothScroll from 'smooth-scroll';
+import '@dialectlabs/react-ui/index.css';
 import './App.css';
 
 import { Container, Typography, useMediaQuery } from '@material-ui/core';
@@ -40,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
       position: 'relative',
       paddingBottom: 247,
     },
+  },
+  '.dialect': {
+    fontFamily: 'Space Grotesk, serif',
   },
   bananasBackground: {
     backgroundColor: '#f3efcd',

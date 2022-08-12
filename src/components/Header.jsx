@@ -9,6 +9,10 @@ import { Box, Link } from '@material-ui/core';
 import { useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 import { TWITTER_BLUE, DISCORD_BLUE } from '../constants/colors';
+import DialectProviders from './Dialect/Widget';
+import { NotificationsButton } from '@dialectlabs/react-ui';
+import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
+import { NOTIFICATION_CHANNELS, NOTIFICATION_TYPES } from './Dialect/utils';
 
 const theme = createTheme({
   palette: {
@@ -67,6 +71,16 @@ const useStyles = makeStyles((theme) => ({
       height: 'auto',
     },
   },
+  socialContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: theme.spacing(2),
+    '&.sm': {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      gap: theme.spacing(1),
+    },
+  },
   social: {
     height: 38,
     '&.sm': {
@@ -77,6 +91,15 @@ const useStyles = makeStyles((theme) => ({
   },
   discord: {
     marginRight: theme.spacing(2),
+  },
+  bell: {
+    marginRight: theme.spacing(2),
+    '&.sm': {
+      display: 'inline-block',
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      verticalAlign: 'bottom',
+    },
   },
   toolbarTitle: {
     padding: `10px`,
@@ -112,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
   plusLogo: {
     marginRight: 8,
     width: '15%',
-    filter: "invert(1)"
+    filter: 'invert(1)',
   },
 }));
 
@@ -122,8 +145,8 @@ export function Header() {
   return (
     <ThemeProvider theme={theme}>
       <AppBar
-        position='sticky'
-        color='default'
+        position="sticky"
+        color="default"
         elevation={0}
         className={clsx(classes.appBar, { sm: isXsScreenAndSmaller })}
       >
@@ -136,12 +159,29 @@ export function Header() {
             })}
           >
             <img
-              alt='MonkeDao logo'
-              src='/MonkeDAO_Logo_Positive.png'
+              alt="MonkeDao logo"
+              src="/MonkeDAO_Logo_Positive.png"
               className={classes.logo}
             />
           </Box>
-          {/* <Box
+          <Box
+            className={clsx(classes.socialContainer, {
+              sm: isXsScreenAndSmaller,
+            })}
+          >
+            <DialectProviders>
+              <NotificationsButton
+                dialectId="monkedao-notifications"
+                pollingInterval={5000}
+                channels={NOTIFICATION_CHANNELS}
+                notifications={NOTIFICATION_TYPES}
+              />
+            </DialectProviders>
+
+            <Box>
+              <WalletMultiButton />
+            </Box>
+            {/* <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
@@ -160,26 +200,7 @@ export function Header() {
               Subscribe
             </Button>
           </Box> */}
-          <Box
-            className={clsx(classes.social, classes.discord, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <Button
-              href='/announcements'
-              color='secondary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Announcements logo'
-                src='/speaker.png'
-                className={classes.plusLogo}
-              />
-              Announcements
-            </Button>
-          </Box>
-          {/* <Box
+            {/* <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
@@ -198,20 +219,21 @@ export function Header() {
               Join the Discord
             </Button>
           </Box> */}
-          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <Button
-              href='https://twitter.com/MonkeDAO'
-              color='primary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Twitter logo'
-                src='/twitter.svg'
-                className={classes.buttonLogo}
-              />
-              Follow us
-            </Button>
+            <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
+              <Button
+                href="https://twitter.com/MonkeDAO"
+                color="primary"
+                variant="contained"
+                className={classes.link}
+              >
+                <img
+                  alt="Twitter logo"
+                  src="/twitter.svg"
+                  className={classes.buttonLogo}
+                />
+                Follow us
+              </Button>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
@@ -220,11 +242,11 @@ export function Header() {
           {'We’re the first DAO to launch a staking pool on Solana.'}
           <br />
           <Link
-            href='https://daopool.monkedao.io/'
-            underline='hover'
+            href="https://daopool.monkedao.io/"
+            underline="hover"
             className={classes.stakeLink}
-            target='_blank'
-            rel='noopener'
+            target="_blank"
+            rel="noopener"
           >
             Stake with DAOPool to receive daoSOL, while earning up to 7% on your
             staked SOL! →
