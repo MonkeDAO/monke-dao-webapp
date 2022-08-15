@@ -7,10 +7,10 @@ import {
   Notifications,
   TokenStore
 } from '@dialectlabs/react-ui';
-// import { Metaplex } from "@metaplex-foundation/js";
+import { Metaplex } from "@metaplex-foundation/js";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDialectStyles } from './styles';
 import { convertWalletToDialectWallet } from './utils';
 
@@ -55,7 +55,7 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
           header: `${defaultVariables.light.textStyles.header} ${classes.bold} ${classes.fontFamilyOverride}`,
           link: `${defaultVariables.light.textStyles.link} ${classes.bold} ${classes.fontFamilyOverride}`,
           input: `${defaultVariables.light.textStyles.input} ${classes.input} ${classes.fontFamilyOverride}`,
-          label: `${defaultVariables.light.textStyles.input} ${classes.input} ${classes.fontFamilyOverride}`
+          label: `${defaultVariables.light.textStyles.input} ${classes.input} ${classes.fontFamilyOverride}`,
         },
         colors: {
           bg: classes.primaryBg,
@@ -79,42 +79,39 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
     [classes]
   );
 
-  // const metaplex = useMemo(() => new Metaplex(connection), [connection]);
+  const metaplex = useMemo(() => new Metaplex(connection), [connection]);
 
-  // const gate = useCallback(async () => {
-  //   if (!wallet.publicKey) {
-  //     return false;
-  //   }
-  //   const nfts = await metaplex.nfts().findAllByOwner(wallet.publicKey).run();
-  //   return nfts
-  //     .map((it) => it.collection)
-  //     .filter((it) => Boolean(it))
-  //     .some((it) => MONKE_DAY_NFT_COLLECTION_KEY.equals(it.key));
-  // }, [wallet, metaplex]);
+  const gate = useCallback(async () => {
+    if (!wallet.publicKey) {
+      return false;
+    }
+    const nfts = await metaplex.nfts().findAllByOwner(wallet.publicKey).run();
+    return nfts
+      .map((it) => it.collection)
+      .filter((it) => Boolean(it))
+      .some((it) => MONKE_DAY_NFT_COLLECTION_KEY.equals(it.key));
+  }, [wallet, metaplex]);
 
   return (
     <DialectContextProvider
       config={dialectConfig}
       wallet={dialectWallet}
       dapp={MONKE_DAO_PUBLIC_KEY}
-    // gate={gate}
+      gate={gate}
     >
       <DialectUiManagementProvider>
         <DialectThemeProvider theme="light" variables={themeVariables}>
-          <div className='sm:dt-h-[40rem]'>
+          <div className="sm:dt-h-[40rem]">
             <Notifications
               notifications={[
                 {
                   name: 'MonkeDAO Announcements',
-                  detail: '',
                 },
                 {
                   name: 'Events & Updates',
-                  detail: '',
                 },
                 {
                   name: 'Upcoming Whitelist Access',
-                  detail: '',
                 },
               ]}
               pollingInterval={15000}
