@@ -7,7 +7,8 @@ import {
   Notifications,
   TokenStore
 } from '@dialectlabs/react-ui';
-import { Metaplex } from "@metaplex-foundation/js";
+import { nftModule, operationModule, programModule, resolveClusterFromConnection, rpcModule } from "@metaplex-foundation/js";
+
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { useCallback, useMemo } from 'react';
@@ -20,6 +21,23 @@ const MONKE_DAO_PUBLIC_KEY = new PublicKey(
 const MONKE_DAY_NFT_COLLECTION_KEY = new PublicKey(
   'SMBH3wF6baUj6JWtzYvqcKuj2XCKWDqQxzspY12xPND'
 );
+
+class LightweightMetaplex {
+  constructor(connection, options = {}) {
+    this.connection = connection;
+    this.cluster = options.cluster ?? resolveClusterFromConnection(connection);
+    this.use(rpcModule());
+    this.use(operationModule());
+    this.use(programModule());
+    this.use(nftModule());
+  }
+
+  use(plugin) {
+    plugin.install(this);
+
+    return this;
+  }
+}
 
 const DialectWidget = ({ onModalClose, onBackClick, children }) => {
   const { connection } = useConnection();
@@ -79,7 +97,7 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
     [classes]
   );
 
-  const metaplex = useMemo(() => new Metaplex(connection), [connection]);
+  const metaplex = useMemo(() => new LightweightMetaplex(connection), [connection]);
 
   const gate = useCallback(async () => {
     if (!wallet.publicKey) {
