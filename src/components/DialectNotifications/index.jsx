@@ -119,25 +119,23 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
     >
       <DialectUiManagementProvider>
         <DialectThemeProvider theme="light" variables={themeVariables}>
-          <div className="sm:dt-h-[40rem]">
-            <Notifications
-              notifications={[
-                {
-                  name: 'MonkeDAO Announcements',
-                },
-                {
-                  name: 'Events & Updates',
-                },
-                {
-                  name: 'Upcoming Whitelist Access',
-                },
-              ]}
-              pollingInterval={15000}
-              onModalClose={onModalClose}
-              onBackClick={onBackClick}
-              channels={['web3', 'telegram', 'sms', 'email']}
-            />
-          </div>
+          <Notifications
+            notifications={[
+              {
+                name: 'MonkeDAO Announcements',
+              },
+              {
+                name: 'Events & Updates',
+              },
+              {
+                name: 'Upcoming Whitelist Access',
+              },
+            ]}
+            pollingInterval={15000}
+            onModalClose={onModalClose}
+            onBackClick={onBackClick}
+            channels={['web3', 'telegram', 'sms', 'email']}
+          />
         </DialectThemeProvider>
       </DialectUiManagementProvider>
     </DialectContextProvider>

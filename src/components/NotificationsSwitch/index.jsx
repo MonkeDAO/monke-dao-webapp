@@ -7,7 +7,7 @@ import useOutsideAlerter from './useOutsideAlerter';
 
 import { useRef, useState } from 'react';
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
+import { Box, IconButton, makeStyles, Typography } from '@material-ui/core';
 
 const MODAL_STATE_SELECTION = 'selection';
 const MODAL_STATE_DIALECT = 'dialect';
@@ -29,14 +29,14 @@ export default function NotificationsSwitch() {
   const [openModal, setOpenModal] = useState(false);
   useOutsideAlerter(wrapperRef, bellRef, setOpenModal);
 
+  const BellIcon = defaultVariables.dark.icons.bell;
+
   return (
-    <div ref={wrapperRef}>
+    <div className={classes.wrapper} ref={wrapperRef}>
       {openModal && (
         <div className={clsx(defaultVariables.dark.modalWrapper, classes.modalWrapper)}>
           {modalState === MODAL_STATE_SELECTION && (
-            // className="w-fit h-fit bg-bkg-5 -top-4 right-0 absolute rounded-lg shadow-md"
             <Box className={classes.selectionWrapper}>
-              {/* className="h-full flex flex-col items-center pt-4"  */}
               <Typography variant="h5" gutterBottom className={classes.header}>
                 MonkeDAO Notifications
               </Typography>
@@ -62,44 +62,30 @@ export default function NotificationsSwitch() {
           )}
         </div>
       )}
-      <Button
+      <IconButton
         className={classes.announcementsButton}
-        color='secondary'
-        variant='contained'
+        color="primary"
         onClick={() => setOpenModal((prev) => !prev)}
         ref={bellRef}
       >
-        <img
-          alt='Announcements logo'
-          src='/speaker.png'
-          className={classes.announcementsLogo}
-        />
-        Announcements
-      </Button>
+        <BellIcon />
+      </IconButton>
     </div>
   );
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  wrapper: { position: 'relative' },
+  modalWrapper: {
+  },
   announcementsButton: {
-    textTransform: 'none',
-    fontFamily: 'Space Grotesk',
-    fontWeight: '600',
-    fontSize: 16,
-    boxShadow: 'none',
-    borderRadius: 8,
-    height: 38,
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    padding: '8px 16px',
+    color: '#f3efcd !important',
+    backgroundColor: '#164120 !important',
   },
   announcementsLogo: {
     marginRight: 8,
     width: '15%',
-    filter: "invert(1)"
-  },
-  modalWrapper: {
-    height: 'fit-content',
+    filter: 'invert(1)',
   },
   header: {
     fontFamily: 'Space Grotesk',
@@ -118,4 +104,4 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'center',
   },
-});
+}));
