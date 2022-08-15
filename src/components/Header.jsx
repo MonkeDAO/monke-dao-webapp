@@ -9,10 +9,8 @@ import { Box, Link } from '@material-ui/core';
 import { useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 import { TWITTER_BLUE, DISCORD_BLUE } from '../constants/colors';
-import DialectProviders from './Dialect/Widget';
-import { NotificationsButton } from '@dialectlabs/react-ui';
 import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
-import { NOTIFICATION_CHANNELS, NOTIFICATION_TYPES } from './Dialect/utils';
+import NotificationsSwitch from './NotificationsSwitch';
 
 const theme = createTheme({
   palette: {
@@ -169,14 +167,17 @@ export function Header() {
               sm: isXsScreenAndSmaller,
             })}
           >
-            <DialectProviders>
+            {/* <DialectProviders>
               <NotificationsButton
                 dialectId="monkedao-notifications"
                 pollingInterval={5000}
                 channels={NOTIFICATION_CHANNELS}
                 notifications={NOTIFICATION_TYPES}
               />
-            </DialectProviders>
+            </DialectProviders> */}
+            <Box>
+              <NotificationsSwitch />
+            </Box>
 
             <Box>
               <WalletMultiButton />

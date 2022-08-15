@@ -2,10 +2,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useDialectStyles = makeStyles((theme) => ({
   primaryBg: {
-    backgroundColor: '#f3efcd',
+    backgroundColor: '#164120',
   },
   primaryText: {
-    color: '#184623',
+    color: '#f3efcd',
   },
   highlight: {
     color: '#f3efcd',
@@ -27,7 +27,7 @@ export const useDialectStyles = makeStyles((theme) => ({
   },
   notificationModal: {
     [theme.breakpoints.up('sm')]: {
-      border: '1px solid #436047',
+      border: '1px solid #184623',
       borderRadius: 10,
     },
   },
@@ -52,23 +52,25 @@ export const useDialectStyles = makeStyles((theme) => ({
     fontFamily: 'Space Grotesk, serif',
     '&::placeholder': {
       fontFamily: 'Space Grotesk, serif',
+      color: '#738668'
     },
   },
   input: {
     border: 'none',
+    color: '#f3efcd'
   },
   outlinedInput: {
-    color: '#184623',
-    borderColor: '#184623',
+    color: '#738668',
+    borderColor: '#246A35',
     '&:focus-within': {
-      borderColor: '#184623',
+      borderColor: '#246A35',
       backgroundColor: '#ababab20',
       outline: 'none',
+      borderStyle: 'dashed'
     },
   },
   divider: {
-    opacity: '0.3',
-    backgroundColor: '#184623'
+    backgroundColor: '#246A35'
   },
   addormentButton: {
     color: '#f3efcd',

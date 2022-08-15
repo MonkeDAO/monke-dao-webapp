@@ -4,23 +4,24 @@ import {
   DialectContextProvider,
   DialectThemeProvider,
   DialectUiManagementProvider,
-  TokenStore,
-} from "@dialectlabs/react-ui";
+  Notifications,
+  TokenStore
+} from '@dialectlabs/react-ui';
 // import { Metaplex } from "@metaplex-foundation/js";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
-import { useCallback, useMemo } from "react";
-import { useDialectStyles } from "./styles";
-import { convertWalletToDialectWallet } from "./utils";
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { useMemo } from 'react';
+import { useDialectStyles } from './styles';
+import { convertWalletToDialectWallet } from './utils';
 
 const MONKE_DAO_PUBLIC_KEY = new PublicKey(
-  "BiM9z9TiFFtXF1oh62QBWG8EJycMTDcQ4tfKBhFyuope"
+  'BiM9z9TiFFtXF1oh62QBWG8EJycMTDcQ4tfKBhFyuope'
 );
 const MONKE_DAY_NFT_COLLECTION_KEY = new PublicKey(
-  "SMBH3wF6baUj6JWtzYvqcKuj2XCKWDqQxzspY12xPND"
+  'SMBH3wF6baUj6JWtzYvqcKuj2XCKWDqQxzspY12xPND'
 );
 
-const DialectProviders = ({ children }) => {
+const DialectWidget = ({ onModalClose, onBackClick, children }) => {
   const { connection } = useConnection();
   const classes = useDialectStyles();
   const wallet = useWallet();
@@ -33,7 +34,7 @@ const DialectProviders = ({ children }) => {
   const dialectConfig = useMemo(
     () => ({
       backends: [Backend.DialectCloud],
-      environment: "production",
+      environment: 'production',
       solana: {
         rpcUrl: connection.rpcEndpoint,
       },
@@ -54,7 +55,7 @@ const DialectProviders = ({ children }) => {
           header: `${defaultVariables.light.textStyles.header} ${classes.bold} ${classes.fontFamilyOverride}`,
           link: `${defaultVariables.light.textStyles.link} ${classes.bold} ${classes.fontFamilyOverride}`,
           input: `${defaultVariables.light.textStyles.input} ${classes.input} ${classes.fontFamilyOverride}`,
-
+          label: `${defaultVariables.light.textStyles.input} ${classes.input} ${classes.fontFamilyOverride}`
         },
         colors: {
           bg: classes.primaryBg,
@@ -100,11 +101,32 @@ const DialectProviders = ({ children }) => {
     >
       <DialectUiManagementProvider>
         <DialectThemeProvider theme="light" variables={themeVariables}>
-          {children}
+          <div className='sm:dt-h-[40rem]'>
+            <Notifications
+              notifications={[
+                {
+                  name: 'MonkeDAO Announcements',
+                  detail: '',
+                },
+                {
+                  name: 'Events & Updates',
+                  detail: '',
+                },
+                {
+                  name: 'Upcoming Whitelist Access',
+                  detail: '',
+                },
+              ]}
+              pollingInterval={15000}
+              onModalClose={onModalClose}
+              onBackClick={onBackClick}
+              channels={['web3', 'telegram', 'sms', 'email']}
+            />
+          </div>
         </DialectThemeProvider>
       </DialectUiManagementProvider>
     </DialectContextProvider>
   );
 };
 
-export default DialectProviders;
+export default DialectWidget;
