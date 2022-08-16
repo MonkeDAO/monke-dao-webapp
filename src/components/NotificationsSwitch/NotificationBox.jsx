@@ -18,7 +18,7 @@ const Tag = ({ channelName, tagWrapperClassName, iconClassName }) => {
   return (
     <div className={tagWrapperClassName}>
       <Icon className={iconClassName} />
-      <Typography>{channelName}</Typography>
+      <span>{channelName}</span>
     </div>
   );
 };
@@ -59,6 +59,7 @@ export default NotificationBox;
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
+    fontFamily: 'Space Grotesk',
     width: '100%',
     padding: '0 1rem 1rem 1rem',
     display: 'flex',
@@ -79,8 +80,10 @@ const useStyles = makeStyles((theme) => ({
     float: 'left',
     width: theme.spacing(3),
     height: theme.spacing(3),
+    marginRight: theme.spacing(1)
   },
   tagWrapper: {
+    fontFamily: 'Space Grotesk',
     display: 'flex',
     borderRadius: 8,
     alignItems: 'center',
@@ -90,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   button: {
+    fontFamily: 'Space Grotesk',
     color: '#184623',
     backgroundColor: '#f3efcd',
     '&:hover': {
