@@ -73,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     gap: theme.spacing(2),
+    alignItems: 'center',
     '&.sm': {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(3),
@@ -117,12 +118,15 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Space Grotesk',
     fontWeight: '600',
     fontSize: 16,
-    boxShadow: 'none',
+    boxShadow: 'none !important',
     borderRadius: 8,
     height: 38,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     padding: '8px 16px',
+  },
+  walletButton: {
+    backgroundColor: '#164120 !important'
   },
   stakeLink: {
     color: 'white',
@@ -167,21 +171,6 @@ export function Header() {
               sm: isXsScreenAndSmaller,
             })}
           >
-            {/* <DialectProviders>
-              <NotificationsButton
-                dialectId="monkedao-notifications"
-                pollingInterval={5000}
-                channels={NOTIFICATION_CHANNELS}
-                notifications={NOTIFICATION_TYPES}
-              />
-            </DialectProviders> */}
-            <Box>
-              <NotificationsSwitch />
-            </Box>
-
-            <Box>
-              <WalletMultiButton />
-            </Box>
             {/* <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
@@ -234,6 +223,12 @@ export function Header() {
                 />
                 Follow us
               </Button>
+            </Box>
+            <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
+              <WalletMultiButton className={clsx(classes.link, classes.walletButton)} />
+            </Box>
+            <Box>
+              <NotificationsSwitch />
             </Box>
           </Box>
         </Toolbar>
