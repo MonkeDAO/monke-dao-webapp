@@ -21,10 +21,10 @@ const notificationSolutions = [
     name: "Dialect",
   },
   {
-    channels: ["Email", "Text", "Telegram", "Notifi Center"],
-    description: `Get notifications for proposals, voting, and results. Add your email address, phone number, and/or Telegram.`,
+    channels: ["Email", "Text", "Telegram", "Notifi Hub"],
+    description: `Get announcements delivered directly to your email address, phone number, and/or Telegram.`,
     modalState: MODAL_STATE_NOTIFI,
-    name: "notifi",
+    name: "Notifi",
   },
 ];
 
@@ -52,6 +52,7 @@ export default function NotificationsSwitch() {
               <Typography variant="h5" gutterBottom className={classes.header}>
                 MonkeDAO Notifications
               </Typography>
+              <Box className={classes.notificationsWrapper}>
               {notificationSolutions.map((solution) => (
                 <NotificationBox
                   channels={solution.channels}
@@ -61,6 +62,7 @@ export default function NotificationsSwitch() {
                   onSelect={() => setModalState(solution.modalState)}
                 />
               ))}
+              </Box>
             </Box>
           )}
 
@@ -109,6 +111,11 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontFamily: "Space Grotesk",
     fontWeight: "600",
+  },
+  notificationsWrapper : {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
   },
   selectionWrapper: {
     color: "#f3efcd",

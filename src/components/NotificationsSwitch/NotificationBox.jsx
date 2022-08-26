@@ -4,21 +4,22 @@ import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import TelegramIcon from './TelegramIcon';
 import { Typography } from '@material-ui/core';
+import { findNftsByOwnerOperation } from '@metaplex-foundation/js';
 
 const TagToIcon = {
   Email: MailIcon,
-  NotifiCenter: BellIcon,
+  'Notifi Hub': BellIcon,
   Telegram: TelegramIcon,
   Text: DeviceMobileIcon,
   Wallet: KeyIcon,
 };
 
-const Tag = ({ channelName, tagWrapperClassName, iconClassName }) => {
+const Tag = ({ channelName, tagWrapperClassName, iconClassName, textClassName }) => {
   const Icon = TagToIcon[channelName];
   return (
-    <div key={channelName} className={tagWrapperClassName}>
+    <div className={tagWrapperClassName}>
       <Icon className={iconClassName} />
-      <span>{channelName}</span>
+      <span className={textClassName}>{channelName}</span>
     </div>
   );
 };
@@ -26,16 +27,22 @@ const Tag = ({ channelName, tagWrapperClassName, iconClassName }) => {
 const NotificationBox = ({ channels, description, onSelect, name }) => {
 
   const classes = useStyles();
-  
+
   const tagWrapperClassName = classes.tagWrapper;
   const iconClassName = classes.icon;
+  const textClassName = classes.textWrapper;
 
   return (
     <div className={classes.wrapper}>
       <h2 className={classes.title}>{name}</h2>
       <div className={classes.iconsWrapper}>
         {channels.map((channel) => (
-          Tag({channel, tagWrapperClassName, iconClassName})
+          <Tag
+             channelName={channel}
+             tagWrapperClassName={tagWrapperClassName}
+             iconClassName={iconClassName}
+             textClassName={textClassName}
+        />
         ))}
       </div>
 
@@ -107,5 +114,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
     fontSize: 18,
     whiteSpace: 'pre-wrap'
+  },
+  textWrapper: {
+    whiteSpace: 'nowrap',
   }
 }));
