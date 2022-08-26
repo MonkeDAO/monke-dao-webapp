@@ -16,7 +16,7 @@ const TagToIcon = {
 const Tag = ({ channelName, tagWrapperClassName, iconClassName }) => {
   const Icon = TagToIcon[channelName];
   return (
-    <div className={tagWrapperClassName}>
+    <div key={channelName} className={tagWrapperClassName}>
       <Icon className={iconClassName} />
       <span>{channelName}</span>
     </div>
@@ -24,19 +24,18 @@ const Tag = ({ channelName, tagWrapperClassName, iconClassName }) => {
 };
 
 const NotificationBox = ({ channels, description, onSelect, name }) => {
+
   const classes = useStyles();
+  
+  const tagWrapperClassName = classes.tagWrapper;
+  const iconClassName = classes.icon;
 
   return (
     <div className={classes.wrapper}>
       <h2 className={classes.title}>{name}</h2>
       <div className={classes.iconsWrapper}>
         {channels.map((channel) => (
-          <Tag
-            key={channel}
-            channelName={channel}
-            tagWrapperClassName={classes.tagWrapper}
-            iconClassName={classes.icon}
-          />
+          Tag({channel, tagWrapperClassName, iconClassName})
         ))}
       </div>
 
