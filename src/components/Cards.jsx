@@ -167,7 +167,7 @@ function GridItem({ classes, data, bg, full }) {
     // From 960px wide and above, I take up 25% of the device (3/12), so 4 columns fit the screen.
     <Grid item sm={12} md={full ? 12 : 6}>
       <Paper
-        className={clsx(classes.paper, { ["small"]: isXsScreenAndSmaller, full })}
+        className={clsx(classes.paper, { "small": isXsScreenAndSmaller, full })}
         style={{ backgroundColor: data.bg }}
       >
         <Grid item xs container direction="column">
