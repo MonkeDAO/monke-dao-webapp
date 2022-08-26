@@ -70,7 +70,8 @@ export default function Validator() {
   return (
     <Container
       p={2}
-      maxWidth="lg"
+      width="100%"
+      maxWidth='xl'
       component="section"
       className={classes.container}
     >
