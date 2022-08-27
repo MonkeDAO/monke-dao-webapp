@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,12 +13,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import {
   Box,
-  Container,
   createTheme,
   makeStyles,
   ThemeProvider,
-  Typography,
-  Paper,
   useMediaQuery,
   FormGroup,
   FormControlLabel,
@@ -33,18 +29,12 @@ import {
   TEXT_GREY,
 } from '../constants/colors';
 
-import Timeline from '@material-ui/lab/Timeline';
-import TimelineItem from '@material-ui/lab/TimelineItem';
-import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
-import TimelineConnector from '@material-ui/lab/TimelineConnector';
-import TimelineContent from '@material-ui/lab/TimelineContent';
 import clsx from 'clsx';
-import { TimelineOppositeContent } from '@material-ui/lab';
-import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
 import { useAnchorWallet, useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { getCreatorAnnouncements, getPublicTopics } from '../utils/notif';
 import { useNotifiClient } from '@notifi-network/notifi-react-hooks';
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -277,7 +267,9 @@ const useStyles = makeStyles((theme) => ({
   sectionBody: {
     fontSize: 18,
     fontFamily: 'Space Grotesk',
-    marginTop: theme.spacing(2.5),
+    backgroundColor: '#f3efcd',
+    borderRadius: 18,
+    border: `1px solid #194824`,
   },
   timelineContainer: {
     paddingBottom: theme.spacing(10),
@@ -289,6 +281,12 @@ const useStyles = makeStyles((theme) => ({
   verticallyCenterContent: {
     display: 'none',
   },
+  arrowButton: {
+    position: 'absolute',
+    left: '16px',
+    marginTop: '-8px',
+    float: 'left',
+  },
   closeButton: {
     position: 'absolute',
     right: '16px',
@@ -298,6 +296,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     width: '100%',
     textAlign: 'center',
+    backgroundColor: '#194824',
+    color: '#ffffff',
+    borderRadius: `15px 15px 0 0`,
   },
   checkbox: {
     color: BUTTON_YELLOW,
@@ -364,6 +365,9 @@ const areTargetsEmpty = (data) => {
 const DialogHeader = (props) => {
   const classes = useStyles();
   return <DialogTitle className={classes.titleText}>
+     <IconButton className={classes.arrowButton} onClick={props.onBackClick} color="primary" aria-label="back-to-notification-selection">
+        <ArrowBackIcon />
+      </IconButton>
     {props.hasNoData ?
       'Get announcement notifications' :
       'Notification settings'
@@ -374,7 +378,7 @@ const DialogHeader = (props) => {
   </DialogTitle>
 }
 
-export default function Announcements(props) {
+export default function Announcements({open, setOpen, onModalClose, onBackClick}) {
   const wallet = useAnchorWallet();
   const { publicKey, signMessage, sendTransaction } = useWallet();
   const { connection } = useConnection();
@@ -410,18 +414,10 @@ export default function Announcements(props) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [telegram, setTelegram] = useState('');
-  const [open, setOpen] = useState(false);
   const [useHardwareWallet, setUseHardwareWallet] = useState(false);
 
   const hasNoData = areTargetsEmpty(data);
 
-  const handleClickOpen = (e) => {
-    e.preventDefault();
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
   const [checkedStates, setCheckedStates] = useState({});
 
   const handleTopicChecked = useCallback((topicName) => {
@@ -706,7 +702,7 @@ export default function Announcements(props) {
 
   const logInForm = (
     <>
-      <DialogHeader hasNoData={hasNoData} onClickClose={handleClose}  />
+      <DialogHeader hasNoData={hasNoData} onClickClose={onModalClose} onBackClick={onBackClick}  />
       <DialogContent>
         <DialogContentText>
           Sign a message with your wallet to log in to Notifi
@@ -728,12 +724,13 @@ export default function Announcements(props) {
       <DialogActions className={classes.centeredActions}>
         <Button className={classes.link} color="primary" variant="contained" disabled={isLoggingIn} onClick={handleLogIn}>Log In</Button>
       </DialogActions>
-    </>
+      </>
   );
 
-  const subscribeForm = (
-    <><DialogHeader hasNoData={hasNoData} onClickClose={handleClose} />
-      <DialogContent>
+ const subscribeForm = (
+  <>
+    <DialogHeader hasNoData={hasNoData} onClickClose={onModalClose} onBackClick={onBackClick} />
+      <DialogContent classes={classes.sectionBody}>
         <DialogContentText>
           To subscribe to MonkeDAO announcements, please enter your your email address, Telegram ID, and/or phone number.
         </DialogContentText>
@@ -828,168 +825,15 @@ export default function Announcements(props) {
         <Button disabled={hasNoData ? isSubscribeDisabled : false} className={classes.link} color="primary" variant="contained" onClick={handleSubscribe}>
           {hasNoData ? 'Subscribe' : 'Update Settings'}
         </Button>
-      </DialogActions></>)
+      </DialogActions>
+      </>)
 
-  const formCard = (
-    <Dialog open={open} onClose={handleClose} fullScreen={isXsScreenAndSmaller}>
-      {isAuthenticated ? subscribeForm : logInForm}
-    </Dialog >
-  );
+  const formCard = 
+  <Box className={classes.sectionBody}>{isAuthenticated ? subscribeForm : logInForm}</Box>
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar
-        position='sticky'
-        color='default'
-        elevation={0}
-        className={clsx(classes.appBar, { sm: isXsScreenAndSmaller })}
-      >
-        <Toolbar
-          className={clsx(classes.toolbar, { sm: isXsScreenAndSmaller })}
-        >
-          <Box
-            className={clsx(classes.titleContainer, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <img
-              alt='MonkeDao logo'
-              src='/MonkeDAO_Logo_Positive.png'
-              className={classes.logo}
-            />
-          </Box>
-          {(wallet && publicKey && <Box
-            className={clsx(classes.social, classes.discord, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <Button
-              color='secondary'
-              variant='contained'
-              className={classes.link}
-              onClick={handleClickOpen}
-            >
-              <img
-                alt='Announcements logo'
-                src='/speaker.png'
-                className={classes.plusLogo}
-              />
-              Subscribe
-            </Button>
-          </Box>) || null }
-          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <WalletMultiButton className={clsx(classes.social, classes.link)} />
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Box className={classes.root}>
-        <Container maxWidth='sm' className={classes.introContainer}>
-          <Typography
-            variant='h4'
-            align='center'
-            className={classes.sectionTitle}
-          >
-            Announcements
-          </Typography>
-          {/* <Button variant='contained' onClick={handleClickOpen}>
-            Subscribe +
-          </Button> */}
-        </Container>
-
-        {(wallet && publicKey && !isAuthenticated) ? (
-          <Container maxWidth='md' className={classes.timelineContainer}>
-            <Typography align="center">
-              Please approve message transaction to login with Notifi to configure announcement subscription.
-            </Typography>
-          </Container>
-        ) : null}
-
-        <Container maxWidth='md' className={classes.timelineContainer}>
-          <Timeline>
-            {timelineCards.map((card, i) => {
-              const isNotFirst = i !== 0;
-              const isNotLast = i !== timelineCards.length - 1;
-              const isActive = card.isActive;
-              const nextIsActive = isNotLast && timelineCards[i + 1].isActive;
-              return (
-                <TimelineItem key={i}>
-                  <TimelineOppositeContent
-                    className={classes.verticallyCenterContent}
-                    align='right'
-                    variant='body2'
-                    color='textSecondary'
-                  ></TimelineOppositeContent>
-                  <TimelineSeparator>
-                    {isNotFirst && (
-                      <TimelineConnector
-                        className={
-                          isActive
-                            ? clsx(classes.connector, 'active')
-                            : classes.connector
-                        }
-                      />
-                    )}
-                    {isNotLast && (
-                      <TimelineConnector
-                        className={
-                          nextIsActive
-                            ? clsx(classes.connector, 'active')
-                            : classes.connector
-                        }
-                      />
-                    )}
-                  </TimelineSeparator>
-                  <TimelineContent
-                    className={
-                      isXsScreenAndSmaller
-                        ? clsx(classes.card, 'extra-small')
-                        : isSmScreenAndSmaller
-                          ? clsx(classes.card, 'small')
-                          : classes.card
-                    }
-                  >
-                    <Paper
-                      elevation={0}
-                      className={
-                        isActive ? clsx(classes.paper, 'active') : classes.paper
-                      }
-                    >
-                      <Typography
-                        variant='h6'
-                        component='h3'
-                        className={
-                          isActive
-                            ? clsx(classes.cardTitle, 'active')
-                            : classes.cardTitle
-                        }
-                      >
-                        {
-                          <span role='img' aria-label={card.emojiAria}>
-                            {card.emoji}
-                          </span>
-                        }{' '}
-                        {card.title}
-                      </Typography>
-                      {!!card.body && (
-                        <Typography
-                          className={
-                            isActive
-                              ? clsx(classes.cardBody, 'active')
-                              : classes.cardBody
-                          }
-                        >
-                          {card.body}
-                        </Typography>
-                      )}
-                    </Paper>
-                  </TimelineContent>
-                </TimelineItem>
-              );
-            })}
-          </Timeline>
-        </Container>
         {formCard}
-      </Box>
     </ThemeProvider>
   );
 }
