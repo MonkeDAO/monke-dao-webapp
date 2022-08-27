@@ -2,7 +2,7 @@ import { defaultVariables } from "@dialectlabs/react-ui";
 import clsx from "clsx";
 import DialectNotifications from "../DialectNotifications";
 import NotificationBox from "./NotificationBox";
-import Announcements from '../Announcements';
+import Announcements from '../NotifiNotifications/Announcements'
 
 import useOutsideAlerter from "./useOutsideAlerter";
 
@@ -36,7 +36,6 @@ export default function NotificationsSwitch() {
   const [modalState, setModalState] = useState(MODAL_STATE_SELECTION);
   const [openModal, setOpenModal] = useState(false);
 
-  console.log('modalState, openModal', modalState, openModal)
   useOutsideAlerter(wrapperRef, bellRef, setOpenModal);
 
   const BellIcon = defaultVariables.dark.icons.bell;

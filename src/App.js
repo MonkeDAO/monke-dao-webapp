@@ -16,7 +16,6 @@ import clsx from 'clsx';
 import Validator from './components/Validator';
 import Footer from './components/Footer';
 import Roadmap from './components/Roadmap';
-import Announcements from './components/Announcements';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
@@ -159,7 +158,6 @@ const App = () => {
           <StyledWalletDialogProvider>
           <Router>
             <Routes>
-              <Route path='/announcements' element={<Announcements />} />
               <Route path='/' element={<Home />} />
             </Routes>
           </Router>
