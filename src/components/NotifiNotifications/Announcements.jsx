@@ -275,9 +275,9 @@ const useStyles = makeStyles((theme) => ({
   sectionBody: {
     fontSize: 18,
     fontFamily: "Space Grotesk",
-    backgroundColor: "#f3efcd",
+    backgroundColor: "#194824",
+    color: "#f3efcd",
     borderRadius: 18,
-    border: `1px solid #194824`,
   },
   timelineContainer: {
     paddingBottom: theme.spacing(10),
@@ -304,7 +304,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
     width: "100%",
     textAlign: "center",
-    backgroundColor: "#194824",
+    backgroundColor: "#498D5E",
     color: "#ffffff",
     borderRadius: `15px 15px 0 0`,
   },
@@ -331,6 +331,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   iconTextField: {
+    backgroundColor: "#F2EFD0",
     color: "#184623",
     border: `2px solid rgba(0, 0, 0, 0)`,
     borderRadius: 8,
@@ -643,6 +644,7 @@ export default function Announcements({
     },
     [publicTopics]
   );
+
 
   useEffect(() => {
     try {
