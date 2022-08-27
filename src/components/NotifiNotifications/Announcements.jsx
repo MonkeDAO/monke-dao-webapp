@@ -10,6 +10,7 @@ import Link from "@material-ui/core/Link";
 import Switch from "@material-ui/core/Switch";
 import Checkbox from "@material-ui/core/Checkbox";
 import MuiPhoneNumber from "material-ui-phone-number";
+import LinkOffIcon from '@mui/icons-material/LinkOff';
 import {
   Box,
   createTheme,
@@ -352,6 +353,12 @@ const useStyles = makeStyles((theme) => ({
   smsIcon: {
     marginRight: 8,
   },
+  walletNotConnectedBody: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: '10px'
+  }
 }));
 
 const getAlert = (data, name) => {
@@ -407,8 +414,6 @@ export default function Announcements({
 
   const { connection } = useConnection();
   const classes = useStyles();
-  const isSmScreenAndSmaller = useMediaQuery(theme.breakpoints.down("sm"));
-  const isXsScreenAndSmaller = useMediaQuery(theme.breakpoints.down("xs"));
   const [timelineCards, setTimelineCards] = useState([]);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [telegramConfirmationUrl, setTelegramConfirmationUrl] = useState("");
@@ -776,7 +781,11 @@ export default function Announcements({
 
   const noConnectedWallet = (
     <DialogContent>
-      <DialogContentText>Wallet is not connected!</DialogContentText>
+      <DialogContentText className={classes.walletNotConnectedBody}>
+        <LinkOffIcon />
+        Wallet not connected!
+        <br />
+      </DialogContentText>
     </DialogContent>
   );
 
@@ -787,7 +796,7 @@ export default function Announcements({
         onClickClose={onModalClose}
         onBackClick={onBackClick}
       />
-      {publicKey !== undefined || publicKey !== null ? (
+      {publicKey !== null ? (
         <>
           <DialogContent>
             <DialogContentText>
