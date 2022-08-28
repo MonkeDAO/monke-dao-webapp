@@ -2,7 +2,7 @@ import { defaultVariables } from "@dialectlabs/react-ui";
 import clsx from "clsx";
 import DialectNotifications from "../DialectNotifications";
 import NotificationBox from "./NotificationBox";
-import Announcements from '../NotifiNotifications/Announcements'
+import NotifiSubscribe from '../NotifiNotifications/NotifiSubscribe'
 
 import useOutsideAlerter from "./useOutsideAlerter";
 
@@ -77,13 +77,14 @@ export default function NotificationsSwitch() {
             />
           )}
           {modalState === "notifi" && (
-            <Announcements
+            <NotifiSubscribe
               open={openModal}
               onModalClose={() => {
                 setOpenModal(false);
               }}
               onBackClick={() => 
                 setModalState(MODAL_STATE_SELECTION)}
+              setModalState={setModalState}
             />
           )}
         </div>
