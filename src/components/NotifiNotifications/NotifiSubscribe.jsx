@@ -604,8 +604,6 @@ export default function NotifiSubscribe({
     }
   }, []);
 
-  const timelineCardsTest = [{emoji: "", emojiAria: "", title: "Announcements Title", body: "Welcome to MonkeyDAO", date: '2022-08-23T04:39:35.072', isActive: true}]
-
   const handleSoftware = useCallback(async () => {
     setIsLoggingIn(true);
     try {
@@ -721,7 +719,7 @@ export default function NotifiSubscribe({
 
   const announcements = (
     <Announcements
-      timelineCards={timelineCardsTest}
+      timelineCards={timelineCards}
       setAlertsShow={setAlertsShow}
       onClickClose={onModalClose}
       isAlerts={true}
@@ -929,7 +927,7 @@ export default function NotifiSubscribe({
         >
           {hasNoData ? "Subscribe" : "Update Settings"}
         </Button>
-        {timelineCards.length === 0 ? (
+        {timelineCards.length > 0 ? (
           <Button
             onClick={handleAlertsShow}
             className={classes.announcementsLink}
