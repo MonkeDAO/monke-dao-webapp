@@ -146,7 +146,9 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionBody: {
     marginTop: '0px',
-    padding: '16px'
+    padding: '16px',
+    maxHeight: '360px',
+    overflowY: 'auto'
   },
   titleSection: {
     display: "flex",
