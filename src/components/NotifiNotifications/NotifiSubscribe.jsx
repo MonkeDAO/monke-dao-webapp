@@ -70,6 +70,11 @@ const theme = createTheme({
       root: {
         color: "inherit",
       },
+      input: {
+        '&:-webkit-autofill': {
+        '-webkit-box-shadow': '0 0 0 100px #F2EFD0 inset',
+        }
+      }
     },
     MuiDialogActions: {
       root: {

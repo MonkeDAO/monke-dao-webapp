@@ -13,8 +13,6 @@ import {
   BANANA_ICON_YELLOW,
   BUTTON_YELLOW,
   LIGHT_GREY,
-  LIGHT_YELLOW,
-  TEXT_BROWN,
   TEXT_GREY,
   TWITTER_BLUE,
 } from "../constants/colors";
