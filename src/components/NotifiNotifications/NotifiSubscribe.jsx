@@ -18,10 +18,7 @@ import {
   FormControlLabel,
   InputAdornment,
 } from "@material-ui/core";
-import {
-  BUTTON_YELLOW,
-  TEXT_GREY,
-} from "../../constants/colors";
+import { BUTTON_YELLOW, TEXT_GREY } from "../../constants/colors";
 import DialogHeader from "./DialogHeader";
 import Announcements from "./Announcements";
 
@@ -71,10 +68,10 @@ const theme = createTheme({
         color: "inherit",
       },
       input: {
-        '&:-webkit-autofill': {
-        '-webkit-box-shadow': '0 0 0 100px #F2EFD0 inset',
-        }
-      }
+        "&:-webkit-autofill": {
+          "-webkit-box-shadow": "0 0 0 100px #F2EFD0 inset",
+        },
+      },
     },
     MuiDialogActions: {
       root: {
@@ -458,13 +455,12 @@ export default function NotifiSubscribe({
   };
 
   const showSubscribeText = () => {
+    if (subscribeLoading) return "Loading";
 
-    if (subscribeLoading) return "Loading"
-
-    if (hasNoData) { 
-      return "Subscribe"
+    if (hasNoData) {
+      return "Subscribe";
     } else return "Update Settings";
-  }
+  };
 
   const maybeDeleteAlert = async (data, payload) => {
     const alertId = getAlert(data, payload.name)?.id;
@@ -701,7 +697,8 @@ export default function NotifiSubscribe({
   // Disabled if No alerts selected and inputs are empty
   const isSubscribeDisabled =
     !Object.keys(checkedStates).some((key) => checkedStates[key]) ||
-    (email === "" && telegram === "" && phone.length < 4) || subscribeLoading;
+    (email === "" && telegram === "" && phone.length < 4) ||
+    subscribeLoading;
 
   const handleHardware = useCallback(async () => {
     setIsLoggingIn(true);
@@ -733,7 +730,7 @@ export default function NotifiSubscribe({
 
   const handleAlertsShow = () => {
     setAlertsShow(true);
-  }
+  };
 
   const announcements = (
     <Announcements
@@ -904,7 +901,33 @@ export default function NotifiSubscribe({
             name="phone"
             data-cy="user-phone"
             defaultCountry={"us"}
-            onlyCountries={["us", "au", "at", "be", "br", "ca", "dk", "fi", "fr", "de", "hk", "hu", "is", "my", "no", "ph", "pl", "pt", "sg", "kr", "es", "se", "ch", "tw", "uk"  ]}
+            onlyCountries={[
+              "us",
+              "au",
+              "at",
+              "be",
+              "br",
+              "ca",
+              "dk",
+              "fi",
+              "fr",
+              "de",
+              "hk",
+              "hu",
+              "is",
+              "my",
+              "no",
+              "ph",
+              "pl",
+              "pt",
+              "sg",
+              "kr",
+              "es",
+              "se",
+              "ch",
+              "tw",
+              "uk",
+            ]}
             variant="standard"
             value={phone}
             onChange={handlePhone}
@@ -961,8 +984,8 @@ export default function NotifiSubscribe({
     if (alertsShow) return announcements;
 
     if (isAuthenticated) {
-      return subscribeForm 
-    } else return signMessageForm
+      return subscribeForm;
+    } else return signMessageForm;
   }
 
   const formCard = (
