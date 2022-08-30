@@ -380,6 +380,7 @@ export default function NotifiSubscribe({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [telegram, setTelegram] = useState("");
+  const [subscribeLoading, setSubscribeLoading] = useState(false);
 
   const [useHardwareWallet, setUseHardwareWallet] = useState(false);
   const [alertsShow, setAlertsShow] = useState(false);
@@ -416,6 +417,7 @@ export default function NotifiSubscribe({
   const handleSubscribe = async () => {
     if (wallet && publicKey && (email || telegram)) {
       try {
+        setSubscribeLoading(true);
         const freshData = await fetchData();
 
         const currentTopics = [...publicTopics];
@@ -445,13 +447,24 @@ export default function NotifiSubscribe({
 
         const dataAfterAlertCreation = await eventPromises;
         reflectNotifiData(dataAfterAlertCreation);
+        setSubscribeLoading(false);
       } catch (e) {
+        setSubscribeLoading(false);
         if (e) {
           console.log("Invalid Signature", e);
         }
       }
     }
   };
+
+  const showSubscribeText = () => {
+
+    if (subscribeLoading) return "Loading"
+
+    if (hasNoData) { 
+      return "Subscribe"
+    } else return "Update Settings";
+  }
 
   const maybeDeleteAlert = async (data, payload) => {
     const alertId = getAlert(data, payload.name)?.id;
@@ -688,7 +701,7 @@ export default function NotifiSubscribe({
   // Disabled if No alerts selected and inputs are empty
   const isSubscribeDisabled =
     !Object.keys(checkedStates).some((key) => checkedStates[key]) ||
-    (email === "" && telegram === "" && phone.length < 4);
+    (email === "" && telegram === "" && phone.length < 4) || subscribeLoading;
 
   const handleHardware = useCallback(async () => {
     setIsLoggingIn(true);
@@ -895,8 +908,8 @@ export default function NotifiSubscribe({
             variant="standard"
             value={phone}
             onChange={handlePhone}
+            inputClass={classes.textFieldInput}
             InputProps={{
-              className: classes.textFieldInput,
               placeholder: "Phone Number",
               disableUnderline: true,
             }}
@@ -930,7 +943,7 @@ export default function NotifiSubscribe({
           variant="contained"
           onClick={handleSubscribe}
         >
-          {hasNoData ? "Subscribe" : "Update Settings"}
+          {showSubscribeText()}
         </Button>
         {timelineCards.length > 0 ? (
           <Button
