@@ -891,7 +891,7 @@ export default function NotifiSubscribe({
             name="phone"
             data-cy="user-phone"
             defaultCountry={"us"}
-            fullWidth
+            onlyCountries={["us", "au", "at", "be", "br", "ca", "dk", "fi", "fr", "de", "hk", "hu", "is", "my", "no", "ph", "pl", "pt", "sg", "kr", "es", "se", "ch", "tw", "uk"  ]}
             variant="standard"
             value={phone}
             onChange={handlePhone}
