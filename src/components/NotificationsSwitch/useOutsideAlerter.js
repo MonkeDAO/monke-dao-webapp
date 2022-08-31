@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 
 const useOutsideAlerter = (ref, bellRef, phoneRef, setOpen) => {
   useEffect(() => {
-
-    console.log('phoneRef', phoneRef.current)
     /**
      * Alert if clicked on outside of element
      */
