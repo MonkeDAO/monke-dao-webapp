@@ -824,8 +824,7 @@ export default function NotifiSubscribe({
       />
       <DialogContent>
         <DialogContentText>
-          To subscribe to MonkeDAO announcements, please enter your your email
-          address, Telegram ID, and/or phone number.
+            To subscribe to MonkeDAO announcements, please enter your email address, Telegram ID, and/or phone number.
         </DialogContentText>
         <TextField
           autoFocus
