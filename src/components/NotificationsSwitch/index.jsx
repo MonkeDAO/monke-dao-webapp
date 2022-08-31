@@ -4,6 +4,8 @@ import DialectNotifications from "../DialectNotifications";
 import NotificationBox from "./NotificationBox";
 import NotifiSubscribe from '../NotifiNotifications/NotifiSubscribe'
 
+import useOutsideAlerter from "./useOutsideAlerter";
+
 import { useRef, useState } from "react";
 
 import { Box, IconButton, makeStyles, Typography } from "@material-ui/core";
@@ -31,8 +33,11 @@ export default function NotificationsSwitch() {
   const classes = useStyles();
   const wrapperRef = useRef(null);
   const bellRef = useRef(null);
+  const phoneRef = useRef(null);
   const [modalState, setModalState] = useState(MODAL_STATE_SELECTION);
   const [openModal, setOpenModal] = useState(false);
+
+  useOutsideAlerter(wrapperRef, bellRef, phoneRef, setOpenModal);
 
   const BellIcon = defaultVariables.dark.icons.bell;
 
@@ -74,8 +79,7 @@ export default function NotificationsSwitch() {
           )}
           {modalState === "notifi" && (
             <NotifiSubscribe
-              open={openModal}
-              setOpen={setOpenModal}
+              phoneRef={phoneRef}
               onModalClose={() => {
                 setOpenModal(false);
               }}

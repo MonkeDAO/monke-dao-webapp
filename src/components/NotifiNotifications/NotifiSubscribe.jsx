@@ -338,10 +338,9 @@ const areTargetsEmpty = (data) => {
 };
 
 export default function NotifiSubscribe({
-  open,
-  setOpen,
+  phoneRef,
+  setPhoneRef,
   onModalClose,
-  setModalState,
   onBackClick,
 }) {
   const wallet = useAnchorWallet();
@@ -527,7 +526,7 @@ export default function NotifiSubscribe({
     setTelegramConfirmationUrl(maybeTarget?.telegramConfirmationUrl ?? "");
   };
 
-  const handlePhone = (value) => {
+  const handlePhone = async (value) => {
     const formattedPhoneNum = `+${value.replace(/\D+/gi, "")}`;
     setPhone(formattedPhoneNum);
   };
@@ -897,46 +896,48 @@ export default function NotifiSubscribe({
             alt="Phone Number"
             src="/icn-sms.svg"
           />
-          <MuiPhoneNumber
-            name="phone"
-            data-cy="user-phone"
-            defaultCountry={"us"}
-            onlyCountries={[
-              "us",
-              "au",
-              "at",
-              "be",
-              "br",
-              "ca",
-              "dk",
-              "fi",
-              "fr",
-              "de",
-              "hk",
-              "hu",
-              "is",
-              "my",
-              "no",
-              "ph",
-              "pl",
-              "pt",
-              "sg",
-              "kr",
-              "es",
-              "se",
-              "ch",
-              "tw",
-              "uk",
-            ]}
-            variant="standard"
-            value={phone}
-            onChange={handlePhone}
-            inputClass={classes.textFieldInput}
-            InputProps={{
-              placeholder: "Phone Number",
-              disableUnderline: true,
-            }}
-          />
+          <div ref={phoneRef}>
+            <MuiPhoneNumber
+              name="phone"
+              data-cy="user-phone"
+              defaultCountry={"us"}
+              onlyCountries={[
+                "us",
+                "au",
+                "at",
+                "be",
+                "br",
+                "ca",
+                "dk",
+                "fi",
+                "fr",
+                "de",
+                "hk",
+                "hu",
+                "is",
+                "my",
+                "no",
+                "ph",
+                "pl",
+                "pt",
+                "sg",
+                "kr",
+                "es",
+                "se",
+                "ch",
+                "tw",
+                "uk",
+              ]}
+              variant="standard"
+              value={phone}
+              onChange={handlePhone}
+              inputClass={classes.textFieldInput}
+              InputProps={{
+                placeholder: "Phone Number",
+                disableUnderline: true,
+              }}
+            />
+          </div>
         </div>
         <br />
         <FormGroup className={classes.notCenteredControls}>
