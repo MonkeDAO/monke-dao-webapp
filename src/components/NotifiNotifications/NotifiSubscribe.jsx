@@ -185,6 +185,21 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     padding: "8px 16px",
   },
+  disabled: {
+    backgroundColor: "#F2EFD0",
+    color: "#808080",
+    pointerEvents: "none",
+    textTransform: "none",
+    fontFamily: "Space Grotesk",
+    fontWeight: "400",
+    fontSize: 16,
+    boxShadow: "none",
+    borderRadius: 8,
+    height: 38,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    padding: "8px 16px",
+  },
   announcementsLink: {
     color: "#F2EFD0",
     marginTop: "3px",
@@ -962,7 +977,7 @@ export default function NotifiSubscribe({
       <DialogActions className={classes.centeredActions}>
         <Button
           disabled={hasNoData ? isSubscribeDisabled : false}
-          className={classes.link}
+          className={isSubscribeDisabled ? classes.disabled : classes.link}
           color="primary"
           variant="contained"
           onClick={handleSubscribe}
