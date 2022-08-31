@@ -16,16 +16,16 @@ const MODAL_STATE_NOTIFI = "notifi";
 
 const notificationSolutions = [
   {
-    channels: ["Wallet", "Email", "Text", "Telegram"],
-    description: `Get announcements delivered directly to your wallet, along with telegram, sms and email.`,
-    modalState: MODAL_STATE_DIALECT,
-    name: "Dialect",
-  },
-  {
     channels: ["Email", "Text", "Telegram", "Notifi Hub"],
     description: `Get announcements delivered directly to your email address, phone number, and/or Telegram.`,
     modalState: MODAL_STATE_NOTIFI,
     name: "Notifi",
+  },
+  {
+    channels: ["Wallet", "Email", "Text", "Telegram"],
+    description: `Get announcements delivered directly to your wallet, along with telegram, sms and email.`,
+    modalState: MODAL_STATE_DIALECT,
+    name: "Dialect",
   },
 ];
 

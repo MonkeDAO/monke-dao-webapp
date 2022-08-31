@@ -631,7 +631,7 @@ export default function NotifiSubscribe({
           };
         });
         setTimelineCards(timelineCardsObject);
-        if (isAuthenticated && publicAnnouncements.length > 0) setAlertsShow(true);
+        if (isAuthenticated && publicAnnouncements > 0 && alert) setAlertsShow(true);
       })();
     } catch (e) {
       console.log("error", e);
@@ -747,6 +747,7 @@ export default function NotifiSubscribe({
       await handleSoftware();
     }
   }, [handleHardware, handleSoftware, useHardwareWallet]);
+
 
   const announcements = (
     <Announcements
@@ -991,12 +992,12 @@ export default function NotifiSubscribe({
   );
 
   function setCard(isAuthenticated, alertsShow) {
+
+    if (!isAuthenticated) return signMessageForm;
     if (alertsShow) return announcements;
 
     if (isAuthenticated && alertsShow === false) {
       return subscribeForm;
-    } else {
-      return signMessageForm;
     }
   }
 
