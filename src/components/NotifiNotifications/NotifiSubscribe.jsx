@@ -365,6 +365,7 @@ export default function NotifiSubscribe({
   const { connection } = useConnection();
   const classes = useStyles();
   const [timelineCards, setTimelineCards] = useState([]);
+  const [alertExists, setAlertExists] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [telegramConfirmationUrl, setTelegramConfirmationUrl] = useState("");
   const [unverifiedEmailTarget, setUnverifiedEmailTarget] = useState(null);
@@ -563,6 +564,7 @@ export default function NotifiSubscribe({
       async function handleAlert(topic) {
         const alert = getAlert(data, topic.displayName);
         if (alert) {
+          setAlertExists(true)
           emailTarget = alert.targetGroup?.emailTargets?.[0];
           smsTarget = alert.targetGroup?.smsTargets?.[0];
           telegramTarget = alert.targetGroup?.telegramTargets?.[0];
@@ -631,12 +633,12 @@ export default function NotifiSubscribe({
           };
         });
         setTimelineCards(timelineCardsObject);
-        if (isAuthenticated && publicAnnouncements > 0 && alert) setAlertsShow(true);
+        if (isAuthenticated && publicAnnouncements > 0 && alertExists) setAlertsShow(true);
       })();
     } catch (e) {
       console.log("error", e);
     }
-  }, [isAuthenticated]);
+  }, [alertExists, isAuthenticated]);
 
   const handleSoftware = useCallback(async () => {
     setIsLoggingIn(true);
