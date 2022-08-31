@@ -23,7 +23,7 @@ export default function DialogHeader({onBackClick, onClickClose, hasNoData, isAl
           size="small"
           onClick={onClickClose}
         >
-          {isAlerts ? <TuneIcon /> : <img alt="close" src="/x.svg" />}
+          {isAlerts ? <TuneIcon className={classes.settingsButton} /> : <img alt="close" src="/x.svg" />}
         </IconButton>
       </DialogTitle>
   )};
@@ -48,6 +48,9 @@ export default function DialogHeader({onBackClick, onClickClose, hasNoData, isAl
         right: "16px",
         float: "right",
     },
+    settingsButton: {
+      color: "#F2EFD0"
+  },
   }));
 
   function setTitle(hasNoData, isAlerts) {
