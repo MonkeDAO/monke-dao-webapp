@@ -2,6 +2,7 @@ import React from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton, makeStyles  } from '@material-ui/core';
+import TuneIcon from '@mui/icons-material/Tune';
 
 export default function DialogHeader({onBackClick, onClickClose, hasNoData, isAlerts}) {
     const classes = useStyles();
@@ -22,7 +23,7 @@ export default function DialogHeader({onBackClick, onClickClose, hasNoData, isAl
           size="small"
           onClick={onClickClose}
         >
-          <img alt="close" src="/x.svg" />
+          {isAlerts ? <TuneIcon /> : <img alt="close" src="/x.svg" />}
         </IconButton>
       </DialogTitle>
   )};

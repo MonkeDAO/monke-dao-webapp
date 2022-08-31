@@ -18,14 +18,14 @@ import {
   TEXT_GREY,
 } from "../../constants/colors";
 
-export default function Announcements({timelineCards, setAlertsShow, onClickClose, hasNoData, isAlerts}) {
+export default function Announcements({timelineCards, handleBackToSelection, setAlertsShow, onClickClose, hasNoData, isAlerts}) {
     const classes = useStyles();
 
     const onAnnouncementsBackClick = () => setAlertsShow(false);
 
     return (
     <>
-    <DialogHeader onBackClick={onAnnouncementsBackClick} onClickClose={onClickClose} hasNoData={hasNoData} isAlerts={isAlerts} />
+    <DialogHeader onBackClick={handleBackToSelection} onClickClose={onAnnouncementsBackClick} hasNoData={hasNoData} isAlerts={isAlerts} />
     <Timeline className={classes.sectionBody}>
       {timelineCards.map((card, i) => {
         const isNotFirst = i !== 0;

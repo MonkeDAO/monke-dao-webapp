@@ -357,6 +357,7 @@ export default function NotifiSubscribe({
   setPhoneRef,
   onModalClose,
   onBackClick,
+  setModalState,
 }) {
   const wallet = useAnchorWallet();
   const { publicKey, signMessage, sendTransaction } = useWallet();
@@ -399,6 +400,10 @@ export default function NotifiSubscribe({
   const hasNoData = areTargetsEmpty(data);
 
   const [checkedStates, setCheckedStates] = useState({});
+
+  const handleBackToSelection = () => {
+    setModalState('selection');
+  }
 
   const handleTopicChecked = useCallback((topicName) => {
     setCheckedStates((state) => ({ ...state, [topicName]: !state[topicName] }));
@@ -626,11 +631,12 @@ export default function NotifiSubscribe({
           };
         });
         setTimelineCards(timelineCardsObject);
+        if (isAuthenticated && publicAnnouncements.length > 0) setAlertsShow(true);
       })();
     } catch (e) {
       console.log("error", e);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const handleSoftware = useCallback(async () => {
     setIsLoggingIn(true);
@@ -742,16 +748,13 @@ export default function NotifiSubscribe({
     }
   }, [handleHardware, handleSoftware, useHardwareWallet]);
 
-  const handleAlertsShow = () => {
-    setAlertsShow(true);
-  };
-
   const announcements = (
     <Announcements
       timelineCards={timelineCards}
       setAlertsShow={setAlertsShow}
       onClickClose={onModalClose}
       isAlerts={true}
+      handleBackToSelection={handleBackToSelection}
     ></Announcements>
   );
 
@@ -983,14 +986,6 @@ export default function NotifiSubscribe({
         >
           {showSubscribeText()}
         </Button>
-        {timelineCards.length > 0 ? (
-          <Button
-            onClick={handleAlertsShow}
-            className={classes.announcementsLink}
-          >
-            View Announcements
-          </Button>
-        ) : null}
       </DialogActions>
     </>
   );
@@ -998,9 +993,11 @@ export default function NotifiSubscribe({
   function setCard(isAuthenticated, alertsShow) {
     if (alertsShow) return announcements;
 
-    if (isAuthenticated) {
+    if (isAuthenticated && alertsShow === false) {
       return subscribeForm;
-    } else return signMessageForm;
+    } else {
+      return signMessageForm;
+    }
   }
 
   const formCard = (
