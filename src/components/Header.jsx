@@ -100,6 +100,9 @@ const useStyles = makeStyles((theme) => ({
       verticalAlign: 'bottom',
     },
   },
+  notificationsSwitch: {
+    marginLeft: theme.spacing(1.5),
+  },
   toolbarTitle: {
     padding: `10px`,
     flexGrow: 1,
@@ -227,7 +230,7 @@ export function Header() {
             <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
               <WalletMultiButton className={clsx(classes.link, classes.walletButton)} />
             </Box>
-            <Box>
+            <Box className={clsx(classes.notificationsSwitch)}>
               <NotificationsSwitch />
             </Box>
           </Box>

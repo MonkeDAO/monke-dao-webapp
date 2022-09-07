@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const useOutsideAlerter = (ref, bellRef, setOpen) => {
+const useOutsideAlerter = (ref, bellRef, phoneRef, setOpen) => {
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
@@ -10,7 +10,8 @@ const useOutsideAlerter = (ref, bellRef, setOpen) => {
         ref.current &&
         !ref?.current.contains(event.target) &&
         bellRef.current &&
-        !bellRef?.current.contains(event.target)
+        !bellRef?.current.contains(event.target) &&
+        phoneRef?.current === null
       ) {
         setOpen(false);
       }
@@ -22,7 +23,7 @@ const useOutsideAlerter = (ref, bellRef, setOpen) => {
       // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [ref, bellRef, setOpen]);
+  }, [ref, bellRef, setOpen, phoneRef]);
 };
 
 export default useOutsideAlerter;
