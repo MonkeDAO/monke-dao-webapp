@@ -4,6 +4,31 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton, makeStyles  } from '@material-ui/core';
 import TuneIcon from '@mui/icons-material/Tune';
 
+const useStyles = makeStyles(() => ({
+  titleText: {
+      display: "inline-block",
+      width: "100%",
+      textAlign: "center",
+      backgroundColor: "#498D5E",
+      color: "#ffffff",
+      borderRadius: `15px 15px 0 0`,
+  },
+  arrowButton: {
+      position: "absolute",
+      left: "16px",
+      marginTop: "-8px",
+      float: "left",
+  },
+  closeButton: {
+      position: "absolute",
+      right: "16px",
+      float: "right",
+  },
+  settingsButton: {
+    color: "#F2EFD0"
+},
+}));
+
 export default function DialogHeader({onBackClick, onClickClose, hasNoData, isAlerts}) {
     const classes = useStyles();
 
@@ -28,30 +53,6 @@ export default function DialogHeader({onBackClick, onClickClose, hasNoData, isAl
       </DialogTitle>
   )};
 
-  const useStyles = makeStyles(() => ({
-    titleText: {
-        display: "inline-block",
-        width: "100%",
-        textAlign: "center",
-        backgroundColor: "#498D5E",
-        color: "#ffffff",
-        borderRadius: `15px 15px 0 0`,
-    },
-    arrowButton: {
-        position: "absolute",
-        left: "16px",
-        marginTop: "-8px",
-        float: "left",
-    },
-    closeButton: {
-        position: "absolute",
-        right: "16px",
-        float: "right",
-    },
-    settingsButton: {
-      color: "#F2EFD0"
-  },
-  }));
 
   function setTitle(hasNoData, isAlerts) {
 

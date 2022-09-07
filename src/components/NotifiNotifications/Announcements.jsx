@@ -18,6 +18,50 @@ import {
   TEXT_GREY,
 } from "../../constants/colors";
 
+const useStyles = makeStyles((theme) => ({
+  verticallyCenterContent: {
+    display: "none",
+  },
+  date: {
+   fontSize: 15,
+  },
+  connector: {
+    backgroundColor: "#ffc919",
+    "&.active": {
+      backgroundColor: BANANA_ICON_YELLOW,
+    },
+  },
+  paper: {
+    padding: '15px 20px',
+    backgroundColor: LIGHT_GREY,
+    "&.active": {
+      backgroundColor: "white",
+    },
+    color: DARK_GREEN,
+
+  },
+  cardBody: {
+    fontFamily: "Space Grotesk",
+    fontSize: 18,
+    textAlign: "left",
+    color: TEXT_GREY,
+    "&.active": {
+      color: "#000000",
+    },
+  },
+  sectionBody: {
+    marginTop: '0px',
+    padding: '16px',
+    maxHeight: '360px',
+    overflowY: 'auto'
+  },
+  titleSection: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  }
+}));
+
 export default function Announcements({timelineCards, handleBackToSelection, setAlertsShow, onClickClose, hasNoData, isAlerts}) {
     const classes = useStyles();
 
@@ -112,50 +156,6 @@ export default function Announcements({timelineCards, handleBackToSelection, set
     </>
     )
 }
-
-const useStyles = makeStyles((theme) => ({
-  verticallyCenterContent: {
-    display: "none",
-  },
-  date: {
-   fontSize: 15,
-  },
-  connector: {
-    backgroundColor: "#ffc919",
-    "&.active": {
-      backgroundColor: BANANA_ICON_YELLOW,
-    },
-  },
-  paper: {
-    padding: '15px 20px',
-    backgroundColor: LIGHT_GREY,
-    "&.active": {
-      backgroundColor: "white",
-    },
-    color: DARK_GREEN,
-
-  },
-  cardBody: {
-    fontFamily: "Space Grotesk",
-    fontSize: 18,
-    textAlign: "left",
-    color: TEXT_GREY,
-    "&.active": {
-      color: "#000000",
-    },
-  },
-  sectionBody: {
-    marginTop: '0px',
-    padding: '16px',
-    maxHeight: '360px',
-    overflowY: 'auto'
-  },
-  titleSection: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between"
-  }
-}));
 
 export const formatDateTime = (utcDate) => {
     const parsedDate = parseISO(utcDate);
