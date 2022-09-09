@@ -77,7 +77,7 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
         },
         colors: {
           bg: classes.primaryBg,
-          primary: classes.primaryText,
+          textPrimary: classes.primaryText,
           accent: classes.primaryText,
           highlight: classes.highlight,
           // Hack to fix logo spacing

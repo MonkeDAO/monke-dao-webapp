@@ -16,17 +16,17 @@ const MODAL_STATE_NOTIFI = "notifi";
 
 const notificationSolutions = [
   {
-    channels: ["Email", "Text", "Telegram", "Notifi Hub"],
-    description: `Get announcements delivered directly to your email address, phone number, and/or Telegram.`,
-    modalState: MODAL_STATE_NOTIFI,
-    name: "Notifi",
-  },
-  {
     channels: ["Wallet", "Email", "Text", "Telegram"],
     description: `Get announcements delivered directly to your wallet, along with telegram, sms and email.`,
     modalState: MODAL_STATE_DIALECT,
     name: "Dialect",
   },
+  {
+    channels: ["Email", "Text", "Telegram", "Notifi Hub"],
+    description: `Get announcements delivered directly to your email address, phone number, and/or Telegram.`,
+    modalState: MODAL_STATE_NOTIFI,
+    name: "Notifi",
+  }
 ];
 
 export default function NotificationsSwitch() {
@@ -56,15 +56,15 @@ export default function NotificationsSwitch() {
                 MonkeDAO Notifications
               </Typography>
               <Box className={classes.notificationsWrapper}>
-              {notificationSolutions.map((solution) => (
-                <NotificationBox
-                  channels={solution.channels}
-                  description={solution.description}
-                  key={solution.name}
-                  name={solution.name}
-                  onSelect={() => setModalState(solution.modalState)}
-                />
-              ))}
+                {notificationSolutions.map((solution) => (
+                  <NotificationBox
+                    channels={solution.channels}
+                    description={solution.description}
+                    key={solution.name}
+                    name={solution.name}
+                    onSelect={() => setModalState(solution.modalState)}
+                  />
+                ))}
               </Box>
             </Box>
           )}
@@ -83,7 +83,7 @@ export default function NotificationsSwitch() {
               onModalClose={() => {
                 setOpenModal(false);
               }}
-              onBackClick={() => 
+              onBackClick={() =>
                 setModalState(MODAL_STATE_SELECTION)}
               setModalState={setModalState}
             />
@@ -118,7 +118,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Space Grotesk",
     fontWeight: "600",
   },
-  notificationsWrapper : {
+  notificationsWrapper: {
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',

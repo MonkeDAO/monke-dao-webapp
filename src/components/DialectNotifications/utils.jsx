@@ -5,6 +5,7 @@ export const convertWalletToDialectWallet = (wallet) => ({
     !wallet.connecting &&
     !wallet.disconnecting &&
     Boolean(wallet.publicKey),
+  signMessage: wallet.signMessage,
   signTransaction: wallet.signTransaction,
   signAllTransactions: wallet.signAllTransactions,
 });
