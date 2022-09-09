@@ -117,7 +117,7 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
       config={dialectConfig}
       wallet={dialectWallet}
       dapp={MONKE_DAO_PUBLIC_KEY}
-    // gate={gate}
+      gate={gate}
     >
       <DialectUiManagementProvider>
         <DialectThemeProvider theme="light" variables={themeVariables}>
