@@ -80,10 +80,12 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
           textPrimary: classes.primaryText,
           accent: classes.primaryText,
           highlight: classes.highlight,
+          toggleBackground: classes.toggleBackground,
+          toggleBackgroundActive: classes.toggleBackgroundActive,
           // Hack to fix logo spacing
           highlightSolid: `${defaultVariables.light.colors.highlightSolid} ${classes.logo}`,
         },
-        addormentButton: `${defaultVariables.light.addormentButton} ${classes.addormentButton}`,
+        adornmentButton: `${defaultVariables.light.adornmentButton} ${classes.adornmentButton}`,
         bellButton: classes.notificationButton,
         modal: classes.notificationModal,
         modalWrapper: `${defaultVariables.light.modalWrapper} ${classes.notificationWrapper}`,
@@ -115,7 +117,7 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
       config={dialectConfig}
       wallet={dialectWallet}
       dapp={MONKE_DAO_PUBLIC_KEY}
-      gate={gate}
+    // gate={gate}
     >
       <DialectUiManagementProvider>
         <DialectThemeProvider theme="light" variables={themeVariables}>

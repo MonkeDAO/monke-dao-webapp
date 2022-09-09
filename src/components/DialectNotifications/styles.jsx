@@ -72,8 +72,14 @@ export const useDialectStyles = makeStyles((theme) => ({
   divider: {
     backgroundColor: '#246A35'
   },
-  addormentButton: {
+  adornmentButton: {
     color: '#f3efcd',
     backgroundColor: '#184623',
+  },
+  toggleBackground: {
+    backgroundColor: '#9e9c88'
+  },
+  toggleBackgroundActive: {
+    backgroundColor: '#8e8939'
   }
 }));

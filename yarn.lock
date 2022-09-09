@@ -1276,10 +1276,10 @@
     nanoid "^4.0.0"
     swr "^1.3.0"
 
-"@dialectlabs/react-ui@1.0.0-beta.56":
-  version "1.0.0-beta.56"
-  resolved "https://registry.yarnpkg.com/@dialectlabs/react-ui/-/react-ui-1.0.0-beta.56.tgz#76949f42049d2a8f3fdb6edef43ad6093c31ab3f"
-  integrity sha512-Ph9PLrWfRsuWPFguueH4DW2j6FbpviXiofruGPJbquMKU3dZxzCliS1NRjOm54haZcLAC5tizLt2e7l6Q+QJNQ==
+"@dialectlabs/react-ui@1.0.0-beta.59":
+  version "1.0.0-beta.59"
+  resolved "https://registry.yarnpkg.com/@dialectlabs/react-ui/-/react-ui-1.0.0-beta.59.tgz#80581c0cbeca38740778b4893cf115f181f7d840"
+  integrity sha512-AyTp9cFN4EgRcx0tNGE7efU2+2y8M2Gg48H78pOeNA9Nm2JZf+lggSbXNMJYoOR/nTVT8gLFkurLz21BJOdcpA==
   dependencies:
     "@dialectlabs/react-sdk" "1.0.0-beta.29"
     "@headlessui/react" "^1.2.0"

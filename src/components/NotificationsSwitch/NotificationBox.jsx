@@ -1,5 +1,5 @@
 import { DeviceMobileIcon } from "@heroicons/react/outline";
-import { BellIcon, KeyIcon, MailIcon } from "@heroicons/react/solid";
+import { BellIcon, MailIcon } from "@heroicons/react/solid";
 import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import TelegramIcon from "./TelegramIcon";
@@ -10,7 +10,7 @@ const TagToIcon = {
   "Notifi Hub": BellIcon,
   Telegram: TelegramIcon,
   Text: DeviceMobileIcon,
-  Wallet: KeyIcon,
+  Wallet: BellIcon,
 };
 
 const Tag = ({
