@@ -137,6 +137,7 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
             onModalClose={onModalClose}
             onBackClick={onBackClick}
             channels={['web3', 'telegram', 'sms', 'email']}
+            gatedView="You must have a SMB in your wallet to sign up for & manage your notifications."
           />
         </DialectThemeProvider>
       </DialectUiManagementProvider>
