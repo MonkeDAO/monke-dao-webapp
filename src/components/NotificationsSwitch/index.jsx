@@ -104,7 +104,7 @@ export default function NotificationsSwitch() {
 
 const useStyles = makeStyles((theme) => ({
   wrapper: { position: "relative" },
-  modalWrapper: {},
+  modalWrapper: { marginRight: '70px', marginTop: '-65px'},
   announcementsButton: {
     color: "#f3efcd !important",
     backgroundColor: "#164120 !important",
