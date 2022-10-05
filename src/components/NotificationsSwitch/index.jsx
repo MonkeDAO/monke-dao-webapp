@@ -104,7 +104,7 @@ export default function NotificationsSwitch() {
 
 const useStyles = makeStyles((theme) => ({
   wrapper: { position: "relative" },
-  modalWrapper: {},
+  modalWrapper: { marginRight: '70px', marginTop: '-65px'},
   announcementsButton: {
     color: "#f3efcd !important",
     backgroundColor: "#164120 !important",
@@ -127,7 +127,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#f3efcd",
     fontFamily: "Space Grotesk",
     fontWeight: "600",
-    position: "absolute",
     right: 0,
     backgroundColor: "#164120",
     padding: "1rem",
@@ -135,5 +134,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    overflowY: "auto",
+    maxHeight: "100vh",
+    width: "500px"
   },
 }));
