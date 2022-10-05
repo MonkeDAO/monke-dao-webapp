@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Header } from './components/Header';
 import { Cards } from './components/Cards';
 import SmoothScroll from 'smooth-scroll';
+import '@dialectlabs/react-ui/index.css';
 import './App.css';
 
 import { Container, Typography, useMediaQuery } from '@material-ui/core';
@@ -15,7 +16,6 @@ import clsx from 'clsx';
 import Validator from './components/Validator';
 import Footer from './components/Footer';
 import Roadmap from './components/Roadmap';
-import Announcements from './components/Announcements';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
       position: 'relative',
       paddingBottom: 247,
     },
+  },
+  '.dialect': {
+    fontFamily: 'Space Grotesk, serif',
   },
   bananasBackground: {
     backgroundColor: '#f3efcd',
@@ -136,7 +139,7 @@ const App = () => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
   const network = WalletAdapterNetwork.Mainnet;
   // You can also provide a custom RPC endpoint.
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const endpoint = useMemo(() => process.env.REACT_APP_SOLANA_RPC_URL || clusterApiUrl(network), [network]);
 
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
   // Only the wallets you configure here will be compiled into your application, and only the dependencies
@@ -155,7 +158,6 @@ const App = () => {
           <StyledWalletDialogProvider>
           <Router>
             <Routes>
-              <Route path='/announcements' element={<Announcements />} />
               <Route path='/' element={<Home />} />
             </Routes>
           </Router>

@@ -6,3 +6,4 @@ export const TEXT_BROWN = "#875811";
 export const TEXT_GREY = "#AAAAAA";
 export const TWITTER_BLUE = "#2A90E8";
 export const DISCORD_BLUE = "#5159E9";
+export const DARK_GREEN = "#1A4625";

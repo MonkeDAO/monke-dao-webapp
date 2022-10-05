@@ -9,6 +9,8 @@ import { Box, Link } from '@material-ui/core';
 import { useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 import { TWITTER_BLUE, DISCORD_BLUE } from '../constants/colors';
+import { WalletMultiButton } from '@solana/wallet-adapter-material-ui';
+import NotificationsSwitch from './NotificationsSwitch';
 
 const theme = createTheme({
   palette: {
@@ -67,6 +69,17 @@ const useStyles = makeStyles((theme) => ({
       height: 'auto',
     },
   },
+  socialContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: theme.spacing(2),
+    alignItems: 'center',
+    '&.sm': {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      gap: theme.spacing(1),
+    },
+  },
   social: {
     height: 38,
     '&.sm': {
@@ -77,6 +90,18 @@ const useStyles = makeStyles((theme) => ({
   },
   discord: {
     marginRight: theme.spacing(2),
+  },
+  bell: {
+    marginRight: theme.spacing(2),
+    '&.sm': {
+      display: 'inline-block',
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
+      verticalAlign: 'bottom',
+    },
+  },
+  notificationsSwitch: {
+    marginLeft: theme.spacing(1.5),
   },
   toolbarTitle: {
     padding: `10px`,
@@ -96,12 +121,15 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Space Grotesk',
     fontWeight: '600',
     fontSize: 16,
-    boxShadow: 'none',
+    boxShadow: 'none !important',
     borderRadius: 8,
     height: 38,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     padding: '8px 16px',
+  },
+  walletButton: {
+    backgroundColor: '#164120 !important'
   },
   stakeLink: {
     color: 'white',
@@ -112,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
   plusLogo: {
     marginRight: 8,
     width: '15%',
-    filter: "invert(1)"
+    filter: 'invert(1)',
   },
 }));
 
@@ -122,8 +150,8 @@ export function Header() {
   return (
     <ThemeProvider theme={theme}>
       <AppBar
-        position='sticky'
-        color='default'
+        position="sticky"
+        color="default"
         elevation={0}
         className={clsx(classes.appBar, { sm: isXsScreenAndSmaller })}
       >
@@ -136,12 +164,17 @@ export function Header() {
             })}
           >
             <img
-              alt='MonkeDao logo'
-              src='/MonkeDAO_Logo_Positive.png'
+              alt="MonkeDao logo"
+              src="/MonkeDAO_Logo_Positive.png"
               className={classes.logo}
             />
           </Box>
-          {/* <Box
+          <Box
+            className={clsx(classes.socialContainer, {
+              sm: isXsScreenAndSmaller,
+            })}
+          >
+            {/* <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
@@ -160,26 +193,7 @@ export function Header() {
               Subscribe
             </Button>
           </Box> */}
-          <Box
-            className={clsx(classes.social, classes.discord, {
-              sm: isXsScreenAndSmaller,
-            })}
-          >
-            <Button
-              href='/announcements'
-              color='secondary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Announcements logo'
-                src='/speaker.png'
-                className={classes.plusLogo}
-              />
-              Announcements
-            </Button>
-          </Box>
-          {/* <Box
+            {/* <Box
             className={clsx(classes.social, classes.discord, {
               sm: isXsScreenAndSmaller,
             })}
@@ -198,20 +212,27 @@ export function Header() {
               Join the Discord
             </Button>
           </Box> */}
-          <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
-            <Button
-              href='https://twitter.com/MonkeDAO'
-              color='primary'
-              variant='contained'
-              className={classes.link}
-            >
-              <img
-                alt='Twitter logo'
-                src='/twitter.svg'
-                className={classes.buttonLogo}
-              />
-              Follow us
-            </Button>
+            <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
+              <Button
+                href="https://twitter.com/MonkeDAO"
+                color="primary"
+                variant="contained"
+                className={classes.link}
+              >
+                <img
+                  alt="Twitter logo"
+                  src="/twitter.svg"
+                  className={classes.buttonLogo}
+                />
+                Follow us
+              </Button>
+            </Box>
+            <Box className={clsx(classes.social, { sm: isXsScreenAndSmaller })}>
+              <WalletMultiButton className={clsx(classes.link, classes.walletButton)} />
+            </Box>
+            <Box className={clsx(classes.notificationsSwitch)}>
+              <NotificationsSwitch />
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
@@ -220,11 +241,11 @@ export function Header() {
           {'We’re the first DAO to launch a staking pool on Solana.'}
           <br />
           <Link
-            href='https://daopool.monkedao.io/'
-            underline='hover'
+            href="https://daopool.monkedao.io/"
+            underline="hover"
             className={classes.stakeLink}
-            target='_blank'
-            rel='noopener'
+            target="_blank"
+            rel="noopener"
           >
             Stake with DAOPool to receive daoSOL, while earning up to 7% on your
             staked SOL! →
