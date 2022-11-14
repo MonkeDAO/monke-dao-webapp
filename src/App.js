@@ -213,7 +213,7 @@ const Home = () => {
             className={clsx(classes.heroTitle, { sm: isXsScreenAndSmaller })}
             gutterBottom
           >
-            MonkeDAO is a curated community of monkes
+            MonkeDAO is a curated community of Monkes
           </Typography>
           <Typography
             variant='h6'
