@@ -9,8 +9,8 @@ import {
 } from '@dialectlabs/react-ui';
 import { nftModule, operationModule, programModule, resolveClusterFromConnection, rpcModule } from "@metaplex-foundation/js";
 
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { PublicKey } from '@solana/web3.js';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection, PublicKey } from '@solana/web3.js';
 import { useCallback, useMemo } from 'react';
 import { useDialectStyles } from './styles';
 import { convertWalletToDialectWallet } from './utils';
@@ -21,6 +21,10 @@ const MONKE_DAO_PUBLIC_KEY = new PublicKey(
 const MONKE_DAY_NFT_COLLECTION_KEY = new PublicKey(
   'SMBH3wF6baUj6JWtzYvqcKuj2XCKWDqQxzspY12xPND'
 );
+
+const DIALECT_RPC = 'https://dialect-dialect-5d55.mainnet.rpcpool.com/';
+
+const dialectConnection = new Connection(DIALECT_RPC);
 
 class LightweightMetaplex {
   constructor(connection, options = {}) {
@@ -40,7 +44,6 @@ class LightweightMetaplex {
 }
 
 const DialectWidget = ({ onModalClose, onBackClick, children }) => {
-  const { connection } = useConnection();
   const classes = useDialectStyles();
   const wallet = useWallet();
   const dialectWallet = useMemo(
@@ -54,13 +57,13 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
       backends: [Backend.DialectCloud],
       environment: 'production',
       solana: {
-        rpcUrl: connection.rpcEndpoint,
+        rpcUrl: DIALECT_RPC,
       },
       dialectCloud: {
         tokenStore: TokenStore.createLocalStorage(),
       },
     }),
-    [connection.rpcEndpoint]
+    []
   );
 
   const themeVariables = useMemo(
@@ -99,7 +102,7 @@ const DialectWidget = ({ onModalClose, onBackClick, children }) => {
     [classes]
   );
 
-  const metaplex = useMemo(() => new LightweightMetaplex(connection), [connection]);
+  const metaplex = useMemo(() => new LightweightMetaplex(dialectConnection), []);
 
   const gate = useCallback(async () => {
     if (!wallet.publicKey) {
