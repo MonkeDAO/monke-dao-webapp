@@ -102,7 +102,7 @@ export default function Staking() {
         Any questions? Try our <Link href="#staking-faq" underline="always" className={classes.stakingFaqLink}>Staking FAQ.</Link>
       </Typography>
 
-      <Grid container justify="space-around" spacing={6} className={classes.grid}>
+      <Grid container justifyContent="space-around" spacing={6} className={classes.grid}>
         <Card
           num={1}
           pointerOffset={56}

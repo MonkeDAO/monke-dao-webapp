@@ -70,7 +70,7 @@ export default function Validator() {
   return (
     <Container
       p={2}
-      maxWidth="100%"
+      maxWidth='xl'
       component="section"
       className={classes.container}
     >
@@ -86,7 +86,7 @@ export default function Validator() {
               className={isSmScreenAndSmaller ? classes.imageSm : classes.image}
             />
           </Grid>
-          <Grid item xs={12} md={6} className={isSmScreenAndSmaller && classes.center}>
+          <Grid item xs={12} md={6} className={isSmScreenAndSmaller ? classes.center : null}>
             <Typography
               component="h3"
               variant="h5"
